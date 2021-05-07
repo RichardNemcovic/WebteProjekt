@@ -1,0 +1,24 @@
+html, body{
+    margin: 0;
+    background: #fffbfb;
+}
+
+.gradient-line{
+    height: 10px;
+    background: rgb(13,12,82);
+    background: linear-gradient(45deg, #0d0c52 0%, #ff8b8b 100%);
+}
+
+.bg-dark{
+    background: #0d160bff !important;
+}
+
+.ml-auto{
+    margin-left: auto;
+}
+
+.container{
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 5rem;
+}

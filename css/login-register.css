@@ -1,0 +1,93 @@
+/* GENERAL */
+html, body {
+    height: 100%;
+    background: rgb(13,12,82);
+    background: linear-gradient(45deg, #0d0c52 0%, #ff8b8b 100%);
+}
+
+.btn{
+    color: #fefeff;
+    background: #0d160b;
+}
+
+.btn:hover{
+    color: #fefeff;
+    background: #191d18;
+}
+
+.btn-gray{
+    background: #7e7e7e !important;
+}
+
+.btn-gray:hover{
+    background: #8b8b8b !important;
+}
+
+/* LOGIN */
+#login-box{
+    margin-top: 10%;
+    background: #fefeff;
+    border-radius: 5px;
+}
+
+.login-tab{
+    padding: 2rem 10rem;
+    border: none;
+    width: 100%;    
+}
+
+.nav-tabs, .nav-link{
+    color: #fefeff;
+    background: #ff8b8b;
+    border-radius: 5px;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.nav-tabs:hover, .nav-link:hover{
+    color: #fff;    
+}
+
+/* MEDIA QUERIES */
+@media screen and (max-width: 1000px){
+    #login-box{
+        max-width: 435px;
+    }
+
+    .nav-item{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 576px){
+    #login-box{
+        max-width: 300px;
+    }
+
+    .login-tab{
+        width: 100%;
+        padding: 1.8rem 5rem;
+        border: none;
+    }
+}
+
+/* REGISTER  */
+
+#register-box{
+    margin-top: 8%;
+    background: #fefeff;
+    border-radius: 5px;
+}
+
+.button-back{
+    margin-top: -25px;
+    margin-left: -30px;
+}
+
+.button-back a{
+    color: #ff8b8b;
+}
+
+.button-back a:hover{
+    color: #ffaeae;
+}
