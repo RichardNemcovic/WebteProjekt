@@ -1,3 +1,21 @@
+/* COLOR PALETTE */
+.blue-bg {background: #0d0c52ff;}
+.light-coral-bg {background: #ff8b8bff;}
+.white-bg {background: #fefeffff;}
+.slate-gray-bg {background: #6f7d8cff;}
+.dark-bg {background: #0d160bff;}
+
+.blue-txt {color: #0d0c52ff;}
+.light-coral-txt {color: #ff8b8bff;}
+.white-txt {color: #fefeffff;}
+.slate-gray-txt {color: #6f7d8cff;}
+.dark-txt {color: #0d160bff;}
+
+/* GENERAL */
+html{
+    min-height: 100%;
+}
+
 html, body{
     margin: 0;
     background: #fffbfb;
@@ -21,4 +39,22 @@ html, body{
     background: #fff;
     border-radius: 10px;
     margin-top: 5rem;
+}
+
+.dropdown-no-arrow::after{
+    content: none;
+}
+
+.modal-dialog{
+    max-width: 700px;
+}
+
+.pairing-input{
+    margin-top: 32px;
+}
+
+.btn-delete{
+    height: 2.5rem;
+    width: 6rem;
+    margin-top: auto;
 }

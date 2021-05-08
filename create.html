@@ -12,22 +12,19 @@
     <!-- JS ( BOOTSTRAP, JQUERY )-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="gradient-line"></div>
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
         <div class="container-fluid">
-
           <a class="navbar-brand" href="home.html">Teacher's panel</a>
-
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="material-icons align-middle">menu</span>
           </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">            
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link active" href="create.html">
@@ -49,29 +46,275 @@
                         <span class="material-icons align-middle">logout</span> Sign out 
                     </a>
                 </li>                           
-            </ul>
-                                
+            </ul>                                
           </div>
-
         </div>
-
     </nav>
 
     <!-- CONTENT -->
-    <div class="container shadow-lg p-5">
-      <div class="row">
-        nish cake. Jujubes dessert candy muffin powder topping. Dessert tiramisu ice cream croissant. Topping wafer donut fruitcake marzipan jelly lollipop marshmallow. Cotton candy candy macaroon wafer. Jelly-o brownie topping dragée candy canes powder. Croissant tiramisu gummi bears gummi bears biscuit pastry chocolate. Sesame snaps sugar plum tiramisu. Toffee muffin gummi bears. Caramels icing cake lemon drops powder marzipan soufflé. Cotton candy powder sweet gingerbread bonbon. Sesame snaps carrot cake pudding gingerbread chocolate bar pudding.
+    <div class="container shadow-lg p-5 mb-5">
+        <form action="">
+            <!-- INFO ABOUT EXAM -->
+            <div id="exam-info">
+                <div class="row text-center">
+                    <h2>Create new exam</h2>
+                </div>
+                <hr class="my-5">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="exam-name" class="form-label">Name of exam</label>
+                            <input id="exam-name" type="text" class="form-control">
+                        </div>                
+                    </div>            
+                    <div class="col-md-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="start-date" class="form-label">Start of exam</label>
+                            <input id="start-date" type="datetime-local" class="form-control" >
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="end-date" class="form-label">End of exam</label>
+                            <input id="end-date" type="datetime-local" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-5">                                     
 
-        Macaroon chocolate chocolate cake liquorice. Cupcake ice cream croissant caramels cheesecake powder powder macaroon croissant. Oat cake danish wafer bear claw oat cake sugar plum pudding jelly lollipop. Oat cake dragée muffin. Candy dragée caramels. Jujubes tart marzipan. Chocolate carrot cake soufflé croissant. Jelly beans chocolate liquorice tootsie roll bonbon. Fruitcake brownie cupcake bear claw. Apple pie jelly beans candy canes donut pie pudding pie jelly-o tart. Tart cookie gingerbread. Candy biscuit tiramisu fruitcake.
+            <!-- QUESTION LIST -->
+            <div id="question-list" class="row">
+                                        
+                <!-- SHORT ANSWER -->                                        
+                <div class="card row m-2 py-3 px-5 shadow">
+                    <div class="col">
+                        <div class="row">
+                            <h6 id="1"> 
+                                <span class="question-number">1.</span>
+                                <span>(</span> 
+                                <span class="question-type">short answer question</span> 
+                                <span>)</span>
+                            </h6>                                                                        
+                        </div>
+                        <div class="row">                                    
+                            <div class="col">
+                                <label for="short-description" class="form-label">Question</label>
+                                <textarea id="short-description" class="form-control"></textarea>  
+                                <label for="short-answer" class="form-label">Correct answer</label>
+                                <input id="short-answer" type="text" class="form-control">
+                            </div>
+                            <hr class="mt-4">
+                            <div class="col-2">
+                                <label for="short-score" class="form-label">Number of points</label>
+                                <input id="short-score" type="number" min="0" class="form-control">
+                            </div>
+                            <div class="col-10 justify-content-end d-flex">
+                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
+                                    <div class="material-icons align-middle">delete</div> Remove
+                                </button> 
+                            </div>                                
+                        </div> 
+                    </div>                       
+                </div>
+            
+                <!-- SELECT -->
+                <div class="card row m-2 py-3 px-5 shadow">
+                    <div class="col">
+                        <div class="row">
+                            <h6 id="2"> 
+                                <span class="question-number">2.</span>
+                                <span>(</span> 
+                                <span class="question-type">multiple choice question</span> 
+                                <span>)</span>
+                            </h6>
+                        </div>
+                        <div class="row">   
+                            <div class="col">
+                                <label for="select-description" class="form-label">Question</label>
+                                <textarea id="select-description" class="form-control mb-2"></textarea> 
+                                <h6>Choices:</h6>                                                         
+                                <label for="select-q1" class="form-label">1.</label>
+                                <input id="select-q1" type="text" class="form-control">  
+                                <label for="select-q2" class="form-label">2.</label>
+                                <input id="select-q2" type="text" class="form-control">
+                                <label for="select-q3" class="form-label">3.</label>
+                                <input id="select-q3" type="text" class="form-control">
+                                <label for="select-q4" class="form-label">4.</label>
+                                <input id="select-q4" type="text" class="form-control">
+                                <label for="select-answer" class="form-label">Correct answer number</label>
+                                <input id="select-answer" type="number" class="form-control"> 
+                            </div>
+                            <hr class="mt-4">
+                            <div class="col-2">
+                                <label for="select-score" class="form-label">Number of points</label>
+                                <input id="select-score" type="number" min="0" class="form-control">
+                            </div>
+                            <div class="col-10 justify-content-end d-flex">
+                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
+                                    <div class="material-icons align-middle">delete</div> Remove
+                                </button> 
+                            </div>                         
+                        </div>                                
+                    </div>
+                </div>
+
+                <!-- PAIRING -->                    
+                <div class="card row m-2 py-3 px-5 shadow">
+                    <div class="col">
+                        <div class="row">
+                            <h6 id="3"> 
+                                <span class="question-number">3.</span>
+                                <span>(</span> 
+                                <span class="question-type">pairing question</span> 
+                                <span>)</span>
+                            </h6>                                       
+                        </div>
+                        <div class="row"> 
+                            <div class="col">
+                                <div class="col">
+                                    <label for="select-description" class="form-label">Question</label>
+                                    <textarea id="select-description" class="form-control mb-2"></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6"><h6>Left</h6></div>
+                                    <div class="col-6"><h6>Right</h6></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="pairing-q1" class="form-label">1.</label>
+                                        <input id="pairing-q1" type="text" class="form-control">
+                                    </div>
+                                    <div class="col-6">                                
+                                        <input id="pairing-a1" type="text" class="form-control pairing-input">   
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="pairing-q2" class="form-label">2.</label>
+                                        <input id="pairing-q2" type="text" class="form-control">
+                                    </div>
+                                    <div class="col-6">                                
+                                        <input id="pairing-a2" type="text" class="form-control pairing-input">   
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="pairing-q3" class="form-label">3.</label>
+                                        <input id="pairing-q3" type="text" class="form-control">
+                                    </div>
+                                    <div class="col-6">                                
+                                        <input id="pairing-a3" type="text" class="form-control pairing-input">   
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="pairing-q4" class="form-label">4.</label>
+                                        <input id="pairing-q4" type="text" class="form-control">
+                                    </div>
+                                    <div class="col-6">                                
+                                        <input id="pairing-a4" type="text" class="form-control pairing-input">   
+                                    </div>
+                                </div>  
+                            </div>
+                            <hr class="mt-3">
+                            <div class="col-2">
+                                <label for="pairing-score" class="form-label">Number of points</label>
+                                <input id="pairing-score" type="number" min="0" class="form-control">
+                            </div>
+                            <div class="col-10 justify-content-end d-flex">
+                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
+                                    <div class="material-icons align-middle">delete</div> Remove
+                                </button> 
+                            </div>                                               
+                        </div>                                
+                    </div>
+                </div>
+            
+                <!-- IMAGE -->
+                <div class="card row m-2 py-3 px-5 shadow">
+                    <div class="col">
+                        <div class="row">
+                            <h6 id="4"> 
+                                <span class="question-number">4.</span>
+                                <span>(</span> 
+                                <span class="question-type">drawing question</span> 
+                                <span>)</span>
+                            </h6>                                            
+                        </div>
+                        <div class="row">                                    
+                            <div class="col">
+                                <label for="image-description" class="form-label">Question</label>
+                                <textarea id="image-description" class="form-control"></textarea>
+                            </div>                          
+                            <hr class="mt-3">
+                            <div class="col-2">
+                                <label for="image-score" class="form-label">Number of points</label>
+                                <input id="image-score" type="number" min="0" class="form-control">
+                            </div>
+                            <div class="col-10 justify-content-end d-flex">
+                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
+                                    <div class="material-icons align-middle">delete</div> Remove
+                                </button> 
+                            </div>
+                        </div>                                
+                    </div>
+                </div>
+
+                <!-- EQUATION -->
+                <div class="card row m-2 py-3 px-5 shadow">
+                    <div class="col">
+                        <div class="row">                                
+                            <h6 id="5"> 
+                                <span class="question-number">5.</span>
+                                <span>(</span> 
+                                <span class="question-type">equation question</span> 
+                                <span>)</span>
+                            </h6>                                                
+                        </div>
+                        <div class="row">                                    
+                            <div class="col">
+                                <label for="equation-description" class="form-label">Question</label>
+                                <textarea id="equation-description" class="form-control"></textarea> 
+                            </div> 
+                            <hr class="mt-3">
+                            <div class="col-2">
+                                <label for="equation-score" class="form-label">Number of points</label>
+                                <input id="equation-score" type="number" min="0" class="form-control">
+                            </div>
+                            <div class="col-10 justify-content-end d-flex">
+                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
+                                    <div class="material-icons align-middle">delete</div> Remove
+                                </button> 
+                            </div>
+                        </div>                                
+                    </div>
+                </div>
+                                                
+            </div>                
+
+        </form>  
         
-        Wafer gummi bears marshmallow candy jelly beans liquorice pudding. Halvah chocolate bar chupa chups. Bonbon candy lemon drops sweet roll soufflé tootsie roll jujubes jujubes brownie. Pudding brownie donut. Sweet roll gummi bears gingerbread. Icing sugar plum carrot cake gingerbread. Fruitcake biscuit gummies pudding jelly jelly pastry toffee sugar plum. Donut sugar plum cake jujubes. Caramels soufflé biscuit danish danish croissant. Topping sweet roll dragée soufflé danish. Pastry marshmallow gummi bears donut halvah bonbon. Jelly beans ice cream danish chocolate sesame snaps gummi bears carrot cake brownie. Gummies sweet roll pudding candy canes chupa chups. Croissant chupa chups apple pie chocolate bar chocolate bar apple pie biscuit candy canes.
+        <!-- CREATE NEW QUESTION  -->
+        <div>
+            <button id="question-new" class="dropdown-toggle dropdown-no-arrow btn mt-3 light-coral-bg white-txt shadow" type="button" data-toggle="dropdown">
+                <span class="material-icons align-middle">add</span> New question
+            </button>
+            <div id="question-type" class="dropdown-menu">
+                <a class="dropdown-item" href="#">Short answer</a>
+                <a class="dropdown-item" href="#">Multiple choices</a>
+                <a class="dropdown-item" href="#">Pairing</a>                    
+                <a class="dropdown-item" href="#">Drawing</a>
+                <a class="dropdown-item" href="#">Equation</a>
+            </div>  
+        </div>
         
-        Brownie fruitcake chupa chups. Candy canes tiramisu sugar plum chocolate cookie jelly beans dessert apple pie. Cheesecake chocolate cake marshmallow gingerbread cake
-      </div>
-
-      
-
-    </div>
+    </div>    
+    <div class="gradient-line"></div>
 
 </body>
 </html>
