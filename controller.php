@@ -6,7 +6,7 @@
     error_reporting(E_ALL);
 
 //Imports
-    require 'php/LoginService.php';
+    require 'services/LoginService.php';
 
 //Headers
     header("Access-Control-Allow-Origin: *");
@@ -20,16 +20,32 @@
 //Routing
     if(isset($_GET['ep'])){
         $ep = $_GET['ep'];
+        // read the POST body
+        $data = json_decode(file_get_contents('php://input'), true);
 
         if($_SERVER["REQUEST_METHOD"] === 'GET'){
 
         }
 
         if($_SERVER["REQUEST_METHOD"] === 'POST'){
-            switch($ep){
+            switch($ep) {
+                case('teacherRegistration'):
+                    if(isset($data['ais_id']) && isset($data['name']) && isset($data['surname']) && isset($data['password']) && isset($data['email'])){
+                        $loginService->teacher_register($data['ais_id'], $data['name'], $data['surname'], $data['password'], $data['email']);
+                    } else{
+                        echo json_encode(['status'=>'regFail']);
+                    }
+                    break;
                 case('teacherLogin'):
-                    if(isset($_POST['email']) && isset($_POST['password'])){
-                        echo json_encode($loginService->teacher_login($_POST['email'], $_POST['password']));
+                    if (isset($data['email']) && isset($data['password'])) {
+                        $loginService->teacher_login($data['email'], $data['password']);
+                    }else{
+                        echo json_encode(['status'=>'FAIL']);
+                    }
+                    break;
+                case('studentLogin'):
+                    if(isset($data['name']) && isset($data['surname']) && isset($data['code']) && isset($data['ais_id'])){
+                        $loginService->student_login($data['name'], $data['surname'], $data['ais_id'], $data['code']);
                     }else{
                         echo json_encode(['status'=>'FAIL']);
                     }
