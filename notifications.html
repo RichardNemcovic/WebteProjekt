@@ -10,24 +10,21 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <!-- JS ( BOOTSTRAP, JQUERY )-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script defer src="js/tooltips.js"></script>
 </head>
 <body>
-    <div class="gradient-line"></div>
+    <div class="gradient-line w-100"></div>
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
         <div class="container-fluid">
-
           <a class="navbar-brand" href="home.html">Teacher's panel</a>
-
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="material-icons align-middle">menu</span>
           </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">            
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="create.html">
@@ -49,27 +46,37 @@
                         <span class="material-icons align-middle">logout</span> Sign out 
                     </a>
                 </li>                           
-            </ul>
-                                
+            </ul>                                
           </div>
-
         </div>
-
     </nav>
 
     <!-- CONTENT -->
     <div class="container shadow-lg p-5">
-      <div class="row">
-        nish cake. Jujubes dessert candy muffin powder topping. Dessert tiramisu ice cream croissant. Topping wafer donut fruitcake marzipan jelly lollipop marshmallow. Cotton candy candy macaroon wafer. Jelly-o brownie topping dragée candy canes powder. Croissant tiramisu gummi bears gummi bears biscuit pastry chocolate. Sesame snaps sugar plum tiramisu. Toffee muffin gummi bears. Caramels icing cake lemon drops powder marzipan soufflé. Cotton candy powder sweet gingerbread bonbon. Sesame snaps carrot cake pudding gingerbread chocolate bar pudding.
-
-        Macaroon chocolate chocolate cake liquorice. Cupcake ice cream croissant caramels cheesecake powder powder macaroon croissant. Oat cake danish wafer bear claw oat cake sugar plum pudding jelly lollipop. Oat cake dragée muffin. Candy dragée caramels. Jujubes tart marzipan. Chocolate carrot cake soufflé croissant. Jelly beans chocolate liquorice tootsie roll bonbon. Fruitcake brownie cupcake bear claw. Apple pie jelly beans candy canes donut pie pudding pie jelly-o tart. Tart cookie gingerbread. Candy biscuit tiramisu fruitcake.
-        
-        Wafer gummi bears marshmallow candy jelly beans liquorice pudding. Halvah chocolate bar chupa chups. Bonbon candy lemon drops sweet roll soufflé tootsie roll jujubes jujubes brownie. Pudding brownie donut. Sweet roll gummi bears gingerbread. Icing sugar plum carrot cake gingerbread. Fruitcake biscuit gummies pudding jelly jelly pastry toffee sugar plum. Donut sugar plum cake jujubes. Caramels soufflé biscuit danish danish croissant. Topping sweet roll dragée soufflé danish. Pastry marshmallow gummi bears donut halvah bonbon. Jelly beans ice cream danish chocolate sesame snaps gummi bears carrot cake brownie. Gummies sweet roll pudding candy canes chupa chups. Croissant chupa chups apple pie chocolate bar chocolate bar apple pie biscuit candy canes.
-        
-        Brownie fruitcake chupa chups. Candy canes tiramisu sugar plum chocolate cookie jelly beans dessert apple pie. Cheesecake chocolate cake marshmallow gingerbread cake
-      </div>
-    
+        <h2 class="text-center mb-3 mt-2">Notifications</h2>
+        <h6 class="text-center mb-5">See who is cheating</h6>
+        <div class="row table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-head blue-bg white-txt">
+                <tr>
+                    <th>Student</th>
+                    <th>Exam key</th>
+                    <th>Exam name</th>
+                    <th>Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <!-- ROW EXAMPLE -->
+                <tr class="table-row">                
+                    <td>Podvadzac prasivy</td>
+                    <td>679135</td>
+                    <td>Zapocet OS</td>
+                    <td>20.5.2021, 13:30</td>                    
+                </tr>              
+                </tbody>
+            </table>                                     
+        </div>      
     </div>
-
+    <div class="gradient-line w-100 gl-bottom"></div>
 </body>
 </html>

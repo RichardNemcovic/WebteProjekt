@@ -13,10 +13,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script defer src="js/tooltips.js"></script>
 </head>
 
 <body>
-    <div class="gradient-line"></div>
+    <div class="gradient-line w-100"></div>
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
@@ -114,9 +115,9 @@
                                 <input id="short-score" type="number" min="0" class="form-control">
                             </div>
                             <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
+                                <button class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Remove question">
+                                    <div class="material-icons align-middle">delete</div> 
+                                </button>
                             </div>                                
                         </div> 
                     </div>                       
@@ -155,9 +156,9 @@
                                 <input id="select-score" type="number" min="0" class="form-control">
                             </div>
                             <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
+                                <button class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Remove question">
+                                    <div class="material-icons align-middle">delete</div> 
+                                </button>
                             </div>                         
                         </div>                                
                     </div>
@@ -227,9 +228,9 @@
                                 <input id="pairing-score" type="number" min="0" class="form-control">
                             </div>
                             <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
+                                <button class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Remove question">
+                                    <div class="material-icons align-middle">delete</div> 
+                                </button>
                             </div>                                               
                         </div>                                
                     </div>
@@ -257,8 +258,8 @@
                                 <input id="image-score" type="number" min="0" class="form-control">
                             </div>
                             <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
+                                <button class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Remove question">
+                                    <div class="material-icons align-middle">delete</div> 
                                 </button> 
                             </div>
                         </div>                                
@@ -287,8 +288,8 @@
                                 <input id="equation-score" type="number" min="0" class="form-control">
                             </div>
                             <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
+                                <button class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Remove question">
+                                    <div class="material-icons align-middle">delete</div> 
                                 </button> 
                             </div>
                         </div>                                
@@ -297,24 +298,34 @@
                                                 
             </div>                
 
-        </form>  
-        
-        <!-- CREATE NEW QUESTION  -->
-        <div>
-            <button id="question-new" class="dropdown-toggle dropdown-no-arrow btn mt-3 light-coral-bg white-txt shadow" type="button" data-toggle="dropdown">
-                <span class="material-icons align-middle">add</span> New question
-            </button>
-            <div id="question-type" class="dropdown-menu">
-                <a class="dropdown-item" href="#">Short answer</a>
-                <a class="dropdown-item" href="#">Multiple choices</a>
-                <a class="dropdown-item" href="#">Pairing</a>                    
-                <a class="dropdown-item" href="#">Drawing</a>
-                <a class="dropdown-item" href="#">Equation</a>
-            </div>  
-        </div>
-        
-    </div>    
-    <div class="gradient-line"></div>
+            <!-- BUTTON - CREATE NEW QUESTION -->
+            <div>
+                <button id="question-new" class="dropdown-toggle dropdown-no-arrow btn mt-3 light-coral-bg white-txt shadow" type="button" data-toggle="dropdown">
+                    <span class="material-icons align-middle">add</span> New question
+                </button>
+                <div id="question-type" class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Short answer</a>
+                    <a class="dropdown-item" href="#">Multiple choices</a>
+                    <a class="dropdown-item" href="#">Pairing</a>                    
+                    <a class="dropdown-item" href="#">Drawing</a>
+                    <a class="dropdown-item" href="#">Equation</a>
+                </div>  
+            </div>
 
+            <hr class="my-5">
+
+            <!-- BUTTON - FINISH -->
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <button id="create-exam" class="btn light-coral-bg white-txt shadow  w-100" type="button">
+                        <span class="material-icons align-middle">save</span> Finish and create
+                    </button>
+                </div>
+            </div>
+
+        </form>                          
+    </div>    
+    <div class="gradient-line w-100 gl-bottom" ></div>
 </body>
 </html>
