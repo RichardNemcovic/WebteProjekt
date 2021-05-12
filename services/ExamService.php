@@ -224,12 +224,16 @@ class ExamService
                 }
             }
         }
-
-
-
-
-        $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
-        return json_encode($resp);
+        if(isset($resp['status'])){
+            if($resp['status'] == 'FAIL'){
+                $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
+                return json_encode($resp);
+            }
+        }
+        else{
+            $resp = ['status' => 'OK', 'message' => 'create_exam'];
+            return json_encode($resp);
+        }
     }
 
     public function get_exam()
