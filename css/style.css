@@ -11,12 +11,11 @@
 .slate-gray-txt {color: #6f7d8cff;}
 .dark-txt {color: #0d160bff;}
 
-/* GENERAL */
-html{
-    min-height: 100%;
-}
+.lct-hover:hover {color: rgb(255, 183, 183);}
 
+/* GENERAL */
 html, body{
+    min-height: 100%;
     margin: 0;
     background: #fffbfb;
 }
@@ -25,6 +24,11 @@ html, body{
     height: 10px;
     background: rgb(13,12,82);
     background: linear-gradient(45deg, #0d0c52 0%, #ff8b8b 100%);
+}
+
+.gl-bottom {
+    position: fixed;
+    bottom: 0px;
 }
 
 .bg-dark{
@@ -53,7 +57,50 @@ html, body{
     margin-top: 32px;
 }
 
-.btn-delete{
+.btn-pill{
     height: 2.5rem;
     /*width: 6rem;*/
+    margin-top: auto;
+}
+
+.table-head{
+    line-height: 3rem;        
+}
+
+.table-row{
+    line-height: 2rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.btn-dark{
+    border-color: #ff8b8bff;
+    background: #ff8b8bff;
+}
+
+.btn-dark:hover{
+    border-color: rgb(255, 172, 172);
+    background: rgb(255, 172, 172);
+}
+
+.action{
+    width: 1rem;
+}
+.action2{
+    width: 8rem;
+}
+
+.button-back{
+    color: #ff8b8bff;
+    margin-top: -15px;
+    margin-left: -20px;
+}
+
+.pair-tile{
+    color: #fff;
+    background: #0d0c52ff;
+    padding: 0.6rem;
+    margin: 10px 0;
+    font-weight: 500;
+    border-radius: 8px;
 }
