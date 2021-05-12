@@ -8,9 +8,9 @@ function authenticate(){
     if(sessionStorage.getItem('id_user') && sessionStorage.getItem('role') && sessionStorage.getItem('name')){
         if(path == 'index.html'){
             if(sessionStorage.getItem('id_test')){
-                window.href.location = 'exam.html';
+                window.location.href = 'exam.html';
             }else{
-                window.href.location = 'home.html';
+                window.location.href = 'home.html';
             }
         }
     }else{

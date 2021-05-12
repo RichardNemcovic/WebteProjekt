@@ -17,6 +17,7 @@ class ExamService
 
     public function create_exam($data)
     {
+        $resp = ['status' => 'OK', 'message' => 'create_exam'];
 
         if(isset($data['code'])){
             if(!empty($data['code'])){
@@ -51,12 +52,12 @@ class ExamService
         $stmt->bindParam('name', $name);
         $stmt->bindParam('start', $start);
         $stmt->bindParam('end', $end);
-
-        if(!$stmt->execute()){
-            $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
+        $stmt->execute();
+        if($stmt->rowCount()){
+            $id_exam = $this->conn->lastInsertId();
         }
         else{
-            $id_exam = $this->conn->lastInsertId();
+            $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
         }
 
         if(isset($data['qShort'])){
@@ -73,16 +74,20 @@ class ExamService
                             $stmt_qShort->bindParam('id_type', $id_type);
                             $stmt_qShort->bindParam('name', $name);
                             $stmt_qShort->bindParam('score', $score);
-                            if (!$stmt_qShort->execute()) {
+                            $stmt_qShort->execute();
+                            if ($stmt_qShort->rowCount()) {
+                                $id_question = $this->conn->lastInsertId();
+                            } else {
                                 $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                 break;
-                            } else {
-                                $id_question = $this->conn->lastInsertId();
                             }
                             $stmt_qShort_answer = $this->conn->prepare('insert into questions_short(id_question, answer) values (:id_question, :answer)');
                             $stmt_qShort_answer->bindParam('id_question', $id_question);
                             $stmt_qShort_answer->bindParam('answer', $answer);
-                            if (!$stmt_qShort_answer->execute()) {
+                            $stmt_qShort_answer->execute();
+                            if ($stmt_qShort_answer->rowCount()) {
+                            }
+                            else{
                                 $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                 break;
                             }
@@ -106,21 +111,24 @@ class ExamService
                             $stmt_qSelect->bindParam('id_type', $id_type);
                             $stmt_qSelect->bindParam('name', $name);
                             $stmt_qSelect->bindParam('score', $score);
-                            if (!$stmt_qSelect->execute()) {
+                            $stmt_qSelect->execute();
+                            if ($stmt_qSelect->rowCount()) {
+                                $id_question = $this->conn->lastInsertId();
+                            } else {
                                 $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                 break;
-                            } else {
-                                $id_question = $this->conn->lastInsertId();
                             }
                             foreach ($item['possibilities'] as $value) {
                                 if(isset($value['answer'])){
                                     if(!empty($value['answer'])){
                                         $answer = $value['answer'];
-                                        $stmt_qSelect_answer = $this->conn->prepare('insert into questions_short(id_question, answer, correct) values (:id_question, :answer, :correct)');
+                                        $stmt_qSelect_answer = $this->conn->prepare('insert into questions_select(id_question, answer, correct) values (:id_question, :answer, :correct)');
                                         $stmt_qSelect_answer->bindParam('id_question', $id_question);
                                         $stmt_qSelect_answer->bindParam('answer', $answer);
                                         $stmt_qSelect_answer->bindParam('correct', $correctAnswer);
-                                        if (!$stmt_qSelect_answer->execute()) {
+                                        $stmt_qSelect_answer->execute();
+                                        if ($stmt_qSelect_answer->rowCount()) {
+                                        }else{
                                             $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                             break;
                                         }
@@ -136,8 +144,8 @@ class ExamService
         if(isset($data['qImage'])){
             if(!empty($data['qImage'])){
                 foreach ($data['qImage'] as $item){
-                    if(isset($data['description']) && isset($data['score'])){
-                        if(!empty($data['description']) && !empty($data['score'])){
+                    if(isset($item['description']) && isset($item['score'])){
+                        if(!empty($item['description']) && !empty($item['score'])){
                             $name = $item['description'];
                             $score = $item['score'];
                             $id_type = 3;
@@ -147,7 +155,8 @@ class ExamService
                             $stmt_qImage->bindParam('name', $name);
                             $stmt_qImage->bindParam('score', $score);
                             $stmt_qImage->execute();
-                            if (!$stmt_qImage->rowCount()) {
+                            if ($stmt_qImage->rowCount()) {
+                            }else{
                                 $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                 break;
                             }
@@ -170,7 +179,10 @@ class ExamService
                             $stmt_qEquation->bindParam('id_type', $id_type);
                             $stmt_qEquation->bindParam('name', $name);
                             $stmt_qEquation->bindParam('score', $score);
-                            if (!$stmt_qEquation->execute()) {
+                            $stmt_qEquation->execute();
+                            if ($stmt_qEquation->rowCount()) {
+
+                            }else{
                                 $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                 break;
                             }
@@ -193,11 +205,12 @@ class ExamService
                             $stmt_qPairs->bindParam('id_type', $id_type);
                             $stmt_qPairs->bindParam('name', $name);
                             $stmt_qPairs->bindParam('score', $score);
-                            if (!$stmt_qPairs->execute()) {
+                            $stmt_qPairs->execute();
+                            if ($stmt_qPairs->rowCount()) {
+                                $id_question = $this->conn->lastInsertId();
+                            } else {
                                 $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                 break;
-                            } else {
-                                $id_question = $this->conn->lastInsertId();
                             }
                             if(isset($item['answers'])){
                                 if(!empty($item['answers'])){
@@ -207,10 +220,12 @@ class ExamService
                                                 $answer_left = $value['left'];
                                                 $answer_right = $value['right'];
                                                 $stmt = $this->conn->prepare('insert into questions_pairing(id_question, answer_left, answer_right) values (:id_question, :answer_left, :answer_right)');
-                                                $stmt->bindParam('"id_question', $id_question);
-                                                $stmt->bindParam("answer_left", $answer_left);
+                                                $stmt->bindParam('id_question', $id_question);
+                                                $stmt->bindParam('answer_left', $answer_left);
                                                 $stmt->bindParam('answer_right', $answer_right);
-                                                if(!$stmt->execute()){
+                                                $stmt->execute();
+                                                if($stmt->rowCount()){
+                                                }else{
                                                     $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                                     break;
                                                 }
@@ -224,14 +239,13 @@ class ExamService
                 }
             }
         }
-        if(isset($resp['status'])){
-            if($resp['status'] == 'FAIL'){
-                $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
-                return json_encode($resp);
-            }
-        }
-        else{
-            $resp = ['status' => 'OK', 'message' => 'create_exam'];
+
+        if($resp['status'] == 'FAIL'){
+            $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
+            echo json_encode($resp);
+            return json_encode($resp);
+        }else{
+            echo json_encode($resp);
             return json_encode($resp);
         }
     }
