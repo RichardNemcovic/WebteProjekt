@@ -122,12 +122,12 @@ class ExamService
                                 if(isset($value['answer'])){
                                     if(!empty($value['answer'])){
                                         $answer = $value['answer'];
-                                        $stmt_qSelect_answer = $this->conn->prepare('insert into questions_short(id_question, answer, correct) values (:id_question, :answer, :correct)');
+                                        $stmt_qSelect_answer = $this->conn->prepare('insert into questions_select(id_question, answer, correct) values (:id_question, :answer, :correct)');
                                         $stmt_qSelect_answer->bindParam('id_question', $id_question);
                                         $stmt_qSelect_answer->bindParam('answer', $answer);
                                         $stmt_qSelect_answer->bindParam('correct', $correctAnswer);
-                                        $stmt_qShort_answer->execute();
-                                        if ($stmt_qShort_answer->rowCount()) {
+                                        $stmt_qSelect_answer->execute();
+                                        if ($stmt_qSelect_answer->rowCount()) {
                                         }else{
                                             $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                             break;
@@ -220,8 +220,8 @@ class ExamService
                                                 $answer_left = $value['left'];
                                                 $answer_right = $value['right'];
                                                 $stmt = $this->conn->prepare('insert into questions_pairing(id_question, answer_left, answer_right) values (:id_question, :answer_left, :answer_right)');
-                                                $stmt->bindParam('"id_question', $id_question);
-                                                $stmt->bindParam("answer_left", $answer_left);
+                                                $stmt->bindParam('id_question', $id_question);
+                                                $stmt->bindParam('answer_left', $answer_left);
                                                 $stmt->bindParam('answer_right', $answer_right);
                                                 $stmt->execute();
                                                 if($stmt->rowCount()){
@@ -242,8 +242,10 @@ class ExamService
 
         if($resp['status'] == 'FAIL'){
             $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
+            echo json_encode($resp);
             return json_encode($resp);
         }else{
+            echo json_encode($resp);
             return json_encode($resp);
         }
     }
