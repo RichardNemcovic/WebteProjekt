@@ -49,8 +49,38 @@ class ExamService
         return json_encode($resp);
     }
 
-    public function set_score() {
-        $resp = ['status' => 'FAIL', 'message' => 'set_score'];
+    public function set_score($id_user, $id_answer, $id_question, $score) {
+        $stmt = $this->conn->prepare("SELECT * FROM answers 
+                                            WHERE id=:id_answer 
+                                              AND id_user=:id_user 
+                                              AND id_question=:id_question");
+        $stmt->bindParam(":id_question", $id_question);
+        $stmt->bindParam(":id_answer", $id_answer);
+        $stmt->bindParam(":id_user", $id_user);
+        $stmt->execute();
+        $output = $stmt->rowCount();
+
+        $stmt = $this->conn->prepare("UPDATE answers 
+                                            SET score=:score 
+                                            WHERE id=:id_answer 
+                                              AND id_user=:id_user 
+                                              AND id_question=:id_question");
+        $stmt->bindParam(":id_question", $id_question);
+        $stmt->bindParam(":id_answer", $id_answer);
+        $stmt->bindParam(":id_user", $id_user);
+        $stmt->bindParam(":score", $score);
+        $stmt->execute();
+        $rowCount = $stmt->rowCount();
+
+        if ($output == 0) {
+            $resp = ['status' => 'FAIL', 'message' => 'No matching rows.'];
+        } else if ($rowCount != $output) {
+            $resp = ['status' => 'FAIL', 'message' => 'No changes in the database.'];
+        } else {
+            $resp = ['status' => 'SUCCESS'];
+        }
+
+        echo json_encode($resp);
         return json_encode($resp);
     }
 

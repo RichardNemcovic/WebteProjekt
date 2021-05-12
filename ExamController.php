@@ -30,7 +30,7 @@ if(isset($_GET['ep'])){
     if($_SERVER["REQUEST_METHOD"] === 'POST'){
         switch($ep) {
             case('createExam'):
-                if(isset($data['email'])){
+                if(isset($data)){
 
                     $resp = array();
 
@@ -140,8 +140,8 @@ if(isset($_GET['ep'])){
                 }
                 break;
             case('setScore'):
-                if(isset($data['email'])){
-                    $examService->set_score();
+                if(isset($data['id_user']) && isset($data['id_answer']) && isset($data['id_question']) && isset($data['score'])){
+                    $examService->set_score($data['id_user'], $data['id_answer'], $data['id_question'], $data['score']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
