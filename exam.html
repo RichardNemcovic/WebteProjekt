@@ -57,7 +57,7 @@
     <!-- CONTENT -->
     <div class="container shadow-lg p-5 mb-5">
         <div class="button-back"> 
-            <a href="home.html" class="light-coral-txt lct-hover" data-toggle="tooltip" data-placement="top" title="All exams"> <span class="material-icons">arrow_back</span>  </a>
+            <a href="home.html" class="light-coral-txt lct-hover" data-toggle="tooltip" data-placement="top" title="Moje testy"> <span class="material-icons">arrow_back</span>  </a>
         </div>
         <h2 class="text-center mb-3 mt-2">Detail testu</h2>
         <div class="row my-5">
@@ -75,10 +75,10 @@
             </div>            
         </div>    
         <div class="row mb-4">
-            <button class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill mx-3" data-toggle="tooltip" data-placement="top" title="Export do pdf">
+            <button onclick="exportPdf()" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill mx-3" data-toggle="tooltip" data-placement="top" title="Export do pdf">
                 <div class="material-icons align-middle">picture_as_pdf</div> 
             </button> 
-            <button class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Export do csv">
+            <button onclick="exportCsv()" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Export do csv">
                 <div class="material-icons align-middle">assessment</div> 
             </button> 
         </div>

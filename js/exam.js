@@ -1,15 +1,15 @@
+let urlParams = new URLSearchParams(window.location.search);
+let id_exam = urlParams.get('id');
+
+if(!id_exam) {
+    window.location.href = "404.html";
+}
+
 getExamDetail(event);
 
 function getExamDetail(event){
     if(event){
         event.preventDefault();
-    }
-
-    let urlParams = new URLSearchParams(window.location.search);
-    let id_exam = urlParams.get('id');
-
-    if(!id_exam) {
-        window.location.href = "404.html";
     }
 
     let req = "http://147.175.98.107/zaver/ExamController.php?ep=getExamsStudents&id=" + id_exam;
@@ -42,6 +42,32 @@ function getExamDetail(event){
                 `;
                 cell.class = "text-center";
             });
+        }
+        else {
+            
+        }
+    });
+}
+
+function exportPdf() {
+    let req = "http://147.175.98.107/zaver/ExamController.php?ep=exportPDF&id=" + id_exam
+    $.get(req, function(resp){
+        if(resp['status'] == 'OK') {
+            let path = resp['path']
+            //TODO download
+        }
+        else {
+            
+        }
+    });
+}
+
+function exportCsv() {
+    let req = "http://147.175.98.107/zaver/ExamController.php?ep=exportCSV&id=" + id_exam
+    $.get(req, function(resp){
+        if(resp['status'] == 'OK') {
+            let path = resp['path']
+            //TODO download
         }
         else {
             
