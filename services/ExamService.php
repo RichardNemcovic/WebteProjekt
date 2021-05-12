@@ -15,7 +15,8 @@ class ExamService
     //                                   Teacher part
     // -----------------------------------------------------------------------------------------------
 
-    public function create_exam() {
+    public function create_exam($resp)
+    {
         $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
         return json_encode($resp);
     }
