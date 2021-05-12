@@ -30,7 +30,7 @@ if(isset($_GET['ep'])){
     if($_SERVER["REQUEST_METHOD"] === 'POST'){
         switch($ep) {
             case('createExam'):
-                if(isset($data)){
+                if($data){
                     $examService->create_exam($data);
                 } else{
                     echo json_encode(['status'=>'FAIL']);

@@ -40,7 +40,7 @@ class ExamService
             }
         }
         if(isset($data['description'])) {
-            if (!empty($data['name'])) {
+            if (!empty($data['description'])) {
                 $name = $data['description'];
             }
         }
