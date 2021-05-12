@@ -132,9 +132,9 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
-            case('getExam'):
-                if(isset($data['email'])){
-                    $examService->get_exam();
+            case('getExamsStudents'):
+                if(isset($data['id_exam'])){
+                    $examService->get_exams_students($data['id_exam']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
