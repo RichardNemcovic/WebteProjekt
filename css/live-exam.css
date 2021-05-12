@@ -5,6 +5,10 @@ html, body {
     background: linear-gradient(45deg, #0d0c52 0%, #ff8b8b 100%);
 }
 
+.drawing-container{
+    width: 100%;
+}
+
 .btn{
     color: #fefeff;
     background: #0d160b;
