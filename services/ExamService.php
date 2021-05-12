@@ -30,7 +30,7 @@ class ExamService
         }
         if(isset($data['start'])){
             if(!empty($data['start'])) {
-                $start = $data['$start'];
+                $start = $data['start'];
             }
         }
 
