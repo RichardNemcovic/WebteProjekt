@@ -37,9 +37,28 @@ class ExamService
     //                                   Student part
     // -----------------------------------------------------------------------------------------------
 
-    public function get_all_my_exams()
+    public function get_all_exams_for_creator($id_creator)
     {
-        $resp = ['status' => 'FAIL', 'message' => 'get_all_my_exams'];
+        $stmt = $this->conn->prepare("SELECT id, code, name, start, end, status FROM exams WHERE id_creator=:id_creator");
+        $stmt->bindParam(":id_creator", $id_creator);
+        $stmt->execute();
+        $output = $stmt->fetchAll();
+
+        $tests = [];
+
+        if ($output) {
+            foreach ($output as $index=>$out) {
+                $tests[$index]['id']     = $out['id'];
+                $tests[$index]['code']   = $out['code'];
+                $tests[$index]['name']   = $out['name'];
+                $tests[$index]['start']  = $out['start'];
+                $tests[$index]['end']    = $out['end'];
+                $tests[$index]['status'] = $out['status'];
+            }
+            $resp = ['status' => 'OK', 'tests' => $tests];
+        } else {
+            $resp = ['status' => 'FAIL', 'message' => 'No tests for this teacher.'];
+        }
         return json_encode($resp);
     }
 

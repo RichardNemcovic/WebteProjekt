@@ -146,9 +146,9 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
-            case('getAllMyExams'):
-                if(isset($data['email'])){
-                    $examService->get_all_my_exams();
+            case('getAllExamsForCreator'):
+                if(isset($data['id_creator'])){
+                    $examService->get_all_exams_for_creator($data['id_creator']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
