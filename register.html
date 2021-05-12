@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/login-register.css">
+    <!-- JS ( BOOTSTRAP, JQUERY )-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <!--MY JS-->
+    <script src="js/login.js" defer></script>
+</head>
+<body>
+    
+    <div class="container d-flex justify-content-center">
+        <div id="register-box" class="p-5 shadow-lg">
+            <div class="button-back"> 
+                <a href="index.html"> <span class="material-icons">arrow_back</span>  </a>
+            </div>
+
+            <div class="row my-3"><h2>Teacher registration</h2></div>
+
+            <div class="row">
+                <div id="register-alert" class="alert alert-danger" role="alert" hidden>
+                    Zadali ste nesprávne údaje. Prosím skontrolujte kód testu.
+                </div>
+                <form>
+                    <div class="mb-3">
+                    <label for="ais-id" class="form-label">AIS id</label>
+                    <input id="ais-id" type="text" class="form-control" required >
+                    </div>
+                    <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input id="name" type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="surname" class="form-label">Surname</label>
+                        <input id="surname" type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input id="password" type="password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password-again" class="form-label">Password again</label>
+                        <input id="password-again" type="password" class="form-control" required>
+                    </div>
+                    <button id="teacher-register" type="submit" onclick="register(event)" class="btn btn-lg w-100 my-3">Sign up</button>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>
