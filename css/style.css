@@ -55,6 +55,5 @@ html, body{
 
 .btn-delete{
     height: 2.5rem;
-    width: 6rem;
-    margin-top: auto;
+    /*width: 6rem;*/
 }

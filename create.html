@@ -13,6 +13,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <!--MY SCIRIPT-->    
+    ,<script src="js/exam_create.js" defer></script>
 </head>
 
 <body>
@@ -53,32 +55,35 @@
 
     <!-- CONTENT -->
     <div class="container shadow-lg p-5 mb-5">
+        <div class="alert alert-success text-center" id='ok' role="alert" hidden>
+        </div>
+        <div class="alert alert-danger text-center" id='fail' role="alert" hidden>
+        </div>
         <form action="">
             <!-- INFO ABOUT EXAM -->
             <div id="exam-info">
                 <div class="row text-center">
-                    <h2>Create new exam</h2>
+                    <h2>Nový test</h2>
                 </div>
                 <hr class="my-5">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="exam-name" class="form-label">Name of exam</label>
+                    <div class="col-12">
+                        <div class="mb-3 text-center">
+                            <label for="exam-name" class="form-label">Názov testu</label>
                             <input id="exam-name" type="text" class="form-control">
                         </div>                
                     </div>            
-                    <div class="col-md-6"></div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-6 text-center">
                         <div class="mb-3">
-                            <label for="start-date" class="form-label">Start of exam</label>
+                            <label for="start-date" class="form-label">Začiatok testu</label>
                             <input id="start-date" type="datetime-local" class="form-control" >
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 text-center">
                         <div class="mb-3">
-                            <label for="end-date" class="form-label">End of exam</label>
+                            <label for="end-date" class="form-label">Koniec testu</label>
                             <input id="end-date" type="datetime-local" class="form-control">
                         </div>
                     </div>
@@ -89,230 +94,29 @@
 
             <!-- QUESTION LIST -->
             <div id="question-list" class="row">
-                                        
-                <!-- SHORT ANSWER -->                                        
-                <div class="card row m-2 py-3 px-5 shadow">
-                    <div class="col">
-                        <div class="row">
-                            <h6 id="1"> 
-                                <span class="question-number">1.</span>
-                                <span>(</span> 
-                                <span class="question-type">short answer question</span> 
-                                <span>)</span>
-                            </h6>                                                                        
-                        </div>
-                        <div class="row">                                    
-                            <div class="col">
-                                <label for="short-description" class="form-label">Question</label>
-                                <textarea id="short-description" class="form-control"></textarea>  
-                                <label for="short-answer" class="form-label">Correct answer</label>
-                                <input id="short-answer" type="text" class="form-control">
-                            </div>
-                            <hr class="mt-4">
-                            <div class="col-2">
-                                <label for="short-score" class="form-label">Number of points</label>
-                                <input id="short-score" type="number" min="0" class="form-control">
-                            </div>
-                            <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
-                            </div>                                
-                        </div> 
-                    </div>                       
-                </div>
-            
-                <!-- SELECT -->
-                <div class="card row m-2 py-3 px-5 shadow">
-                    <div class="col">
-                        <div class="row">
-                            <h6 id="2"> 
-                                <span class="question-number">2.</span>
-                                <span>(</span> 
-                                <span class="question-type">multiple choice question</span> 
-                                <span>)</span>
-                            </h6>
-                        </div>
-                        <div class="row">   
-                            <div class="col">
-                                <label for="select-description" class="form-label">Question</label>
-                                <textarea id="select-description" class="form-control mb-2"></textarea> 
-                                <h6>Choices:</h6>                                                         
-                                <label for="select-q1" class="form-label">1.</label>
-                                <input id="select-q1" type="text" class="form-control">  
-                                <label for="select-q2" class="form-label">2.</label>
-                                <input id="select-q2" type="text" class="form-control">
-                                <label for="select-q3" class="form-label">3.</label>
-                                <input id="select-q3" type="text" class="form-control">
-                                <label for="select-q4" class="form-label">4.</label>
-                                <input id="select-q4" type="text" class="form-control">
-                                <label for="select-answer" class="form-label">Correct answer number</label>
-                                <input id="select-answer" type="number" class="form-control"> 
-                            </div>
-                            <hr class="mt-4">
-                            <div class="col-2">
-                                <label for="select-score" class="form-label">Number of points</label>
-                                <input id="select-score" type="number" min="0" class="form-control">
-                            </div>
-                            <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
-                            </div>                         
-                        </div>                                
-                    </div>
-                </div>
-
-                <!-- PAIRING -->                    
-                <div class="card row m-2 py-3 px-5 shadow">
-                    <div class="col">
-                        <div class="row">
-                            <h6 id="3"> 
-                                <span class="question-number">3.</span>
-                                <span>(</span> 
-                                <span class="question-type">pairing question</span> 
-                                <span>)</span>
-                            </h6>                                       
-                        </div>
-                        <div class="row"> 
-                            <div class="col">
-                                <div class="col">
-                                    <label for="select-description" class="form-label">Question</label>
-                                    <textarea id="select-description" class="form-control mb-2"></textarea>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6"><h6>Left</h6></div>
-                                    <div class="col-6"><h6>Right</h6></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="pairing-q1" class="form-label">1.</label>
-                                        <input id="pairing-q1" type="text" class="form-control">
-                                    </div>
-                                    <div class="col-6">                                
-                                        <input id="pairing-a1" type="text" class="form-control pairing-input">   
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="pairing-q2" class="form-label">2.</label>
-                                        <input id="pairing-q2" type="text" class="form-control">
-                                    </div>
-                                    <div class="col-6">                                
-                                        <input id="pairing-a2" type="text" class="form-control pairing-input">   
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="pairing-q3" class="form-label">3.</label>
-                                        <input id="pairing-q3" type="text" class="form-control">
-                                    </div>
-                                    <div class="col-6">                                
-                                        <input id="pairing-a3" type="text" class="form-control pairing-input">   
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="pairing-q4" class="form-label">4.</label>
-                                        <input id="pairing-q4" type="text" class="form-control">
-                                    </div>
-                                    <div class="col-6">                                
-                                        <input id="pairing-a4" type="text" class="form-control pairing-input">   
-                                    </div>
-                                </div>  
-                            </div>
-                            <hr class="mt-3">
-                            <div class="col-2">
-                                <label for="pairing-score" class="form-label">Number of points</label>
-                                <input id="pairing-score" type="number" min="0" class="form-control">
-                            </div>
-                            <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
-                            </div>                                               
-                        </div>                                
-                    </div>
-                </div>
-            
-                <!-- IMAGE -->
-                <div class="card row m-2 py-3 px-5 shadow">
-                    <div class="col">
-                        <div class="row">
-                            <h6 id="4"> 
-                                <span class="question-number">4.</span>
-                                <span>(</span> 
-                                <span class="question-type">drawing question</span> 
-                                <span>)</span>
-                            </h6>                                            
-                        </div>
-                        <div class="row">                                    
-                            <div class="col">
-                                <label for="image-description" class="form-label">Question</label>
-                                <textarea id="image-description" class="form-control"></textarea>
-                            </div>                          
-                            <hr class="mt-3">
-                            <div class="col-2">
-                                <label for="image-score" class="form-label">Number of points</label>
-                                <input id="image-score" type="number" min="0" class="form-control">
-                            </div>
-                            <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
-                            </div>
-                        </div>                                
-                    </div>
-                </div>
-
-                <!-- EQUATION -->
-                <div class="card row m-2 py-3 px-5 shadow">
-                    <div class="col">
-                        <div class="row">                                
-                            <h6 id="5"> 
-                                <span class="question-number">5.</span>
-                                <span>(</span> 
-                                <span class="question-type">equation question</span> 
-                                <span>)</span>
-                            </h6>                                                
-                        </div>
-                        <div class="row">                                    
-                            <div class="col">
-                                <label for="equation-description" class="form-label">Question</label>
-                                <textarea id="equation-description" class="form-control"></textarea> 
-                            </div> 
-                            <hr class="mt-3">
-                            <div class="col-2">
-                                <label for="equation-score" class="form-label">Number of points</label>
-                                <input id="equation-score" type="number" min="0" class="form-control">
-                            </div>
-                            <div class="col-10 justify-content-end d-flex">
-                                <button class="btn btn-sm btn-dark blue-bg btn-delete">
-                                    <div class="material-icons align-middle">delete</div> Remove
-                                </button> 
-                            </div>
-                        </div>                                
-                    </div>
-                </div>
                                                 
-            </div>                
+            </div>             
 
+            <!-- CREATE NEW QUESTION  -->
+            <div class="text-center">
+                <button id="question-new" class="dropdown-toggle dropdown-no-arrow btn mt-3 light-coral-bg white-txt shadow" type="button" data-toggle="dropdown">
+                    <span class="material-icons align-middle">add</span> Nová otázka
+                </button>
+                <div id="question-type" class="dropdown-menu">
+                    <a class="dropdown-item" onclick="createShort()">Otázka s krátkou odpoveďou</a>
+                    <a class="dropdown-item" onclick="createSelect()">Výberová otázka</a>
+                    <a class="dropdown-item" onclick="createPair()">Párová otázka</a>                    
+                    <a class="dropdown-item" onclick="createImage()">Kreslenie obrázku</a>
+                    <a class="dropdown-item" onclick="createEquation()">Matematický vzorec</a>
+                </div>  
+            </div>
+            <!-- Submit  -->
+            <div class="text-center">
+                <button class="btn mt-3 btn-sm btn-dark blue-bg btn-delete" type="submit" onclick="createTest(event)">
+                    Vytvoriť test
+                </button> 
+            </div>
         </form>  
-        
-        <!-- CREATE NEW QUESTION  -->
-        <div>
-            <button id="question-new" class="dropdown-toggle dropdown-no-arrow btn mt-3 light-coral-bg white-txt shadow" type="button" data-toggle="dropdown">
-                <span class="material-icons align-middle">add</span> New question
-            </button>
-            <div id="question-type" class="dropdown-menu">
-                <a class="dropdown-item" href="#">Short answer</a>
-                <a class="dropdown-item" href="#">Multiple choices</a>
-                <a class="dropdown-item" href="#">Pairing</a>                    
-                <a class="dropdown-item" href="#">Drawing</a>
-                <a class="dropdown-item" href="#">Equation</a>
-            </div>  
-        </div>
-        
     </div>    
     <div class="gradient-line"></div>
 
