@@ -30,7 +30,7 @@ class ExamService
         }
         if(isset($data['start'])){
             if(!empty($data['start'])) {
-                $start = $data['$start'];
+                $start = $data['start'];
             }
         }
 
@@ -44,7 +44,6 @@ class ExamService
                 $name = $data['description'];
             }
         }
-
 
         $stmt = $this->conn->prepare('insert into exams (id_creator, code, name, start, end) values (:id_creator, :code, :name, :start, :end)');
         $stmt->bindParam('id_creator', $id_creator);
