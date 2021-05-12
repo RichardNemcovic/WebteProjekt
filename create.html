@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,6 +16,7 @@
 
     <!--MY SCIRIPT-->    
     <script src="js/exam_create.js" defer></script>
+    <script src="js/login.js" defer></script>
     <script defer src="js/tooltips.js"></script>
 </head>
 
@@ -24,7 +25,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="home.html">Teacher's panel</a>
+          <a class="navbar-brand" href="home.html">Učiteľský panel</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="material-icons align-middle">menu</span>
           </button>
@@ -32,22 +33,22 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link active" href="create.html">
-                        <span class="material-icons align-middle">add</span> New exam 
+                        <span class="material-icons align-middle">add</span> Nový test
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="home.html">
-                        <span class="material-icons align-middle">list</span> Exam list 
+                        <span class="material-icons align-middle">list</span> Zoznam testov 
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="notifications.html">
-                        <span class="material-icons align-middle">notifications</span> Notifications 
+                        <span class="material-icons align-middle">notifications</span> Upozornenia
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span class="material-icons align-middle">logout</span> Sign out 
+                    <a class="nav-link" onclick="logout()">
+                        <span class="material-icons align-middle">logout</span> Odhlásiť sa 
                     </a>
                 </li>                           
             </ul>                                

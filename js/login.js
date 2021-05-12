@@ -1,5 +1,25 @@
 var server = "http://147.175.98.107/zaver/controller.php";
 
+var path = window.location.href.split('/');
+path = path[path.length-1];
+authenticate();
+
+function authenticate(){
+    if(sessionStorage.getItem('id_user') && sessionStorage.getItem('role') && sessionStorage.getItem('name')){
+        if(path == 'index.html'){
+            if(sessionStorage.getItem('id_test')){
+                window.href.location = 'exam.html';
+            }else{
+                window.href.location = 'home.html';
+            }
+        }
+    }else{
+        if(path != 'index.html' && path != 'register.html'){
+            window.location.href = 'index.html';
+        }
+    }
+}
+
 function login(event){
     if(event){
         event.preventDefault();
@@ -13,6 +33,7 @@ function login(event){
         if(resp['status'] == 'OK'){
             sessionStorage.setItem('id_user', resp['id']);
             sessionStorage.setItem('name', resp['name']);
+            sessionStorage.setItem('role', 'admin');
             window.location.href = 'home.html';
         }else{
             document.getElementById('teacher-alert').hidden = false;
@@ -36,6 +57,7 @@ function register(event){
     $.post(server+'?ep=registration', data, function(resp){
         if(resp['status'] == 'OK'){
             sessionStorage.setItem('id_user', resp['id']);
+            sessionStorage.setItem('role', 'admin');
             sessionStorage.setItem('name', resp['name']);
             window.location.href = 'home.html';
         }else{
@@ -58,6 +80,7 @@ function joinExam(event){
     $.post(server+'?ep=studentLogin', data, function(resp){
         if(resp['status'] == 'OK'){
             sessionStorage.setItem('id_user', resp['id']);
+            sessionStorage.setItem('role', 'user');
             sessionStorage.setItem('name', resp['name']);
             sessionStorage.setItem('id_test', resp['id_test']);
             window.location.href = 'exam.html';
@@ -69,6 +92,11 @@ function joinExam(event){
 
 function logout(){
     $.post(server+'?ep=logout', function(data){
-        console.log('logged out');
+        sessionStorage.removeItem('id_user');
+        sessionStorage.removeItem('role');
+        sessionStorage.removeItem('name');
+        sessionStorage.removeItem('id_test');
+        
+        window.location.href = 'index.html';
     });
 }

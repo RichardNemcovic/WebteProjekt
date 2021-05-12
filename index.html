@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,14 +33,14 @@
             <div class="tab-content p-5" id="myTabContent">
                 <!-- STUDENT TAB -->
                 <div class="tab-pane fade show active" id="student" role="tabpanel">
-                    <div class="row text-center mb-3"><h3> <span class="material-icons">school</span> Student</h3></div>
+                    <div class="row text-center mb-3"><h3> <span class="material-icons">school</span> Študent</h3></div>
                     <div class="row">
                         <div id="student-alert" class="alert alert-danger" role="alert" hidden>
                             Zadali ste nesprávne údaje. Prosím skontrolujte kód testu.
                         </div>
                         <form>
                             <div class="mb-3">
-                                <label for="Scode" class="form-label">Exam key</label>
+                                <label for="Scode" class="form-label">Kód testu</label>
                                 <input id="Scode" type="text" class="form-control" required>
                             </div>
                             <div class="mb-3">
@@ -48,20 +48,20 @@
                                 <input id="Sais-id" type="text" class="form-control" required>
                             </div>
                             <div class="mb-3">
-                                <label for="Sname" class="form-label">Name</label>
+                                <label for="Sname" class="form-label">Meno</label>
                                 <input id="Sname" type="text" class="form-control" required>
                             </div>
                             <div class="mb-3">
-                                <label for="Ssurname" class="form-label">Surname</label>
+                                <label for="Ssurname" class="form-label">Priezvisko</label>
                                 <input id="Ssurname" type="text" class="form-control" required>
                             </div>
-                            <button id="student-login" type="submit" onclick="joinExam(event)" class="btn btn-lg w-100 my-3">Join exam</button>
+                            <button id="student-login" type="submit" onclick="joinExam(event)" class="btn btn-lg w-100 my-3">Začať test</button>
                         </form>
                     </div>                
                 </div>
                 <!-- TEACHER TAB -->
                 <div class="tab-pane fade" id="teacher" role="tabpanel">
-                    <div class="row text-center mb-3"><h3> <span class="material-icons">account_circle</span> Teacher</h3></div>
+                    <div class="row text-center mb-3"><h3> <span class="material-icons">account_circle</span> Učiteľ</h3></div>
                     <div class="row">
                         <div id="teacher-alert" class="alert alert-danger" role="alert" hidden>
                                 Zadali ste neplatné údaje.
@@ -73,14 +73,14 @@
                             </div>
                             <div class="mb-3">
                                 
-                            <label for="Tpassword" class="form-label">Password</label>
+                            <label for="Tpassword" class="form-label">Heslo</label>
                             <input id="Tpassword" type="password" class="form-control">
                             </div>                        
-                            <button id="teacher-login" type="submit" onclick="login(event)" class="btn btn-lg w-100 my-3">Log in</button>
+                            <button id="teacher-login" type="submit" onclick="login(event)" class="btn btn-lg w-100 my-3">Prihlásiť sa</button>
                         </form>
                         <hr class="my-3">
                         <div class="col">
-                            <a href="register.html" class="btn btn-lg w-100 my-3 btn-gray">Register</a>                            
+                            <a href="register.html" class="btn btn-lg w-100 my-3 btn-gray">Zaregistrovať sa</a>                            
                         </div>
                     </div>   
                 </div>                

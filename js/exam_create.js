@@ -360,6 +360,7 @@ function createTest(event){
     data['description'] = document.getElementById('exam-name').value;
     data['start'] = document.getElementById('start-date').value;
     data['end'] = document.getElementById('end-date').value;
+    data['creator'] = sessionStorage.getItem('id_user');
     data['qShort'] = getShortData();
     data['qSelect'] = getSelectData();
     data['qImage'] = getImageData();
