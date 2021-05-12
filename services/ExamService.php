@@ -28,7 +28,7 @@ class ExamService
                 $id_creator = $data['creator'];
             }
         }
-        if(isset($data['$start'])){
+        if(isset($data['start'])){
             if(!empty($data['start'])) {
                 $start = $data['$start'];
             }
