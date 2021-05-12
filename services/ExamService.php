@@ -15,7 +15,7 @@ class ExamService
     //                                   Teacher part
     // -----------------------------------------------------------------------------------------------
 
-    public function create_exam($resp)
+    public function create_exam($data)
     {
 
         if(isset($data['code'])){
