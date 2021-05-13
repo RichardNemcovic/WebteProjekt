@@ -406,6 +406,38 @@ class ExamService
                 }
             }
 
+            // Short answer question, id=2
+            $id_type = 2;
+            $stmt = $this->conn->prepare("SELECT questions.name, questions.score, questions_short.answer
+                                                FROM questions 
+                                                INNER JOIN questions_short ON questions.id=questions_short.id_question
+                                                WHERE id_exam=:id_exam
+                                                  AND id_type=:id_type");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_type", $id_type);
+            $stmt->execute();
+            $output = $stmt->fetchAll();
+
+            foreach ($output as $index01=>$out) {
+                $resp['qShort'][$index01]['question']['description'] = $out['name'];
+                $resp['qShort'][$index01]['question']['score'] = $out['score'];
+                $resp['qShort'][$index01]['question']['answer'] = $out['answer'];
+
+                $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_short.answer
+                                                    FROM answers
+                                                    INNER JOIN answers_select ON answers.id=answers_short.id_answer
+                                                    WHERE answers.id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetch();
+
+                if ($res) {
+                    $resp['qShort'][$index01]['answer']['id'] = $res['id'];
+                    $resp['qShort'][$index01]['answer']['answer'] = $res['answer'];
+                    $resp['qShort'][$index01]['answer']['score'] = $res['score'];
+                }
+            }
+
         } else {
             $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
         }
