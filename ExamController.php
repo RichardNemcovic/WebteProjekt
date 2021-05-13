@@ -47,18 +47,14 @@ if(isset($_GET['ep'])){
                 }
                 break;
             case('getExamTimes'):
-                if(isset($_GET['id_exam']) && isset($_GET['id_user'])){
-                    $examService->get_exam_times($_GET['id_exam'], $_GET['id_user']);
+                if(isset($_GET['id_exam'])){
+                    $examService->get_exam_times($_GET['id_exam']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('getServerTime'):
-                if(isset($_GET['id_exam']) && isset($_GET['id_user'])){
-                    $examService->get_server_time($_GET['id_exam'], $_GET['id_user']);
-                } else{
-                    echo json_encode(['status'=>'FAIL']);
-                }
+                $examService->get_server_time();
                 break;
             case('openExam'):
                 if(isset($_GET['id_exam'])){
