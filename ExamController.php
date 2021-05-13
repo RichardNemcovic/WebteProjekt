@@ -24,14 +24,10 @@ if(isset($_GET['ep'])){
     $data = json_decode(file_get_contents('php://input'), true);
 
     if($_SERVER["REQUEST_METHOD"] === 'GET'){
-
-    }
-
-    if($_SERVER["REQUEST_METHOD"] === 'POST'){
         switch($ep) {
-            case('createExam'):
-                if($data){
-                    $examService->create_exam($data);
+            case('getAllExamsForCreator'):
+                if(isset($data['id_creator'])){
+                    $examService->get_all_exams_for_creator($data['id_creator']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
@@ -43,6 +39,39 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('getExamById'):
+                if(isset($data['id_exam']) && isset($data['id_user'])){
+                    $examService->get_exam_by_id($data['id_exam'], $data['id_user']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
+            case('getExamTimes'):
+                if(isset($data['id_exam']) && isset($data['id_user'])){
+                    $examService->get_exam_times($data['id_exam'], $data['id_user']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
+            case('getServerTime'):
+                if(isset($data['id_exam']) && isset($data['id_user'])){
+                    $examService->get_server_time($data['id_exam'], $data['id_user']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
+        }
+    }
+
+    if($_SERVER["REQUEST_METHOD"] === 'POST'){
+        switch($ep) {
+            case('createExam'):
+                if($data){
+                    $examService->create_exam($data);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
             case('setScore'):
                 if(isset($data['id_user']) && isset($data['id_answer']) && isset($data['id_question']) && isset($data['score'])){
                     $examService->set_score($data['id_user'], $data['id_answer'], $data['id_question'], $data['score']);
@@ -50,23 +79,9 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
-            case('getAllExamsForCreator'):
-                if(isset($data['id_creator'])){
-                    $examService->get_all_exams_for_creator($data['id_creator']);
-                } else{
-                    echo json_encode(['status'=>'FAIL']);
-                }
-                break;
             case('submitExam'):
                 if(isset($data['email'])){
                     $examService->submit_exam();
-                } else{
-                    echo json_encode(['status'=>'FAIL']);
-                }
-                break;
-            case('getExamById'):
-                if(isset($data['id_exam']) && isset($data['id_user'])){
-                    $examService->get_exam_by_id($data['id_exam'], $data['id_user']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }

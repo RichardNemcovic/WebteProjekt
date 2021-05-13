@@ -414,6 +414,18 @@ class ExamService
 
         return json_encode($resp);
     }
+
+    public function get_exam_times() {
+        $resp = ['status' => 'FAIL', 'message' => 'get_exam_times'];
+        echo json_encode($resp);
+        return json_encode($resp);
+    }
+
+    public function get_server_time() {
+        $resp = ['status' => 'FAIL', 'message' => 'get_server_time'];
+        echo json_encode($resp);
+        return json_encode($resp);
+    }
 }
 
 ?>
