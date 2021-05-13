@@ -60,6 +60,13 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('openExam'):
+                if(isset($_GET['id_exam'])){
+                    $examService->open_exam($_GET['id_exam']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
         }
     }
 
