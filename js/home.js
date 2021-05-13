@@ -24,17 +24,18 @@ function getExams(event){
             }
             else {
                 tests.forEach(test => {
-                    let row = table.insertRow(0);
+                    let row = table.insertRow();
                     row.insertCell(0).innerHTML = test.description;
                     row.insertCell(1).innerHTML = test.code;
                     row.insertCell(2).innerHTML = test.start;
                     row.insertCell(3).innerHTML = test.end;
                     row.insertCell(4).innerHTML = test.status;
-                    row.insertCell(5).innerHTML = `
+                    let cell = row.insertCell(5).innerHTML = `
                         <a href="exam.html?id=${test.id}" class="btn btn-sm btn-dark rounded-pill d-inline-block mx-1" data-toggle="tooltip" data-placement="top" title="Detail testu">
                             <div class="material-icons align-middle fs-5">visibility</div>
                         </a>
                     `;
+                    cell.class = "text-center";
                 });
             }
         }else{

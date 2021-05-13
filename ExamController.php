@@ -65,8 +65,8 @@ if(isset($_GET['ep'])){
                 }
                 break;
             case('getExamById'):
-                if(isset($data['email'])){
-                    $examService->get_exam_by_id();
+                if(isset($data['id_exam']) && isset($data['id_user'])){
+                    $examService->get_exam_by_id($data['id_exam'], $data['id_user']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }

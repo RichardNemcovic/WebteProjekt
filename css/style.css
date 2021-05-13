@@ -61,6 +61,7 @@ html, body{
     height: 2.5rem;
     max-width: 6rem;
     margin-top: auto;
+    line-height: 1.8rem;
 }
 
 .table-head{
