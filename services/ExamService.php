@@ -18,20 +18,20 @@ class ExamService
     public function create_exam($data)
     {
         $resp = ['status' => 'OK', 'message' => 'create_exam'];
+        $exists = false;
 
-        if(isset($data['code'])){
-            if(!empty($data['code'])){
-                $code= $data['code'];
-                $stmt = $this->conn->prepare('select * from exams where code=:code');
-                $stmt->bindParam('code', $code);
-                $stmt->execute();
-                if($stmt->rowCount()){
-                    $resp = ['status' => 'FAIL (code exists)', 'message' => 'create_exam'];
-                    echo json_encode($resp);
-                    return json_encode($resp);
-                }
+        while(!$exists){
+            $code = rand(100000,999999);
+            $stmt = $this->conn->prepare('select * from exams where code=:code');
+            $stmt->bindParam('code', $code);
+            $stmt->execute();
+            if($stmt->rowCount()){
+                $exists = false;
+            }else{
+                $exists = true;
             }
         }
+
         if(isset($data['creator'])){
             if(!empty($data['creator'])) {
                 $id_creator = $data['creator'];
@@ -656,6 +656,15 @@ class ExamService
 
                         if (!empty($item['id'])) {
                             $id_exam = $item['id'];
+                            $stmt = $this->conn->prepare('select * from exams where id=:id and status="active"');
+                            $stmt->bindParam('id', $id_exam);
+                            $stmt->execute();
+                            if($stmt->rowCount()){
+                            }{
+                                $resp = ['status' => 'FAIL', 'message' => 'submit_exam exam doesnt exists'];
+                                echo json_encode($resp);
+                                return json_encode($resp);
+                            }
 
                         }
                     }
