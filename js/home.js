@@ -1,6 +1,6 @@
 let server;
 // let id_user = sessionStorage.getItem('id_user');
-
+let id_user = 1;
 
 const getExams = async () => {
     const response = await fetch('js/config.json');
@@ -11,8 +11,6 @@ const getExams = async () => {
 }
 
 function generateTable() {    
-    let id_user = 1;
-    
     let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
 
     let table = document.getElementById('table-body');
@@ -50,7 +48,15 @@ function generateTable() {
             <td class="text-center" colspan="6">Žiadne testy</td>
             </tr>`;
         }
+        setTooltips();
     });
 }
 
 getExams();
+
+// SET TOOLTIPS
+function setTooltips() {
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
+}
