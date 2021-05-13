@@ -617,6 +617,15 @@ class ExamService
 
                         if (!empty($item['id'])) {
                             $id_exam = $item['id'];
+                            $stmt = $this->conn->prepare('select * from exams where id=:id and status="active"');
+                            $stmt->bindParam('id', $id_exam);
+                            $stmt->execute();
+                            if($stmt->rowCount()){
+                            }{
+                                $resp = ['status' => 'FAIL', 'message' => 'submit_exam exam doesnt exists'];
+                                echo json_encode($resp);
+                                return json_encode($resp);
+                            }
 
                         }
                     }
