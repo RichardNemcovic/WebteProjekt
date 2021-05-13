@@ -60,6 +60,13 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('openExam'):
+                if(isset($_GET['id_exam'])){
+                    $examService->open_exam($_GET['id_exam']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
         }
     }
 
@@ -80,8 +87,8 @@ if(isset($_GET['ep'])){
                 }
                 break;
             case('submitExam'):
-                if(isset($data['email'])){
-                    $examService->submit_exam();
+                if($data){
+                    $examService->submit_exam($data);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
