@@ -22,6 +22,14 @@ class ExamService
         if(isset($data['code'])){
             if(!empty($data['code'])){
                 $code= $data['code'];
+                $stmt = $this->conn->prepare('select * from exams where code=:code');
+                $stmt->bindParam('code', $code);
+                $stmt->execute();
+                if($stmt->rowCount()){
+                    $resp = ['status' => 'FAIL (code exists)', 'message' => 'create_exam'];
+                    echo json_encode($resp);
+                    return json_encode($resp);
+                }
             }
         }
         if(isset($data['creator'])){
