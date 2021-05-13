@@ -806,6 +806,7 @@ class ExamService
                                 if ($ais_id) {
                                     $t = time();
                                     $path = "uploads/" . $ais_id . $t . ".png";
+                                    $img_data = substr($img_data, 22);
                                     $status = file_put_contents($path, base64_decode($img_data));
                                     $correct = 0;
                                     $score = 0;
@@ -911,6 +912,10 @@ class ExamService
                                                 $stmt->execute();
                                                 $question_pairing = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 if($question_pairing){
+                                                    if($right == null){
+                                                        $score = 0;
+                                                        $correct = 0;
+                                                    }
                                                     if($question_pairing[0]['answer_right'] == $right){
                                                     }else{
                                                         $score = 0;
