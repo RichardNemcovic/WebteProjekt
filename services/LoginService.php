@@ -31,6 +31,7 @@
             } else {
                 $resp = ['status' => 'FAIL', 'message' => 'Database error.'];
             }
+            echo json_encode($resp);
             return json_encode($resp);
         }
 
@@ -49,6 +50,7 @@
             } else {
                 $resp = ['status' => 'FAIL', 'message' => 'Wrong email.'];
             }
+            echo json_encode($resp);
             return json_encode($resp);
         }
 
@@ -84,7 +86,7 @@
                     $resp = ['status' => 'FAIL', 'message' => 'No test matching this code.'];
                 }
             }
-
+            echo json_encode($resp);
             return json_encode($resp);
         }
     }
