@@ -82,8 +82,8 @@ function joinExam(event){
             sessionStorage.setItem('id_user', resp['id']);
             sessionStorage.setItem('role', 'user');
             sessionStorage.setItem('name', resp['name']);
-            sessionStorage.setItem('id_test', resp['id_test']);
-            window.location.href = 'exam.html';
+            //sessionStorage.setItem('id_exam', resp['id_exam']);
+            window.location.href = 'exam.html?id_exam='+resp['id_exam'];
         }else{
             document.getElementById('student-alert').hidden = false;
         }
@@ -95,7 +95,7 @@ function logout(){
         sessionStorage.removeItem('id_user');
         sessionStorage.removeItem('role');
         sessionStorage.removeItem('name');
-        sessionStorage.removeItem('id_test');
+        //sessionStorage.removeItem('id_test');
         
         window.location.href = 'index.html';
     });
