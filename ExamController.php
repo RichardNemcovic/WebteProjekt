@@ -57,8 +57,8 @@ if(isset($_GET['ep'])){
                 $examService->get_server_time();
                 break;
             case('openExam'):
-                if(isset($_GET['id_exam'])){
-                    $examService->open_exam($_GET['id_exam']);
+                if(isset($_GET['id_exam']) && isset($_GET['id_user'])){
+                    $examService->open_exam($_GET['id_exam'], $_GET['id_user']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
