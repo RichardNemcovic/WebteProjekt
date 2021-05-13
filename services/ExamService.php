@@ -562,6 +562,35 @@ class ExamService
         return json_encode($resp);
     }
 
+    public function change_exams_status($id_exam) {
+        $stmt = $this->conn->prepare("SELECT status
+                                            FROM exams
+                                            WHERE id=:id_exam");
+        $stmt->bindParam(":id_exam", $id_exam);
+        $stmt->execute();
+        $status = $stmt->fetchColumn();
+
+        if ($status) {
+            if ($status == "active") {
+                $status = "inactive";
+            } else {
+                $status = "active";
+            }
+
+            $stmt = $this->conn->prepare("UPDATE exams SET status=:status WHERE exams.id=:id_exam ");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":status", $status);
+            $stmt->execute();
+
+            $resp = ['status' => 'OK', 'newStatus' => $status];
+        } else {
+            $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
+        }
+
+        echo json_encode($resp);
+        return json_encode($resp);
+    }
+
     // -----------------------------------------------------------------------------------------------
     //                                   Student part
     // -----------------------------------------------------------------------------------------------

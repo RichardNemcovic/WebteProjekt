@@ -75,6 +75,13 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('changeExamsStatus'):
+                if($data['id_exam']){
+                    $examService->change_exams_status($data['id_exam']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
             case('setScore'):
                 if(isset($data['id_user']) && isset($data['id_answer']) && isset($data['id_question']) && isset($data['score'])){
                     $examService->set_score($data['id_user'], $data['id_answer'], $data['id_question'], $data['score']);
