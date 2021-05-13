@@ -414,7 +414,7 @@ class ExamService
 
             // Short answer question, id=2
             $id_type = 2;
-            $stmt = $this->conn->prepare("SELECT questions.name, questions.score, questions_short.answer
+            $stmt = $this->conn->prepare("SELECT questions.id, questions.name, questions.score, questions_short.answer
                                                 FROM questions 
                                                 INNER JOIN questions_short ON questions.id=questions_short.id_question
                                                 WHERE id_exam=:id_exam
@@ -431,7 +431,7 @@ class ExamService
 
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_short.answer
                                                     FROM answers
-                                                    INNER JOIN answers_select ON answers.id=answers_short.id_answer
+                                                    INNER JOIN answers_short ON answers.id=answers_short.id_answer
                                                     WHERE answers.id_question=:id_question");
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
@@ -441,6 +441,35 @@ class ExamService
                     $resp['qShort'][$index01]['answer']['id'] = $res['id'];
                     $resp['qShort'][$index01]['answer']['answer'] = $res['answer'];
                     $resp['qShort'][$index01]['answer']['score'] = $res['score'];
+                }
+            }
+
+            // Image question, id=3
+            $id_type = 3;
+            $stmt = $this->conn->prepare("SELECT id, name, score
+                                                FROM questions 
+                                                WHERE id_exam=:id_exam
+                                                  AND id_type=:id_type");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_type", $id_type);
+            $stmt->execute();
+            $output = $stmt->fetchAll();
+
+            foreach ($output as $index01=>$out) {
+                $resp['qImage'][$index01]['question']['description'] = $out['name'];
+                $resp['qImage'][$index01]['question']['score'] = $out['score'];
+
+                $stmt = $this->conn->prepare("SELECT answers.id, answers_images.answer
+                                                    FROM answers
+                                                    INNER JOIN answers_images ON answers.id=answers_images.id_answer
+                                                    WHERE answers.id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetch();
+
+                if ($res) {
+                    $resp['qImage'][$index01]['answer']['id'] = $res['id'];
+                    $resp['qImage'][$index01]['answer']['answer'] = $res['answer'];
                 }
             }
 
@@ -457,15 +486,25 @@ class ExamService
     //                                   Student part
     // -----------------------------------------------------------------------------------------------
 
-    public function open_exam($id_exam) {
+    public function open_exam($id_exam, $id_user) {
+        $status = 'active';
         $stmt = $this->conn->prepare("SELECT name, start, end
                                             FROM exams
-                                            WHERE id=:id_exam");
+                                            WHERE id=:id_exam
+                                              AND status=:status");
         $stmt->bindParam(":id_exam", $id_exam);
+        $stmt->bindParam(":status", $status);
         $stmt->execute();
         $output = $stmt->fetch();
 
         if ($output) {
+            $id_status = 1;
+            $stmt = $this->conn->prepare('INSERT INTO exam_status (id_exam, id_user, id_status) values (:id_exam, :id_user, :id_status)');
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_user", $id_user);
+            $stmt->bindParam(":id_status", $id_status);
+            $stmt->execute();
+
             $resp = ['status' => 'OK', 'name' => $output['name'], 'start' => $output['start'], 'end' => $output['end']];
 
             // Select question, id=1
