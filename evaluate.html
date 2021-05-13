@@ -59,66 +59,37 @@
         <div class="button-back"> 
             <a id="button-back" href="#" class="light-coral-txt lct-hover" data-toggle="tooltip" data-placement="top" title="Back to exam"> <span class="material-icons">arrow_back</span>  </a>
         </div>
-        <h2 class="text-center mb-3 mt-2">Student's result</h2>
+        <h2 class="text-center mb-3 mt-2">Ohodnotiť študenta</h2>
         <div class="row my-5">
             <div class="col-md-4 text-center">
-                <h6 class="light-coral-txt">Exam name: </h6>
-                <h5 id="exam-name">Zapocet OS</h5>
+                <h6 class="light-coral-txt">Názov testu: </h6>
+                <h5 id="exam-name"></h5>
             </div>
             <div class="col-md-4 text-center">
-                <h6 class="light-coral-txt">Start: </h6>
-                <h5 id="exam-start">20.5.2021, 13:00</h5>
+                <h6 class="light-coral-txt">Začiatok: </h6>
+                <h5 id="exam-start"></h5>
             </div>
             <div class="col-md-4 text-center">
-                <h6 class="light-coral-txt">End: </h6>
-                <h5 id="exam-end">20.5.2021, 13:30</h5>
+                <h6 class="light-coral-txt">Koniec: </h6>
+                <h5 id="exam-end"></h5>
             </div>                        
         </div>    
         <div class="row mb-4">
             <div class="col-md-4"></div>
             <div class="col-md-4 text-center">
-                <h6 class="light-coral-txt">Student's name: </h6>
-                <h5 id="exam-student">Poctivak Poctivy</h5>
+                <h6 class="light-coral-txt">Študent: </h6>
+                <h5 id="exam-student"></h5>
             </div>
             <div class="col-md-4"></div>
         </div>
 
         <hr class="my-5">
 
-        <button id="save-evaluation" class="btn mb-4 light-coral-bg white-txt shadow" type="button">
-            <span class="material-icons align-middle">save</span> Save changes
-        </button>
+        <!-- <button id="save-evaluation" class="btn mb-4 light-coral-bg white-txt shadow" type="button">
+            <span class="material-icons align-middle">save</span> Uložiť honotenie
+        </button> -->
 
-        <div id="exam-content" class="row">
-
-            <!-- SHORT ANSWER -->                                        
-            <div class="card row m-2 py-3 px-5 shadow">
-                <div class="col">
-                    <div class="row">
-                        <h6 id="1"> 
-                            <span class="question-number">1.</span>
-                            <span>(</span> 
-                            <span class="question-type">short answer question</span> 
-                            <span>)</span>
-                        </h6>                                                                        
-                    </div>
-                    <div class="row">                                    
-                        <div class="col-md-6">
-                            <p class="light-coral-txt mb-1">Question:</p>
-                            <h6>Whats 9 + 10</h6>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="light-coral-txt mb-1">Answer:</p>
-                            <h6>12</h6>
-                        </div>
-                        <hr class="mt-4">
-                        <div class="col-2">
-                            <label for="short-score" class="form-label">Number of points</label>
-                            <input id="short-score" type="number" min="0" class="form-control">
-                        </div>                                                       
-                    </div> 
-                </div>                       
-            </div>
+        <div id="exam-content" class="row">            
         
             <!-- SELECT -->
             <div class="card row m-2 py-3 px-5 shadow">
@@ -148,54 +119,7 @@
                     </div>                                
                 </div>
             </div>
-
-            <!-- PAIRING -->                    
-            <div class="card row m-2 py-3 px-5 shadow">
-                <div class="col">
-                    <div class="row">
-                        <h6 id="3"> 
-                            <span class="question-number">3.</span>
-                            <span>(</span> 
-                            <span class="question-type">pairing question</span> 
-                            <span>)</span>
-                        </h6>                                       
-                    </div>
-                    <div class="row"> 
-                        <div class="col">
-                            <div class="col mb-3">
-                                <p class="light-coral-txt mb-1">Question:</p>
-                                <h6>Match the question parts</h6>
-                            </div>
-                            <div class="row">
-                                <div class="col-6"><h6>Left</h6></div>
-                                <div class="col-6"><h6>Right</h6></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="pair-tile">3+2</div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="pair-tile">5</div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="pair-tile">3*3</div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="pair-tile">9</div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="mt-3">
-                        <div class="col-2">
-                            <label for="pairing-score" class="form-label">Number of points</label>
-                            <input id="pairing-score" type="number" min="0" class="form-control">
-                        </div>                                                                    
-                    </div>                                
-                </div>
-            </div>
-        
+                                         
             <!-- IMAGE -->
             <div class="card row m-2 py-3 px-5 shadow">
                 <div class="col">
@@ -225,43 +149,10 @@
                         </div>                        
                     </div>                                
                 </div>
-            </div>
-
-            <!-- EQUATION -->
-            <div class="card row m-2 py-3 px-5 shadow">
-                <div class="col">
-                    <div class="row">                                
-                        <h6 id="5"> 
-                            <span class="question-number">5.</span>
-                            <span>(</span> 
-                            <span class="question-type">equation question</span> 
-                            <span>)</span>
-                        </h6>                                                
-                    </div>
-                    <div class="row">                                    
-                        <div class="col-md-6">
-                            <p class="light-coral-txt mb-1">Question:</p>
-                            <h6>Whats 9 + bäää</h6>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="light-coral-txt mb-1">Answer:</p>
-                            <h6>equation</h6>
-                        </div> 
-                        <hr class="mt-3">
-                        <div class="col-2">
-                            <label for="equation-score" class="form-label">Number of points</label>
-                            <input id="equation-score" type="number" min="0" class="form-control">
-                        </div>                        
-                    </div>                                
-                </div>
-            </div>
+            </div>            
 
         </div>
-
-        <button id="save-evaluation2" class="btn my-4 light-coral-bg white-txt shadow" type="button">
-            <span class="material-icons align-middle">save</span> Save changes
-        </button>
-
+        
     </div>
     
     <!-- MODAL BOX -->
@@ -269,7 +160,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Student's drawing:</h5>            
+                    <h5 class="modal-title">Študentov obrázok:</h5>            
                 </div>
                 <div class="modal-body">
                     <img src="https://artprojectsforkids.org/wp-content/uploads/2021/04/Draw-a-Unicorn-revised.jpg" class="w-100">

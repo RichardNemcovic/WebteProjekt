@@ -110,3 +110,16 @@ tbody{
     border-radius: 8px;
 }
 
+.alert-success{
+    color: #0d0c52ff;
+    background-color: rgb(186 185 255);
+    border: none;    
+}
+
+.alert-danger{    
+    border: none;    
+}
+
+.light-bg{
+    background: #f0f0ff;
+}
