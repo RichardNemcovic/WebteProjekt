@@ -87,8 +87,8 @@ if(isset($_GET['ep'])){
                 }
                 break;
             case('submitExam'):
-                if(isset($data['email'])){
-                    $examService->submit_exam();
+                if($data){
+                    $examService->submit_exam($data);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
