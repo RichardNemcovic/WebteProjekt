@@ -338,11 +338,12 @@ class ExamService
         } else {
             $resp = ['status' => 'FAIL', 'message' => 'No tests for this teacher.'];
         }
-        return json_encode($resp);
+        echo json_encode($resp);
     }
 
     public function submit_exam() {
         $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+        echo json_encode($resp);
         return json_encode($resp);
     }
 
