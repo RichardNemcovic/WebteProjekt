@@ -39,6 +39,13 @@ if(isset($_GET['ep'])) {
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('delteExamZip'):
+                if(isset($data['filename'])){
+                    $exportService->delete_exam_zip($data['filename']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
         }
     }
 }

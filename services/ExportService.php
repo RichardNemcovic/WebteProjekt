@@ -12,8 +12,6 @@
 
         public function get_exam_csv($id_exam)
         {
-        //vyexportovať výsledky vo formáte csv, kde v prvom stĺpci bude ID študenta, v druhom a treťom meno a priezvisko
-        // a v poslednom stĺpci sumárne bodové hodnotenie za celý test. ID-Meno-Preizvisko-Sum(body za test) vsetko zo studenta za dany test
         $stmt = $this->conn->prepare("SELECT users.id, name, surname, points FROM users, exam_status WHERE exam_status.id_exam=:id_exam AND exam_status.id_user=users.id");
         $stmt->bindParam(":id_exam", $id_exam);
         $stmt->execute();
@@ -38,8 +36,125 @@
         return json_encode($resp);
         }
 
-        public function get_exam_PDF() {
+        public function get_exam_pdf($id_exam)//Composer Needed https://getcomposer.org/download/ and https://mpdf.github.io/installation-setup/installation-v7-x.html
+        {//and U need to change priority to current file chmod 777 PLUS u need to create tmp file and do the same chmod mate
+            $filename = '../tmp/exam' . $id_exam . '.zip';
+            $zip = new ZipArchive;
+            if ($zip->open($filename, ZipArchive::CREATE) === TRUE){
+                $stmt = $this->conn->prepare("SELECT id_user, users.name as Username, surname, exams.name as Examname, ais_id  FROM exam_status, users, exams WHERE id_status=2 AND id_exam=:id_exam AND id_user=users.id AND id_exam=exams.id");
+                $stmt->bindParam(":id_exam", $id_exam);
+                $stmt->execute();
+                $status = false;
+                while($data = $stmt->fetch(PDO::FETCH_OBJ)){//Pre kazdeho usera
+                    $status = true;
+                    $mpdf = new \Mpdf\Mpdf();
+                    $myData = '
+                    <!DOCTYPE html>
+                    <html lang="sk">
+                    <head>
+                        <meta charset="UTF-8">
+                        <script src="https://unpkg.com/mathlive/dist/mathlive.min.js"></script>
+                        <style>
+                        h1 {text-align: center;}
+                        h2 {text-align: center;}
+                        img {
+                            border: 1px solid #ddd;
+                            border-radius: 4px;
+                            padding: 5px;
+                            width: 150px;
+                        }
+                        </style>
+                        </head>
+                        <body>
+                    ';
+                    $myData .= '<h1>' . $data->Examname .'</h1>';
+                    $myData .= '<h2>' . $data->Username . ' '. $data->surname .'</h2>';
+                    $pdfname = $data->ais_id . '_' . $id_exam. '.pdf';
 
+                    $stmtQ = $this->conn->prepare("SELECT answers.id as AnswerID, id_type as IDtype, questions.name as QuestionsName FROM questions,answers WHERE questions.id_exam=:id_exam AND answers.id_user=:USERid AND id_question=questions.id");
+                    $stmtQ->bindParam(":id_exam", $id_exam);
+                    $stmtQ->bindParam(":USERid", $data->id_user);
+                    $stmtQ->execute();
+                    while($dataQ = $stmtQ->fetch(PDO::FETCH_OBJ)){//Pre kazdu question
+                        $myData .= '<strong>Question: </strong>' . $dataQ->QuestionsName . '<br />';
+                        switch ($dataQ->IDtype) {
+                            case 1:
+                                $stmtA = $this->conn->prepare("SELECT questions_select.answer as Answer FROM answers_select, questions_select WHERE id_answer=:IDanswer AND questions_select.id=answers_select.id_question_select");
+                                $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
+                                $stmtA->execute();
+                                while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
+                                    $myData .= '<strong>Answer: </strong>' . $dataA->Answer . '<br />';
+                                }
+                                break;
+                            case 2:
+                                $stmtA = $this->conn->prepare("SELECT id_answer, answer FROM answers_short WHERE id_answer=:IDanswer");
+                                $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
+                                $stmtA->execute();
+                                while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
+                                    $myData .= '<strong>Answer: </strong>' . $dataA->answer . '<br />';
+                                }
+                                break;
+                            case 3:
+                                $stmtA = $this->conn->prepare("SELECT id_answer, answer FROM answers_images WHERE id_answer=:IDanswer");
+                                $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
+                                $stmtA->execute();
+                                while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
+                                    $myData .= '<img src='. $dataA->answer .' alt="picture" width="200" height="200">';
+                                }
+                                break;
+                            case 4:
+                                $stmtA = $this->conn->prepare("SELECT id_answer, answer FROM answers_equations WHERE id_answer=:IDanswer");
+                                $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
+                                $stmtA->execute();
+                                while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
+                                    $myData .=  '<math-field>' .
+                                    $dataA->answer
+                                    . '</math-field>';
+                                }
+                                break;
+                            case 5:
+                                $stmtA = $this->conn->prepare("SELECT id_answer, answer_left, answer_right FROM answers_pairing WHERE id_answer=:IDanswer");
+                                $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
+                                $stmtA->execute();
+                                while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
+                                    $myData .= '<strong>Answer: </strong>'  . '<br />';
+                                    $myData .= '<p>' .$dataA->answer_left. '---'. $dataA->answer_right . '</p>'  . '<br />';
+                                }
+                                break;
+                            $myData .= '<hr>';
+                        }//TOTO MA BYT PRE KAZDEHO USERA
+                    }
+                    $mpdf->WriteHTML($myData);
+                    $mpdf->Output($pdfname, "F");
+
+                    if (file_exists($pdfname)) {
+                        $zip->addFile($pdfname);
+                    } else {
+                        //echo "The file does not exist";
+                    }
+                }
+                $conn = null;
+            }
+            if($status){//ESTE CO TREBA JE CI ANDREJ CHCE HENTU CESTU ALEBO AKO
+                $filename = 'tmp/exam' . $id_exam . '.zip';
+                $resp = ['status' => 'OK', 'path' => $filename];
+            }else{
+                $resp = ['status' => 'FAIL', 'message' => 'No zip was made due to non existent id_exam or no users.'];
+            }
+            $zip->close();
+            array_map('unlink', glob("*.pdf"));
+            return json_encode($resp);
+        }
+
+        public function delete_exam_zip($filename)//includes a PATH TO ISTE TU CO DOSTANEM LEN FILE ALEBO AJ CESTU?
+        {   
+            if(file_exists($filename)){
+                array_map('unlink', glob($filename));
+                $resp = ['status' => 'OK', 'path' => 'Deleted completed'];
+            }else{
+                $resp = ['status' => 'FAIL', 'message' => 'Delete not copleted, file didnt exist in that dir.'];
+            }
+            return json_encode($resp);
         }
     }
 ?>
