@@ -19,8 +19,8 @@ class ExamService
     {
         $resp = ['status' => 'OK', 'message' => 'create_exam'];
         $exists = false;
-        
-        if(!$exists){
+
+        while(!$exists){
             $code = rand(100000,999999);
             $stmt = $this->conn->prepare('select * from exams where code=:code');
             $stmt->bindParam('code', $code);
