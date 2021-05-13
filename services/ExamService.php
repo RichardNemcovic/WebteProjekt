@@ -806,7 +806,7 @@ class ExamService
                                 if ($ais_id) {
                                     $t = time();
                                     $path = "uploads/" . $ais_id . $t . ".png";
-
+                                    $status = file_put_contents($path, base64_decode($img_data));
                                     $correct = 0;
                                     $score = 0;
                                     $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
@@ -894,7 +894,7 @@ class ExamService
                                     $score = $stmt->fetchColumn();
                                     $correct = 1;
                                     if($score){}else{
-                                        $resp = ['status' => 'get score fail', 'message' => 'submit_exam'];
+                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
                                         echo json_encode($resp);
                                         return json_encode($resp);
                                     }
@@ -917,7 +917,7 @@ class ExamService
                                                         $correct = 0;
                                                     }
                                                 }else{
-                                                    $resp = ['status' => 'question pairing fail', 'message' => 'submit_exam'];
+                                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
                                                     echo json_encode($resp);
                                                     return json_encode($resp);
                                                 }
@@ -946,7 +946,7 @@ class ExamService
                                         $stmt->bindParam('answer_right', $right);
                                         $stmt->execute();
                                         if($stmt->rowCount()){}else{
-                                            $resp = ['status' => 'insert answers_pairing fail', 'message' => 'submit_exam'];
+                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
                                             echo json_encode($resp);
                                             return json_encode($resp);
                                         }
