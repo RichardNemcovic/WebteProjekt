@@ -1,28 +1,26 @@
+let server;
+// let id_user = sessionStorage.getItem('id_user');
+
+
 const getExams = async () => {
     const response = await fetch('js/config.json');
     const json = await response.json();
-    console.log(json);
+    server = json.url;
+    
+    generateTable();
+}
 
-    const server = json.url;
-
-    console.log(server);
-
+function generateTable() {    
     let id_user = 1;
-    // let id_user = sessionStorage.getItem('id_user');
     
     let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
-
-    console.log(req);
 
     let table = document.getElementById('table-body');
 
     $.get(req, function(resp){
-        console.log(resp);
         if(resp['status'] == 'OK'){
             
             let tests = resp['tests'];
-
-            console.log(tests);
 
             if(tests.length === 0) {
                 table.innerHTML = 
@@ -33,7 +31,7 @@ const getExams = async () => {
             else {
                 tests.forEach(test => {
                     let row = table.insertRow();
-                    row.insertCell(0).innerHTML = test.description;
+                    row.insertCell(0).innerHTML = test.name;
                     row.insertCell(1).innerHTML = test.code;
                     row.insertCell(2).innerHTML = test.start;
                     row.insertCell(3).innerHTML = test.end;

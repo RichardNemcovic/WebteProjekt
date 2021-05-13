@@ -84,6 +84,10 @@ html, body{
     background: rgb(255, 172, 172);
 }
 
+tbody{
+    font-weight: 500;
+}
+
 .action{
     width: 1rem;
 }
@@ -105,3 +109,4 @@ html, body{
     font-weight: 500;
     border-radius: 8px;
 }
+
