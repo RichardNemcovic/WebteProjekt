@@ -731,7 +731,7 @@ class ExamService
                                     $question_select = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                     if ($question_select) {
                                         foreach ($question_select as $select) {
-                                            if($select['id_question'] == $id_answer) {
+                                            if($select['id'] == $id_answer) {
                                                 if ($select['correct'] == 1) {
                                                     $correct = 1;
                                                     $score = $question[0]['score'];
@@ -742,6 +742,7 @@ class ExamService
                                                     $stmt->bindParam('score', $score);
                                                     $stmt->execute();
                                                     if ($stmt->rowCount()) {
+                                                        $id_question_select = $id_answer;
                                                         $id_answers = $this->conn->lastInsertId();
                                                         $answer = $value['id_answer'];
                                                         $stmt = $this->conn->prepare('insert into answers_select (id_answer, id_question_select) values (:id_answer, :id_question_select)');
@@ -765,6 +766,7 @@ class ExamService
                                                     $stmt->bindParam('score', $score);
                                                     $stmt->execute();
                                                     if ($stmt->rowCount()) {
+                                                        $id_question_select = $id_answer;
                                                         $id_answers = $this->conn->lastInsertId();
                                                         $answer = $value['id_answer'];
                                                         $stmt = $this->conn->prepare('insert into answers_select (id_answer, id_question_select) values (:id_answer, :id_question_select)');
