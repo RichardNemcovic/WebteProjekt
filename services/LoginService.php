@@ -71,8 +71,10 @@
             } else {
                 $resp = ['status' => 'OK', 'id' => $output["id"], 'name' => $output["name"] ." ". $output["surname"]];
 
-                $stmt = $this->conn->prepare("SELECT id FROM exams WHERE code=:code");
+                $status = 'active';
+                $stmt = $this->conn->prepare("SELECT id FROM exams WHERE code=:code AND status=:status");
                 $stmt->bindParam(":code", $code);
+                $stmt->bindParam(":status", $status);
                 $stmt->execute();
                 $output = $stmt->fetchColumn();
 
