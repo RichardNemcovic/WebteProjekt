@@ -99,17 +99,15 @@
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
                                 while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
-                                    $myData .= '<img src='. $dataA->answer .' alt="picture" width="200" height="200">';
+                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
                                 }
                                 break;
                             case 4:
                                 $stmtA = $this->conn->prepare("SELECT id_answer, answer FROM answers_equations WHERE id_answer=:IDanswer");
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
-                                while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
-                                    $myData .=  '<math-field>' .
-                                    $dataA->answer
-                                    . '</math-field>';
+                                while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){//budem ocakavat img
+                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
                                 }
                                 break;
                             case 5:
@@ -135,7 +133,7 @@
                 }
                 $conn = null;
             }
-            if($status){//Toto co ti posiel je, ze ten zip bude v WEBTEPROJEKT/tmp/exam.zip
+            if($status){//Toto co ti poslem je, ze ten zip bude v WEBTEPROJEKT/tmp/exam.zip
                 $filename = 'tmp/exam' . $id_exam . '.zip';
                 $resp = ['status' => 'OK', 'path' => $filename];
             }else{
