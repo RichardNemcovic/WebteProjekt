@@ -10,7 +10,7 @@ const getExams = async () => {
     let id_user = 1;
     // let id_user = sessionStorage.getItem('id_user');
     
-    let req = server + "ExamController.php?ep=getAllExamsForCreator&id=" + id_user;
+    let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
 
     console.log(req);
 
