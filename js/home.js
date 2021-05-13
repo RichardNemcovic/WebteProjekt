@@ -14,9 +14,7 @@ function generateTable() {
     let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
 
     let table = document.getElementById('table-body');
-
-    console.log(req);
-
+    
     $.get(req, function(resp) {
         console.log(resp);
         if(resp['status'] == 'OK') {
