@@ -586,19 +586,422 @@ class ExamService
         return json_encode($resp);
     }
 
-    public function submit_exam() {
-        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
-        echo json_encode($resp);
-        return json_encode($resp);
+    public function submit_exam($data) {
+
+        function stripAccents($str)
+        {
+            return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+        }
+
+        if (isset($data['id_user'])) {
+            if (!empty($data['id_user'])) {
+                $id_user = $data['id_user'];
+
+
+            }
+        }
+        if (isset($data['exam'])) {
+
+            if (!empty($data['exam'])) {
+
+                foreach ($data['exam'] as $item) {
+                    if (isset($item['id'])) {
+
+                        if (!empty($item['id'])) {
+                            $id_exam = $item['id'];
+
+                        }
+                    }
+                    if (isset($item['qShort'])) {
+                        if (!empty($item['qShort'])) {
+
+                            foreach ($item['qShort'] as $value) {
+
+                                if (isset($value['id'])) {
+                                    if (!empty($value['id'])) {
+                                        $id_question = $value['id'];
+
+                                    }
+                                }
+                                if (isset($value['answer'])) {
+                                    if (!empty($value['answer'])) {
+                                        $answer = $value['answer'];
+                                        $answer = stripAccents($answer);
+                                        $answer = strtolower($answer);
+
+                                    }
+                                }
+
+                                $id_type = "2";
+
+                                $stmt = $this->conn->prepare('Select * from questions where id_exam=:id_exam and id_type=:id_type and id=:id_question');
+                                $stmt->bindParam('id_exam', $id_exam);
+                                $stmt->bindParam('id_question', $id_question);
+                                $stmt->bindParam('id_type', $id_type);
+                                $stmt->execute();
+
+                                $question = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                if ($question) {
+
+                                    $stmt = $this->conn->prepare('Select * from questions_short where id_question=:id_question');
+                                    $stmt->bindParam('id_question', $id_question);
+                                    $stmt->execute();
+                                    $question_short = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    if ($question_short) {
+                                        $answer_right = $question_short[0]['answer'];
+                                        $answer_right = stripAccents($answer_right);
+                                        $answer_right = strtolower($answer_right);
+                                        if ($answer_right == $answer) {
+                                            $correct = 1;
+                                            $score = $question[0]['score'];
+                                            $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
+                                            $stmt->bindParam('id_user', $id_user);
+                                            $stmt->bindParam('id_question', $id_question);
+                                            $stmt->bindParam('correct', $correct);
+                                            $stmt->bindParam('score', $score);
+                                            $stmt->execute();
+                                            if ($stmt->rowCount()) {
+                                                $id_answers = $this->conn->lastInsertId();
+                                                $answer = $value['answer'];
+                                                $stmt = $this->conn->prepare('insert into answers_short (id_answer, answer) values (:id_answer, :answer)');
+                                                $stmt->bindParam('id_answer', $id_answers);
+                                                $stmt->bindParam('answer', $answer);
+                                                $stmt->execute();
+                                                if ($stmt->rowCount()) {
+                                                } else {
+                                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                                    echo json_encode($resp);
+                                                    return json_encode($resp);
+                                                }
+                                            }
+                                        } else {
+                                            $correct = 0;
+                                            $score = 0;
+                                            $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
+                                            $stmt->bindParam('id_user', $id_user);
+                                            $stmt->bindParam('id_question', $id_question);
+                                            $stmt->bindParam('correct', $correct);
+                                            $stmt->bindParam('score', $score);
+                                            $stmt->execute();
+                                            if ($stmt->rowCount()) {
+                                                $id_answers = $this->conn->lastInsertId();
+                                                $answer = $value['answer'];
+                                                $stmt = $this->conn->prepare('insert into answers_short (id_answer, answer) values (:id_answer, :answer)');
+                                                $stmt->bindParam('id_answer', $id_answers);
+                                                $stmt->bindParam('answer', $answer);
+                                                $stmt->execute();
+                                                if ($stmt->rowCount()) {
+                                                } else {
+                                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                                    echo json_encode($resp);
+                                                    return json_encode($resp);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (isset($item['qSelect'])) {
+                        if (!empty($item['qSelect'])) {
+                            foreach ($item['qSelect'] as $value) {
+                                if (isset($value['id']) && isset($value['id_answer'])) {
+                                    if (!empty($value['id']) && !empty($value['id_answer'])) {
+                                        $id_question = $value['id'];
+                                        $id_answer = $value['id_answer'];
+                                    } else {
+                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                        echo json_encode($resp);
+                                        return json_encode($resp);
+                                    }
+                                }
+                                $id_type = 1;
+                                $stmt = $this->conn->prepare('Select * from questions where id_exam=:id_exam and id_type=:id_type and id=:id_question');
+                                $stmt->bindParam('id_exam', $id_exam);
+                                $stmt->bindParam('id_question', $id_question);
+                                $stmt->bindParam('id_type', $id_type);
+                                $stmt->execute();
+                                $question = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                if ($question) {
+                                    $stmt = $this->conn->prepare('Select * from questions_select where id_question=:id_question');
+                                    $stmt->bindParam('id_question', $id_question);
+                                    $stmt->execute();
+                                    $question_select = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    if ($question_select) {
+                                        foreach ($question_select as $select) {
+                                            if($select['id'] == $id_answer) {
+                                                if ($select['correct'] == 1) {
+                                                    $correct = 1;
+                                                    $score = $question[0]['score'];
+                                                    $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
+                                                    $stmt->bindParam('id_user', $id_user);
+                                                    $stmt->bindParam('id_question', $id_question);
+                                                    $stmt->bindParam('correct', $correct);
+                                                    $stmt->bindParam('score', $score);
+                                                    $stmt->execute();
+                                                    if ($stmt->rowCount()) {
+                                                        $id_question_select = $id_answer;
+                                                        $id_answers = $this->conn->lastInsertId();
+                                                        $answer = $value['id_answer'];
+                                                        $stmt = $this->conn->prepare('insert into answers_select (id_answer, id_question_select) values (:id_answer, :id_question_select)');
+                                                        $stmt->bindParam('id_answer', $id_answers);
+                                                        $stmt->bindParam('id_question_select', $id_question_select);
+                                                        $stmt->execute();
+                                                        if ($stmt->rowCount()) {
+                                                        } else {
+                                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                                            echo json_encode($resp);
+                                                            return json_encode($resp);
+                                                        }
+                                                    }
+                                                } else {
+                                                    $correct = 0;
+                                                    $score = 0;
+                                                    $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
+                                                    $stmt->bindParam('id_user', $id_user);
+                                                    $stmt->bindParam('id_question', $id_question);
+                                                    $stmt->bindParam('correct', $correct);
+                                                    $stmt->bindParam('score', $score);
+                                                    $stmt->execute();
+                                                    if ($stmt->rowCount()) {
+                                                        $id_question_select = $id_answer;
+                                                        $id_answers = $this->conn->lastInsertId();
+                                                        $answer = $value['id_answer'];
+                                                        $stmt = $this->conn->prepare('insert into answers_select (id_answer, id_question_select) values (:id_answer, :id_question_select)');
+                                                        $stmt->bindParam('id_answer', $id_answers);
+                                                        $stmt->bindParam('id_question_select', $id_question_select);
+                                                        $stmt->execute();
+                                                    } else {
+                                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                                        echo json_encode($resp);
+                                                        return json_encode($resp);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (isset($item['qImage'])) {
+                        if (!empty($item['qImage'])) {
+                            foreach ($item['qImage'] as $value) {
+                                if (isset($value['id']) && isset($value['image_data'])) {
+                                    if (!empty($value['id']) && !empty($value['image_data'])) {
+                                        $id_question = $value['id'];
+                                        $img_data = $value['image_data'];
+                                    }
+                                } else {
+                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                    echo json_encode($resp);
+                                    return json_encode($resp);
+                                }
+                                $stmt = $this->conn->prepare("select ais_id from users where id=:user_id");
+                                $stmt->bindParam('user_id', $id_user);
+                                $stmt->execute();
+                                $ais_id = $stmt->fetchColumn();;
+                                if ($ais_id) {
+                                    $t = time();
+                                    $path = "uploads/" . $ais_id . $t . ".png";
+                                    $img_data = substr($img_data, 22);
+                                    $status = file_put_contents($path, base64_decode($img_data));
+                                    $correct = 0;
+                                    $score = 0;
+                                    $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
+                                    $stmt->bindParam('id_user', $id_user);
+                                    $stmt->bindParam('id_question', $id_question);
+                                    $stmt->bindParam('correct', $correct);
+                                    $stmt->bindParam('score', $score);
+                                    $stmt->execute();
+                                    if ($stmt->rowCount()) {
+                                        $id_answers = $this->conn->lastInsertId();
+                                        $stmt = $this->conn->prepare('insert into answers_images (id_answer, answer) values (:id_answer, :path)');
+                                        $stmt->bindParam('id_answer', $id_answers);
+                                        $stmt->bindParam('path', $path);
+                                        $stmt->execute();
+                                        if ($stmt->rowCount()) {
+                                        } else {
+                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                            echo json_encode($resp);
+                                            return json_encode($resp);
+                                        }
+                                    }
+
+                                } else {
+                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                    echo json_encode($resp);
+                                    return json_encode($resp);
+                                }
+                            }
+                        }
+                    }
+                    if (isset($item['qEquation'])) {
+                        if (!empty($item['qEquation'])) {
+                            foreach ($item['qEquation'] as $value) {
+                                if (isset($value['id']) && isset($value['answer'])) {
+                                    if (!empty($value['id']) && !empty($value['answer'])) {
+                                        $id_question = $value['id'];
+                                        $answer = $value['answer'];
+                                    } else {
+                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                        echo json_encode($resp);
+                                        return json_encode($resp);
+                                    }
+                                }
+                                $correct = 0;
+                                $score = 0;
+                                $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
+                                $stmt->bindParam('id_user', $id_user);
+                                $stmt->bindParam('id_question', $id_question);
+                                $stmt->bindParam('correct', $correct);
+                                $stmt->bindParam('score', $score);
+                                $stmt->execute();
+                                if($stmt->rowCount()){
+                                    $id_answers = $this->conn->lastInsertId();
+                                    $stmt = $this->conn->prepare('insert into answers_equations (id_answer, answer) values (:id_answer, :answer)');
+                                    $stmt->bindParam('id_answer', $id_answers);
+                                    $stmt->bindParam('answer', $answer);
+                                    $stmt->execute();
+                                    if($stmt->rowCount()){}else {
+                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                        echo json_encode($resp);
+                                        return json_encode($resp);
+                                    }
+                                }else {
+                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                    echo json_encode($resp);
+                                    return json_encode($resp);
+                                }
+                            }
+                        }
+                    }
+                    if(isset($item['qPairs'])){
+                        if(!empty($item['qPairs'])){
+                            foreach ($item['qPairs'] as $value){
+                                if(isset($value['id']) && isset($value['pairs'])){
+                                    if(!empty($value['id']) && !empty($value['pairs'])){
+                                        $id_question = $value['id'];
+                                    }else{
+                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                        echo json_encode($resp);
+                                        return json_encode($resp);
+                                    }
+                                    $stmt = $this->conn->prepare('select score from questions where id=:id_question');
+                                    $stmt->bindParam('id_question', $id_question);
+                                    $stmt->execute();
+                                    $score = $stmt->fetchColumn();
+                                    $correct = 1;
+                                    if($score){}else{
+                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                        echo json_encode($resp);
+                                        return json_encode($resp);
+                                    }
+
+                                    foreach ($value['pairs'] as $pairs){
+                                        if(isset($pairs['left']) && isset($pairs['right'])){
+                                            if(!empty($pairs['left'] && !empty($pairs['right']))){
+                                                $left = $pairs['left'];
+                                                $right = $pairs['right'];
+
+                                                $stmt = $this->conn->prepare('Select * from questions_pairing where id_question = :id_question && answer_left=:answer_left');
+                                                $stmt->bindParam('id_question', $id_question);
+                                                $stmt->bindParam('answer_left', $left);
+                                                $stmt->execute();
+                                                $question_pairing = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                                if($question_pairing){
+                                                    if($right == null){
+                                                        $score = 0;
+                                                        $correct = 0;
+                                                    }
+                                                    if($question_pairing[0]['answer_right'] == $right){
+                                                    }else{
+                                                        $score = 0;
+                                                        $correct = 0;
+                                                    }
+                                                }else{
+                                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                                    echo json_encode($resp);
+                                                    return json_encode($resp);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
+                                    $stmt->bindParam('id_user', $id_user);
+                                    $stmt->bindParam('id_question', $id_question);
+                                    $stmt->bindParam('correct', $correct);
+                                    $stmt->bindParam('score', $score);
+                                    $stmt->execute();
+                                    if($stmt->rowCount()){
+                                        $id_answers = $this->conn->lastInsertId();
+                                    }else{
+                                        $resp = ['status' => 'insert into answers fail', 'message' => 'submit_exam'];
+                                        echo json_encode($resp);
+                                        return json_encode($resp);
+                                    }
+                                    foreach ($value['pairs'] as $pairs){
+                                        $left = $pairs['left'];
+                                        $right = $pairs['right'];
+                                        $stmt = $this->conn->prepare('insert into answers_pairing (id_answer, answer_left, answer_right) values (:id_answer, :answer_left, :answer_right)');
+                                        $stmt->bindParam('id_answer', $id_answers);
+                                        $stmt->bindParam('answer_left', $left);
+                                        $stmt->bindParam('answer_right', $right);
+                                        $stmt->execute();
+                                        if($stmt->rowCount()){}else{
+                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                            echo json_encode($resp);
+                                            return json_encode($resp);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $resp = ['status' => 'OK', 'message' => 'submit_exam'];
+                echo json_encode($resp);
+                return json_encode($resp);
+            }
+        }
     }
 
-    public function get_exam_times() {
+    public function get_exam_times($id) {
+        $stmt = $this->conn->prepare('select * from exams where id=:id');
+        $stmt->bindParam('id', $id);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($result){
+            $start = $result[0]['start'];
+            $end = $result[0]['end'];
+            $resp = array(
+                "status"=> "OK",
+                "start"=>$start,
+                "end"=>$end
+            );
+            echo json_encode($resp);
+            return json_encode($resp);
+        }
         $resp = ['status' => 'FAIL', 'message' => 'get_exam_times'];
         echo json_encode($resp);
         return json_encode($resp);
     }
 
     public function get_server_time() {
+        date_default_timezone_set('Europe/Bratislava');
+        $time = date("Y-m-d H:i:s");
+
+        if($time){
+            $resp = array(
+                "status"=>"OK",
+                "time"=>$time
+            );
+            echo json_encode($resp);
+            return json_encode($resp);
+        }
         $resp = ['status' => 'FAIL', 'message' => 'get_server_time'];
         echo json_encode($resp);
         return json_encode($resp);

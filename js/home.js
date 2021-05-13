@@ -1,13 +1,17 @@
-getExams(event);
+let server;
+// let id_user = sessionStorage.getItem('id_user');
+let id_user = 1;
 
-function getExams(event){
-    if(event){
-        event.preventDefault();
-    }
-
-    let id_user = sessionStorage.getItem('id_user');
+const getExams = async () => {
+    const response = await fetch('js/config.json');
+    const json = await response.json();
+    server = json.url;
     
-    let req = "http://147.175.98.107/zaver/ExamController.php?ep=getAllExams&id=" + id_user;
+    generateTable();
+}
+
+function generateTable() {    
+    let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
 
     let table = document.getElementById('table-body');
 
@@ -25,7 +29,7 @@ function getExams(event){
             else {
                 tests.forEach(test => {
                     let row = table.insertRow();
-                    row.insertCell(0).innerHTML = test.description;
+                    row.insertCell(0).innerHTML = test.name;
                     row.insertCell(1).innerHTML = test.code;
                     row.insertCell(2).innerHTML = test.start;
                     row.insertCell(3).innerHTML = test.end;
@@ -44,5 +48,15 @@ function getExams(event){
             <td class="text-center" colspan="6">Žiadne testy</td>
             </tr>`;
         }
+        setTooltips();
+    });
+}
+
+getExams();
+
+// SET TOOLTIPS
+function setTooltips() {
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
     });
 }
