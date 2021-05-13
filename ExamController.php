@@ -26,36 +26,36 @@ if(isset($_GET['ep'])){
     if($_SERVER["REQUEST_METHOD"] === 'GET'){
         switch($ep) {
             case('getAllExamsForCreator'):
-                if(isset($data['id_creator'])){
-                    $examService->get_all_exams_for_creator($data['id_creator']);
+                if(isset($_GET['id_creator'])){
+                    $examService->get_all_exams_for_creator($_GET['id_creator']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('getExamsStudents'):
-                if(isset($data['id_exam'])){
-                    $examService->get_exams_students($data['id_exam']);
+                if(isset($_GET['id_exam'])){
+                    $examService->get_exams_students($_GET['id_exam']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('getExamById'):
-                if(isset($data['id_exam']) && isset($data['id_user'])){
-                    $examService->get_exam_by_id($data['id_exam'], $data['id_user']);
+                if(isset($_GET['id_exam']) && isset($_GET['id_user'])){
+                    $examService->get_exam_by_id($_GET['id_exam'], $_GET['id_user']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('getExamTimes'):
-                if(isset($data['id_exam']) && isset($data['id_user'])){
-                    $examService->get_exam_times($data['id_exam'], $data['id_user']);
+                if(isset($_GET['id_exam']) && isset($_GET['id_user'])){
+                    $examService->get_exam_times($_GET['id_exam'], $_GET['id_user']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('getServerTime'):
-                if(isset($data['id_exam']) && isset($data['id_user'])){
-                    $examService->get_server_time($data['id_exam'], $data['id_user']);
+                if(isset($_GET['id_exam']) && isset($_GET['id_user'])){
+                    $examService->get_server_time($_GET['id_exam'], $_GET['id_user']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
