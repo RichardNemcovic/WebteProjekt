@@ -562,6 +562,35 @@ class ExamService
         return json_encode($resp);
     }
 
+    public function change_exams_status($id_exam) {
+        $stmt = $this->conn->prepare("SELECT status
+                                            FROM exams
+                                            WHERE id=:id_exam");
+        $stmt->bindParam(":id_exam", $id_exam);
+        $stmt->execute();
+        $status = $stmt->fetchColumn();
+
+        if ($status) {
+            if ($status == "active") {
+                $status = "inactive";
+            } else {
+                $status = "active";
+            }
+
+            $stmt = $this->conn->prepare("UPDATE exams SET status=:status WHERE exams.id=:id_exam ");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":status", $status);
+            $stmt->execute();
+
+            $resp = ['status' => 'OK', 'newStatus' => $status];
+        } else {
+            $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
+        }
+
+        echo json_encode($resp);
+        return json_encode($resp);
+    }
+
     // -----------------------------------------------------------------------------------------------
     //                                   Student part
     // -----------------------------------------------------------------------------------------------
@@ -714,7 +743,7 @@ class ExamService
     }
 
     public function submit_exam($data) {
-
+        $final_score=0;
         function stripAccents($str)
         {
             return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
@@ -740,7 +769,7 @@ class ExamService
                             $stmt->bindParam('id', $id_exam);
                             $stmt->execute();
                             if($stmt->rowCount()){
-                            }{
+                            }else{
                                 $resp = ['status' => 'FAIL', 'message' => 'submit_exam exam doesnt exists'];
                                 echo json_encode($resp);
                                 return json_encode($resp);
@@ -796,6 +825,7 @@ class ExamService
                                             $stmt->bindParam('id_question', $id_question);
                                             $stmt->bindParam('correct', $correct);
                                             $stmt->bindParam('score', $score);
+                                            $final_score += $score;
                                             $stmt->execute();
                                             if ($stmt->rowCount()) {
                                                 $id_answers = $this->conn->lastInsertId();
@@ -877,6 +907,7 @@ class ExamService
                                                     $stmt->bindParam('correct', $correct);
                                                     $stmt->bindParam('score', $score);
                                                     $stmt->execute();
+                                                    $final_score += $score;
                                                     if ($stmt->rowCount()) {
                                                         $id_question_select = $id_answer;
                                                         $id_answers = $this->conn->lastInsertId();
@@ -1071,6 +1102,7 @@ class ExamService
                                     $stmt->bindParam('correct', $correct);
                                     $stmt->bindParam('score', $score);
                                     $stmt->execute();
+                                    $final_score += $score;
                                     if($stmt->rowCount()){
                                         $id_answers = $this->conn->lastInsertId();
                                     }else{
@@ -1097,7 +1129,14 @@ class ExamService
                         }
                     }
                 }
-
+                date_default_timezone_set('Europe/Bratislava');
+                $time = date("Y-m-d H:i:s");
+                $stmt = $this->conn->prepare('update exam_status set id_status=2, submit_timestamp=:time_submit, points=:score where id_exam=:id_exam and id_user=:id_user');
+                $stmt->bindParam('score', $final_score);
+                $stmt->bindParam('time_submit', $time);
+                $stmt->bindParam('id_exam', $id_exam);
+                $stmt->bindParam('id_user', $id_user);
+                $stmt->execute();
                 $resp = ['status' => 'OK', 'message' => 'submit_exam'];
                 echo json_encode($resp);
                 return json_encode($resp);
