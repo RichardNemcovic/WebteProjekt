@@ -353,6 +353,17 @@ class ExamService
     }
 
     public function get_exam_by_id($id_exam, $id_user) {
+        $stmt = $this->conn->prepare("SELECT users.name, users.surname
+                                                FROM exam_status 
+                                                INNER JOIN users ON exam_status.id_user=users.id
+                                                WHERE exam_status.id_exam=:id_exam
+                                                  AND exam_status.id_user=:id_user");
+        $stmt->bindParam(":id_exam", $id_exam);
+        $stmt->bindParam(":id_user", $id_user);
+        $stmt->execute();
+        $output = $stmt->fetch();
+        $studentName = $output['name']." ".$output['surname'];
+
         $stmt = $this->conn->prepare("SELECT exams.name, exam_status.submit_timestamp
                                             FROM exams 
                                             INNER JOIN exam_status ON exams.id=exam_status.id_exam
@@ -364,7 +375,7 @@ class ExamService
         $output = $stmt->fetch();
 
         if ($output) {
-            $resp = ['status' => 'OK', 'name' => $output['name'], 'submit_timestamp' => $output['submit_timestamp']];
+            $resp = ['status' => 'OK', 'name' => $output['name'], 'submit_timestamp' => $output['submit_timestamp'], 'studentName' => $studentName];
 
             // Select question, id=1
             $id_type = 1;
