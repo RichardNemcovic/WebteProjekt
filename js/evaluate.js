@@ -30,6 +30,10 @@ function checkOwner() {
         exams.forEach(exam => {
             if(exam.id == id_exam) {
                 cnt++;
+                document.getElementById('exam-name').innerHTML=exam.name;
+                document.getElementById('exam-start').innerHTML=exam.start;
+                document.getElementById('exam-end').innerHTML=exam.end;
+                document.getElementById('exam-student').innerHTML=exam.end;
             }
         });
 
