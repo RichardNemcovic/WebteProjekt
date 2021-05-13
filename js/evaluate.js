@@ -2,9 +2,6 @@ let urlParams = new URLSearchParams(window.location.search);
 let id_exam = urlParams.get('id_exam');
 let id_student = urlParams.get('id_student');
 
-console.log(id_exam);
-console.log(id_student);
-
 if(!id_exam || !id_student) {
     window.location.href = "404.html";
 }
@@ -33,7 +30,7 @@ function checkOwner() {
                 document.getElementById('exam-name').innerHTML=exam.name;
                 document.getElementById('exam-start').innerHTML=exam.start;
                 document.getElementById('exam-end').innerHTML=exam.end;
-                document.getElementById('exam-student').innerHTML=exam.end;
+                document.getElementById('exam-student'); //TODO niekde inde
             }
         });
 
@@ -44,7 +41,7 @@ function checkOwner() {
 }
 
 function generateTable() {
-    let req = server + "ExamController.php?ep=getExamsStudents&id_exam=" + id_exam;
+    let req = server + "ExamController.php?ep=getExamById&id_exam=" + id_exam + "&id_user";
 
     let writing = document.getElementById('table-writing');
 
@@ -62,6 +59,9 @@ function generateTable() {
 
 getExamResult();
 
+// SET BUTTON back to exam detail
+let button = document.getElementById('button-back');
+button.setAttribute('href','exam.html?id=' + id_exam)
 
 // SET TOOLTIPS
 function setTooltips() {
