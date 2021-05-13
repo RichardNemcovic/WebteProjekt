@@ -1,20 +1,28 @@
-getExams(event);
+const getExams = async () => {
+    const response = await fetch('js/config.json');
+    const json = await response.json();
+    console.log(json);
 
-function getExams(event){
-    if(event){
-        event.preventDefault();
-    }
+    const server = json.url;
 
-    let id_user = sessionStorage.getItem('id_user');
+    console.log(server);
+
+    let id_user = 1;
+    // let id_user = sessionStorage.getItem('id_user');
     
-    let req = "http://147.175.98.107/zaver/ExamController.php?ep=getAllExams&id=" + id_user;
+    let req = server + "ExamController.php?ep=getAllExamsForCreator&id=" + id_user;
+
+    console.log(req);
 
     let table = document.getElementById('table-body');
 
     $.get(req, function(resp){
+        console.log(resp);
         if(resp['status'] == 'OK'){
             
             let tests = resp['tests'];
+
+            console.log(tests);
 
             if(tests.length === 0) {
                 table.innerHTML = 
@@ -46,3 +54,5 @@ function getExams(event){
         }
     });
 }
+
+getExams();
