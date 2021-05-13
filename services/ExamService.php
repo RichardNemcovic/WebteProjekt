@@ -390,7 +390,7 @@ class ExamService
                 if ($res) {
                     foreach ($res as $index02=>$item) {
                         if ($item['correct'] == 1) {
-                            $resp['qSelect'][$index01]['question']['correctAnswer'] = $item['answer'];
+                            $resp['qSelect'][$index01]['question']['correctAnswer'] = $item['id'];
                         }
                         $resp['qSelect'][$index01]['question']['possibilities'][$index02]['id']     = $item['id'];
                         $resp['qSelect'][$index01]['question']['possibilities'][$index02]['answer'] = $item['answer'];
@@ -473,6 +473,75 @@ class ExamService
                 }
             }
 
+            // Math question, id=4
+            $id_type = 4;
+            $stmt = $this->conn->prepare("SELECT id, name, score
+                                                FROM questions 
+                                                WHERE id_exam=:id_exam
+                                                  AND id_type=:id_type");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_type", $id_type);
+            $stmt->execute();
+            $output = $stmt->fetchAll();
+
+            foreach ($output as $index01=>$out) {
+                $resp['qEquation'][$index01]['question']['description'] = $out['name'];
+                $resp['qEquation'][$index01]['question']['score'] = $out['score'];
+
+                $stmt = $this->conn->prepare("SELECT answers.id, answers_equations.answer
+                                                    FROM answers
+                                                    INNER JOIN answers_equations ON answers.id=answers_equations.id_answer
+                                                    WHERE answers.id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetch();
+
+                if ($res) {
+                    $resp['qEquation'][$index01]['answer']['id'] = $res['id'];
+                    $resp['qEquation'][$index01]['answer']['answer'] = $res['answer'];
+                }
+            }
+
+            // Pairings question, id=5
+            $id_type = 5;
+            $stmt = $this->conn->prepare("SELECT id, name, score
+                                                FROM questions 
+                                                WHERE id_exam=:id_exam
+                                                  AND id_type=:id_type");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_type", $id_type);
+            $stmt->execute();
+            $output = $stmt->fetchAll();
+
+            foreach ($output as $index01=>$out) {
+                $resp['qPairs'][$index01]['question']['description'] = $out['name'];
+                $resp['qPairs'][$index01]['question']['score'] = $out['score'];
+
+                $stmt = $this->conn->prepare("SELECT answer_left, answer_right
+                                                FROM questions_pairing
+                                                WHERE id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetchAll();
+
+                foreach ($res as $index02=>$val) {
+                    $resp['qPairs'][$index01]['question']['answers'][$index02]['left'] = $val['answer_left'];
+                    $resp['qPairs'][$index01]['question']['answers'][$index02]['right'] = $val['answer_right'];
+                }
+
+                $stmt = $this->conn->prepare("SELECT answers.id, answers_pairing.answer_left, answers_pairing.answer_right
+                                                    FROM answers
+                                                    INNER JOIN answers_pairing ON answers.id=answers_pairing.id_answer
+                                                    WHERE answers.id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetchAll();
+
+                foreach ($res as $index02=>$val) {
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['left'] = $val['answer_left'];
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = $val['answer_right'];
+                }
+            }
         } else {
             $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
         }
@@ -599,9 +668,9 @@ class ExamService
             $output = $stmt->fetchAll();
 
             foreach ($output as $index01=>$out) {
-                $resp['qEquation'][$index01]['id'] = $out['id'];
-                $resp['qEquation'][$index01]['description'] = $out['name'];
-                $resp['qEquation'][$index01]['score'] = $out['score'];
+                $resp['qPairs'][$index01]['id'] = $out['id'];
+                $resp['qPairs'][$index01]['description'] = $out['name'];
+                $resp['qPairs'][$index01]['score'] = $out['score'];
 
                 $stmt = $this->conn->prepare("SELECT answer_left, answer_right
                                                 FROM questions_pairing
@@ -613,14 +682,14 @@ class ExamService
                 $inputs = [];
 
                 foreach ($res as $index02=>$val) {
-                    $resp['qEquation'][$index01]['pairs'][$index02]['left'] = $val['answer_left'];
+                    $resp['qPairs'][$index01]['pairs'][$index02]['left'] = $val['answer_left'];
                     $inputs[$index02] = $val['answer_right'];
                 }
 
                 shuffle($inputs);
 
                 foreach ($res as $index02=>$val) {
-                    $resp['qEquation'][$index01]['pairs'][$index02]['right'] = $inputs[$index02];
+                    $resp['qPairs'][$index01]['pairs'][$index02]['right'] = $inputs[$index02];
                 }
             }
 
