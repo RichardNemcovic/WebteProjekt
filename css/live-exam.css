@@ -5,8 +5,17 @@ html, body {
     background: linear-gradient(45deg, #0d0c52 0%, #ff8b8b 100%);
 }
 
+.border-box{
+    background-color: aliceblue;
+    border-radius: 0.5em;
+    padding: 0.2em;
+    border: 1px solid antiquewhite;
+}
+
 .drawing-container{
     width: 100%;
+    border: 1px solid gray;
+    border-radius: 0.5em;
 }
 
 .btn{
@@ -38,6 +47,24 @@ html, body {
     width: 100%; 
 }
 
+#count-down{
+    margin-top: 8%;
+    margin-bottom: 8%;
+    background: #fefeff;
+    border-radius: 5px;
+    padding: 2rem 3rem;
+    width: 100%; 
+}
+
+#end{
+    margin-top: 8%;
+    margin-bottom: 8%;
+    background: #fefeff;
+    border-radius: 5px;
+    padding: 2rem 3rem;
+    width: 100%; 
+}
+
 #live-exam-nav{
     left: 0;
     bottom: 0;
@@ -49,10 +76,7 @@ html, body {
 }
 
 .bt-submit{
-    columns: #fff;
     background-color: #0d0c52;
-    margin-bottom: 5px;
-    width: auto;
 }
 
 .bt-submit:hover{

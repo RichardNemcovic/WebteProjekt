@@ -1,10 +1,10 @@
-function create_canvas(id_container){
-    var width = document.getElementById('container').offsetWidth;
+function createCanvas(id_container){
+    var width = document.getElementById(id_container).offsetWidth;
     var height = width*0.5625;
 
     // first we need Konva core things: stage and layer
     var stage = new Konva.Stage({
-    container: 'container',
+    container: id_container,
     width: width,
     height: height
     });
@@ -80,4 +80,6 @@ function create_canvas(id_container){
     lastPointerPosition = pos;
     layer.batchDraw();
     });
+
+    return stage;
 }
