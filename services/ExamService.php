@@ -969,13 +969,39 @@ class ExamService
         }
     }
 
-    public function get_exam_times() {
+    public function get_exam_times($id) {
+        $stmt = $this->conn->prepare('select * from exams where id=:id');
+        $stmt->bindParam('id', $id);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if($result){
+            $start = $result[0]['start'];
+            $end = $result[0]['end'];
+            $resp = array(
+                "status"=> "OK",
+                "start"=>$start,
+                "end"=>$end
+            );
+            echo json_encode($resp);
+            return json_encode($resp);
+        }
         $resp = ['status' => 'FAIL', 'message' => 'get_exam_times'];
         echo json_encode($resp);
         return json_encode($resp);
     }
 
     public function get_server_time() {
+        date_default_timezone_set('Europe/Bratislava');
+        $time = date("Y-m-d H:i:s");
+
+        if($time){
+            $resp = array(
+                "status"=>"OK",
+                "time"=>$time
+            );
+            echo json_encode($resp);
+            return json_encode($resp);
+        }
         $resp = ['status' => 'FAIL', 'message' => 'get_server_time'];
         echo json_encode($resp);
         return json_encode($resp);
