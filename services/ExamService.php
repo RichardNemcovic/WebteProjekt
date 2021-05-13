@@ -18,20 +18,20 @@ class ExamService
     public function create_exam($data)
     {
         $resp = ['status' => 'OK', 'message' => 'create_exam'];
-
-        if(isset($data['code'])){
-            if(!empty($data['code'])){
-                $code= $data['code'];
-                $stmt = $this->conn->prepare('select * from exams where code=:code');
-                $stmt->bindParam('code', $code);
-                $stmt->execute();
-                if($stmt->rowCount()){
-                    $resp = ['status' => 'FAIL (code exists)', 'message' => 'create_exam'];
-                    echo json_encode($resp);
-                    return json_encode($resp);
-                }
+        $exists = false;
+        
+        if(!$exists){
+            $code = rand(100000,999999);
+            $stmt = $this->conn->prepare('select * from exams where code=:code');
+            $stmt->bindParam('code', $code);
+            $stmt->execute();
+            if($stmt->rowCount()){
+                $exists = false;
+            }else{
+                $exists = true;
             }
         }
+
         if(isset($data['creator'])){
             if(!empty($data['creator'])) {
                 $id_creator = $data['creator'];
