@@ -135,7 +135,7 @@
                 }
                 $conn = null;
             }
-            if($status){//ESTE CO TREBA JE CI ANDREJ CHCE HENTU CESTU ALEBO AKO
+            if($status){//Toto co ti posiel je, ze ten zip bude v WEBTEPROJEKT/tmp/exam.zip
                 $filename = 'tmp/exam' . $id_exam . '.zip';
                 $resp = ['status' => 'OK', 'path' => $filename];
             }else{
@@ -146,13 +146,15 @@
             return json_encode($resp);
         }
 
-        public function delete_exam_zip($filename)//includes a PATH TO ISTE TU CO DOSTANEM LEN FILE ALEBO AJ CESTU?
+        public function delete_exam_zip($filename)//Ocakavam tmp/exam1.zip
         {   
+            $location = explode("/", $filename);
+            $filename = '../tmp/' . $location[1];
             if(file_exists($filename)){
                 array_map('unlink', glob($filename));
-                $resp = ['status' => 'OK', 'path' => 'Deleted completed'];
+                $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
             }else{
-                $resp = ['status' => 'FAIL', 'message' => 'Delete not copleted, file didnt exist in that dir.'];
+                $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
             }
             return json_encode($resp);
         }
