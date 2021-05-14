@@ -353,6 +353,17 @@ class ExamService
     }
 
     public function get_exam_by_id($id_exam, $id_user) {
+        $stmt = $this->conn->prepare("SELECT users.name, users.surname
+                                                FROM exam_status 
+                                                INNER JOIN users ON exam_status.id_user=users.id
+                                                WHERE exam_status.id_exam=:id_exam
+                                                  AND exam_status.id_user=:id_user");
+        $stmt->bindParam(":id_exam", $id_exam);
+        $stmt->bindParam(":id_user", $id_user);
+        $stmt->execute();
+        $output = $stmt->fetch();
+        $studentName = $output['name']." ".$output['surname'];
+
         $stmt = $this->conn->prepare("SELECT exams.name, exam_status.submit_timestamp
                                             FROM exams 
                                             INNER JOIN exam_status ON exams.id=exam_status.id_exam
@@ -364,7 +375,7 @@ class ExamService
         $output = $stmt->fetch();
 
         if ($output) {
-            $resp = ['status' => 'OK', 'name' => $output['name'], 'submit_timestamp' => $output['submit_timestamp']];
+            $resp = ['status' => 'OK', 'name' => $output['name'], 'submit_timestamp' => $output['submit_timestamp'], 'studentName' => $studentName];
 
             // Select question, id=1
             $id_type = 1;
@@ -390,7 +401,7 @@ class ExamService
                 if ($res) {
                     foreach ($res as $index02=>$item) {
                         if ($item['correct'] == 1) {
-                            $resp['qSelect'][$index01]['question']['correctAnswer'] = $item['answer'];
+                            $resp['qSelect'][$index01]['question']['correctAnswer'] = $item['id'];
                         }
                         $resp['qSelect'][$index01]['question']['possibilities'][$index02]['id']     = $item['id'];
                         $resp['qSelect'][$index01]['question']['possibilities'][$index02]['answer'] = $item['answer'];
@@ -473,12 +484,110 @@ class ExamService
                 }
             }
 
+            // Math question, id=4
+            $id_type = 4;
+            $stmt = $this->conn->prepare("SELECT id, name, score
+                                                FROM questions 
+                                                WHERE id_exam=:id_exam
+                                                  AND id_type=:id_type");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_type", $id_type);
+            $stmt->execute();
+            $output = $stmt->fetchAll();
+
+            foreach ($output as $index01=>$out) {
+                $resp['qEquation'][$index01]['question']['description'] = $out['name'];
+                $resp['qEquation'][$index01]['question']['score'] = $out['score'];
+
+                $stmt = $this->conn->prepare("SELECT answers.id, answers_equations.answer
+                                                    FROM answers
+                                                    INNER JOIN answers_equations ON answers.id=answers_equations.id_answer
+                                                    WHERE answers.id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetch();
+
+                if ($res) {
+                    $resp['qEquation'][$index01]['answer']['id'] = $res['id'];
+                    $resp['qEquation'][$index01]['answer']['answer'] = $res['answer'];
+                }
+            }
+
+            // Pairings question, id=5
+            $id_type = 5;
+            $stmt = $this->conn->prepare("SELECT id, name, score
+                                                FROM questions 
+                                                WHERE id_exam=:id_exam
+                                                  AND id_type=:id_type");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_type", $id_type);
+            $stmt->execute();
+            $output = $stmt->fetchAll();
+
+            foreach ($output as $index01=>$out) {
+                $resp['qPairs'][$index01]['question']['description'] = $out['name'];
+                $resp['qPairs'][$index01]['question']['score'] = $out['score'];
+
+                $stmt = $this->conn->prepare("SELECT answer_left, answer_right
+                                                FROM questions_pairing
+                                                WHERE id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetchAll();
+
+                foreach ($res as $index02=>$val) {
+                    $resp['qPairs'][$index01]['question']['answers'][$index02]['left'] = $val['answer_left'];
+                    $resp['qPairs'][$index01]['question']['answers'][$index02]['right'] = $val['answer_right'];
+                }
+
+                $stmt = $this->conn->prepare("SELECT answers.id, answers_pairing.answer_left, answers_pairing.answer_right
+                                                    FROM answers
+                                                    INNER JOIN answers_pairing ON answers.id=answers_pairing.id_answer
+                                                    WHERE answers.id_question=:id_question");
+                $stmt->bindParam(":id_question", $out['id']);
+                $stmt->execute();
+                $res = $stmt->fetchAll();
+
+                foreach ($res as $index02=>$val) {
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['left'] = $val['answer_left'];
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = $val['answer_right'];
+                }
+            }
         } else {
             $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
         }
 
         echo json_encode($resp);
 
+        return json_encode($resp);
+    }
+
+    public function change_exams_status($id_exam) {
+        $stmt = $this->conn->prepare("SELECT status
+                                            FROM exams
+                                            WHERE id=:id_exam");
+        $stmt->bindParam(":id_exam", $id_exam);
+        $stmt->execute();
+        $status = $stmt->fetchColumn();
+
+        if ($status) {
+            if ($status == "active") {
+                $status = "inactive";
+            } else {
+                $status = "active";
+            }
+
+            $stmt = $this->conn->prepare("UPDATE exams SET status=:status WHERE exams.id=:id_exam ");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":status", $status);
+            $stmt->execute();
+
+            $resp = ['status' => 'OK', 'newStatus' => $status];
+        } else {
+            $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
+        }
+
+        echo json_encode($resp);
         return json_encode($resp);
     }
 
@@ -599,9 +708,9 @@ class ExamService
             $output = $stmt->fetchAll();
 
             foreach ($output as $index01=>$out) {
-                $resp['qEquation'][$index01]['id'] = $out['id'];
-                $resp['qEquation'][$index01]['description'] = $out['name'];
-                $resp['qEquation'][$index01]['score'] = $out['score'];
+                $resp['qPairs'][$index01]['id'] = $out['id'];
+                $resp['qPairs'][$index01]['description'] = $out['name'];
+                $resp['qPairs'][$index01]['score'] = $out['score'];
 
                 $stmt = $this->conn->prepare("SELECT answer_left, answer_right
                                                 FROM questions_pairing
@@ -613,14 +722,14 @@ class ExamService
                 $inputs = [];
 
                 foreach ($res as $index02=>$val) {
-                    $resp['qEquation'][$index01]['pairs'][$index02]['left'] = $val['answer_left'];
+                    $resp['qPairs'][$index01]['pairs'][$index02]['left'] = $val['answer_left'];
                     $inputs[$index02] = $val['answer_right'];
                 }
 
                 shuffle($inputs);
 
                 foreach ($res as $index02=>$val) {
-                    $resp['qEquation'][$index01]['pairs'][$index02]['right'] = $inputs[$index02];
+                    $resp['qPairs'][$index01]['pairs'][$index02]['right'] = $inputs[$index02];
                 }
             }
 
@@ -634,7 +743,7 @@ class ExamService
     }
 
     public function submit_exam($data) {
-
+        $final_score=0;
         function stripAccents($str)
         {
             return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
@@ -660,7 +769,7 @@ class ExamService
                             $stmt->bindParam('id', $id_exam);
                             $stmt->execute();
                             if($stmt->rowCount()){
-                            }{
+                            }else{
                                 $resp = ['status' => 'FAIL', 'message' => 'submit_exam exam doesnt exists'];
                                 echo json_encode($resp);
                                 return json_encode($resp);
@@ -716,6 +825,7 @@ class ExamService
                                             $stmt->bindParam('id_question', $id_question);
                                             $stmt->bindParam('correct', $correct);
                                             $stmt->bindParam('score', $score);
+                                            $final_score += $score;
                                             $stmt->execute();
                                             if ($stmt->rowCount()) {
                                                 $id_answers = $this->conn->lastInsertId();
@@ -797,6 +907,7 @@ class ExamService
                                                     $stmt->bindParam('correct', $correct);
                                                     $stmt->bindParam('score', $score);
                                                     $stmt->execute();
+                                                    $final_score += $score;
                                                     if ($stmt->rowCount()) {
                                                         $id_question_select = $id_answer;
                                                         $id_answers = $this->conn->lastInsertId();
@@ -991,6 +1102,7 @@ class ExamService
                                     $stmt->bindParam('correct', $correct);
                                     $stmt->bindParam('score', $score);
                                     $stmt->execute();
+                                    $final_score += $score;
                                     if($stmt->rowCount()){
                                         $id_answers = $this->conn->lastInsertId();
                                     }else{
@@ -1017,7 +1129,14 @@ class ExamService
                         }
                     }
                 }
-
+                date_default_timezone_set('Europe/Bratislava');
+                $time = date("Y-m-d H:i:s");
+                $stmt = $this->conn->prepare('update exam_status set id_status=2, submit_timestamp=:time_submit, points=:score where id_exam=:id_exam and id_user=:id_user');
+                $stmt->bindParam('score', $final_score);
+                $stmt->bindParam('time_submit', $time);
+                $stmt->bindParam('id_exam', $id_exam);
+                $stmt->bindParam('id_user', $id_user);
+                $stmt->execute();
                 $resp = ['status' => 'OK', 'message' => 'submit_exam'];
                 echo json_encode($resp);
                 return json_encode($resp);
