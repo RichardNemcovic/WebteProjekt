@@ -391,9 +391,7 @@ button.setAttribute('href','exam.html?id=' + id_exam);
 function changeImage(path) {
     console.log('funkcia zbehla');
     let modal = document.getElementById('modal-image');
-    // modal.setAttribute('src',server + path);
-    modal.setAttribute('src', 'https://artprojectsforkids.org/wp-content/uploads/2021/04/Draw-a-Unicorn-revised.jpg');
-    
+    modal.setAttribute('src',server + path);        
 }
 
 // SET TOOLTIPS
