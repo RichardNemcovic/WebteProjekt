@@ -83,7 +83,6 @@ function awake(){
                     if(resp['status'] == 'OK'){
                         timer(resp['start']);    
                         setData(resp);      
-                        setFocusListener();  
                     }else{
                         error();
                     }
@@ -469,40 +468,42 @@ function showHideEq(id){
 //OBTAINING DATA
 
 function submitTest(){
-    let data = {};
-    data['id_user'] = sessionStorage.getItem('id_user');
+    readFiles(function(){
+        let data = {};
+        data['id_user'] = sessionStorage.getItem('id_user');
+        
+        let exam = {}
+        exam['id'] = id_exam;
+        exam['qShort'] = getShortAnswers();
+        exam['qSelect'] = getSelectAnswers();
+        exam['qImage'] = getImageAnswers();
+        exam['qEquation'] = getEquationAnswers();
+        exam['qPairs'] = getPairAnswers();
+        
+        data['exam'] = exam;
     
-    let exam = {}
-    exam['id'] = id_exam;
-    exam['qShort'] = getShortAnswers();
-    exam['qSelect'] = getSelectAnswers();
-    exam['qImage'] = getImageAnswers();
-    exam['qEquation'] = getEquationAnswers();
-    exam['qPairs'] = getPairAnswers();
+        $.ajax(
+            {
+            url: server+'ExamController.php?ep=submitExam',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(resp){
+                if(resp['status'] == 'OK'){                
+                    document.getElementById('count-down').hidden = true;
+                    document.getElementById('live-exam').hidden = true;
+                    document.getElementById('live-exam-nav').hidden = true;
+                    document.getElementById('end').hidden = false;
+                    document.getElementById('error').hidden = true;
     
-    data['exam'] = exam;
-
-    $.ajax(
-        {
-        url: server+'ExamController.php?ep=submitExam',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(resp){
-            if(resp['status'] == 'OK'){                
-                document.getElementById('count-down').hidden = true;
-                document.getElementById('live-exam').hidden = true;
-                document.getElementById('live-exam-nav').hidden = true;
-                document.getElementById('end').hidden = false;
-                document.getElementById('error').hidden = true;
-
-                setTimeout(function() { logout(); }, 5000);
-            }else{
-                error();
-            }
-        },
-        async: false
-    });
+                    setTimeout(function() { logout(); }, 5000);
+                }else{
+                    error();
+                }
+            },
+            async: false
+        });
+    });    
 }
 
 function getShortAnswers(){
@@ -562,12 +563,74 @@ function getPairAnswers(){
     return data;
 }
 
-const toBase64 = file => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-});
+function getBase64(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  function readFileAsText(file){
+    return new Promise(function(resolve,reject){
+        let fr = new FileReader();
+
+        fr.onload = function(){
+            resolve(fr.result);
+        };
+
+        fr.onerror = function(){
+            reject(fr);
+        };
+
+        fr.readAsDataURL(file);
+    });
+}
+
+
+var fileData = {};
+
+function readFiles(callback){
+    readers = [];
+    indexes = [];
+    
+    qMath.forEach(e => {
+        if(document.getElementById('eq-'+e+'-cb').checked){
+            let f = document.getElementById('eq-'+e+'-f').files[0]; // FileList object
+            readers.push(readFileAsText(f));
+            indexes.push('e'+e);
+            //console.log(readFile(f));  
+        }
+    });
+
+    qImage.forEach(e => {
+        if(document.getElementById('img-'+e+'-cb').checked){            
+            var f = document.getElementById('img-'+e+'-f').files[0]; // FileList object
+            
+            readers.push(readFileAsText(f));
+            indexes.push('i'+e);
+            //console.log(readFile(f));
+            /*getBase64(f).then(
+                a => (fileData['img'][e] = a)
+            );*/
+        }
+    });
+
+    Promise.all(readers).then((values) => {
+        // Values will be an array that contains an item
+        // with the text of every selected file
+        // ["File1 Content", "File2 Content" ... "FileN Content"]
+        for(let i = 0; i < values.length; i++){
+            let i1 = indexes[i].substring(0,1);
+            let i2 = indexes[i].substring(1);
+            fileData[i1] = {}
+            fileData[i1][i2] = values[i];
+        }
+        console.log(fileData);
+        callback();
+    });
+}
 
 function getEquationAnswers(){
     let data = [];
@@ -577,20 +640,18 @@ function getEquationAnswers(){
         d['id'] = e;
 
         if(document.getElementById('eq-'+e+'-cb').checked){
-            var f = document.getElementById('eq-'+e+'-f').files[0]; // FileList object
-            toBase64(f).then(function(res){
-                d['answer'] = res;
-            });       
+            //let f = document.getElementById('eq-'+e+'-f').files[0]; // FileList object
+
+            d['answer'] = fileData['e'][e];
+            /*getBase64(f).then(
+                a => d['answer'] = a
+            );*/   
             d['url'] = 0;       
         }else{
             d['url'] = 1;
             d['answer'] = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
         }
 
-        //let url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
-
-        //d['answer'] = url;
-        //d['answer'] = mathFields[e].getValue();
         data.push(d);
     });       
     
@@ -605,15 +666,15 @@ function getImageAnswers(){
         d['id'] = e;
 
         if(document.getElementById('img-'+e+'-cb').checked){            
-            var f = document.getElementById('img-'+e+'-f').files[0]; // FileList object
-            toBase64(f).then(function(res){
-                d['image_data'] = res;
-            });          
+            //var f = document.getElementById('img-'+e+'-f').files[0]; // FileList object
+            d['image_data'] = fileData['i'][e];
+            /*getBase64(f).then(
+                a => console.log(a)
+            );         */
         }else{
-            d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });
+            d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });            
         }
-        //d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });
-        
+
         data.push(d);
     })
 
