@@ -122,6 +122,10 @@ function setFocusListener(){
     });
 }
 
+function error(){
+    
+}
+
 function timer(){
     get_exam_times(function(){
         let i = 0;

@@ -75,7 +75,7 @@ function generateTable() {
                                 <hr class="mt-3">
                                 <div class="col-md-3">
                                     <label for="score-${cnt}" class="form-label">Počet bodov |<small> max: ${q.question.score}</small> </label>
-                                    <input id="score-${cnt}" type="number" min="0" class="form-control">
+                                    <input id="score-${cnt}" type="number" min="0" class="form-control" value="${q.answer.score}">
                                 </div>
                                 <div class="col-md-1">
                                     <button onclick="updateAnswer(${cnt},${q.answer.id})" class="btn my-4 btn-dark btn-pill shadow rounded-pill mb-0" type="button"
@@ -131,7 +131,7 @@ function generateTable() {
                                 </div>
                                 <div class="col-md-1">
                                     <button onclick="updateAnswer(${cnt},${q.answer.id})" class="btn my-4 btn-dark btn-pill shadow rounded-pill mb-0" type="button"
-                                    data-toggle="tooltip" data-placement="top" title="Zmeniť hodnotenie">
+                                    data-toggle="tooltip" data-placement="top" title="Zmeniť hodnotenie" value="${q.answer.score}">
                                         <span class="material-icons">edit</span>
                                     </button>
                                 </div>
@@ -200,7 +200,7 @@ function generateTable() {
                                 <hr class="mt-3">
                                 <div class="col-md-3">
                                     <label for="score-${cnt}" class="form-label">Počet bodov |<small> max: ${q.question.score}</small> </label>
-                                    <input id="score-${cnt}" type="number" min="0" class="form-control">
+                                    <input id="score-${cnt}" type="number" min="0" class="form-control" value="${q.answer.score}">
                                 </div>
                                 <div class="col-md-1">
                                     <button onclick="updateAnswer(${cnt},${q.answer.id})" class="btn my-4 btn-dark btn-pill shadow rounded-pill mb-0" type="button"
