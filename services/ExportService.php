@@ -143,8 +143,8 @@
 
         public function delete_exam_zip($filename)//Ocakavam tmp/exam1.zip
         {   
-            $location = explode("/", $filename);
-            $filename = '../tmp/' . $location[1];
+            $location = basename($filename);
+            $filename = '../tmp/' . $location;
             if(file_exists($filename)){
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
@@ -156,8 +156,8 @@
 
         public function delete_exam_csv($filename)//Ocakavam tmp/exam1.csv
         {   
-            $location = explode("/", $filename);
-            $filename = '../tmp/' . $location[1];
+            $location = basename($filename);
+            $filename = '../tmp/' . $location;
             if(file_exists($filename)){
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
