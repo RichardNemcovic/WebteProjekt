@@ -230,7 +230,7 @@ function generateTable() {
                 examContent.appendChild(div);
             });
 
-            // funguje, dostavam zly index odpovede ktoru zvolil student
+            // funguje, opravit index na id
             // SELECT --------------------------------------------------------------------------------------------------------------------------------------------------
             // let qSelect = resp.qSelect;
 
@@ -316,7 +316,7 @@ function generateTable() {
                             <hr class="mt-3">
                             <div class="col-md-3">
                                 <label for="score-${cnt}" class="form-label">Počet bodov |<small> max: ${q.question.score}</small> </label>
-                                <input id="score-${cnt}" type="number" min="0" class="form-control">
+                                <input id="score-${cnt}" type="number" min="0" value="${q.answer.score}" class="form-control">
                             </div>
                             <div class="col-md-1">
                                 <button onclick="updateAnswer(${cnt},${q.answer.id})" class="btn my-4 btn-dark btn-pill shadow rounded-pill mb-0" type="button"
@@ -359,14 +359,22 @@ function updateAnswer(n,id) {
     }
     else {
         data = {};
-        data.idAnswer = id;
+        data.id_answer = id;
         data.score = points;
         console.log(data);
-        $.post(server+'?ep=setAnswersScore', data, function(resp){
-            if(resp['status'] == 'OK'){
-                console.log('okOKOKOKOKO');
-            }else{
-                alert("Nastala chyba");
+        
+        $.ajax(
+            {
+            url: server+'?ep=setAnswersScore',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(resp){
+                if(resp['status'] == 'OK'){
+                    console.log('okOKOKOKOKO');
+                }else{
+                    alert("Nastala chyba");
+                }
             }
         });
 
