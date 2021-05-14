@@ -83,8 +83,7 @@ function generateTable() {
 
 // EXPORT BUTTONS
 function exportPdf() {
-    let req = "http://147.175.98.107/zaver/ExamController.php?ep=exportPDF&id_test=" + id_exam
-    $.get(req, function(resp){
+    $.get(server + 'ExportController', function(resp){
         if(resp['status'] == 'OK') {
             let path = resp['path']
             //TODO download
@@ -98,13 +97,20 @@ function exportPdf() {
 function exportCsv() {
     $.get(server + 'ExportController.php?ep=exportCSV&id_test=' + id_exam, function(resp){
         if(resp['status'] == 'OK') {
-            let path = resp['path']
-        }
-        else {
-            
+            downloadURI(server + resp['message']);
         }
     });
 }
+
+function downloadURI(uri) {
+    var link = document.createElement('a');
+    link.download = 'export.csv';
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    delete link;
+ }
 
 // SET TOOLTIPS
 function setTooltips() {

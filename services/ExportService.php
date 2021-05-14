@@ -31,7 +31,7 @@
             $resp = ['status' => 'FAIL', 'message' => 'No tests with this id.'];
         }
         fclose($fp);
-        return json_encode($resp);
+        echo json_encode($resp);
         }
 
         public function get_exam_pdf($id_exam)//Composer Needed https://getcomposer.org/download/ and https://mpdf.github.io/installation-setup/installation-v7-x.html
