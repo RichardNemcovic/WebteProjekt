@@ -354,7 +354,9 @@ class ExamService
         $stmt->bindParam(":id_user", $id_user);
         $stmt->execute();
         $output = $stmt->fetch();
-        $studentName = $output['name']." ".$output['surname'];
+        if ($output) {
+            $studentName = $output['name']." ".$output['surname'];
+        }
 
         $stmt = $this->conn->prepare("SELECT exams.name, exam_status.submit_timestamp
                                             FROM exams 
@@ -412,6 +414,10 @@ class ExamService
                     $resp['qSelect'][$index01]['answer']['id'] = $res['id'];
                     $resp['qSelect'][$index01]['answer']['answer'] = $res['id_question_select'];
                     $resp['qSelect'][$index01]['answer']['score'] = $res['score'];
+                } else {
+                    $resp['qSelect'][$index01]['answer']['id'] = null;
+                    $resp['qSelect'][$index01]['answer']['answer'] = null;
+                    $resp['qSelect'][$index01]['answer']['score'] = null;
                 }
             }
 
@@ -444,6 +450,10 @@ class ExamService
                     $resp['qShort'][$index01]['answer']['id'] = $res['id'];
                     $resp['qShort'][$index01]['answer']['answer'] = $res['answer'];
                     $resp['qShort'][$index01]['answer']['score'] = $res['score'];
+                } else {
+                    $resp['qShort'][$index01]['answer']['id'] = null;
+                    $resp['qShort'][$index01]['answer']['answer'] = null;
+                    $resp['qShort'][$index01]['answer']['score'] = null;
                 }
             }
 
@@ -473,6 +483,9 @@ class ExamService
                 if ($res) {
                     $resp['qImage'][$index01]['answer']['id'] = $res['id'];
                     $resp['qImage'][$index01]['answer']['answer'] = $res['answer'];
+                } else {
+                    $resp['qImage'][$index01]['answer']['id'] = null;
+                    $resp['qImage'][$index01]['answer']['answer'] = null;
                 }
             }
 
@@ -502,6 +515,9 @@ class ExamService
                 if ($res) {
                     $resp['qEquation'][$index01]['answer']['id'] = $res['id'];
                     $resp['qEquation'][$index01]['answer']['answer'] = $res['answer'];
+                } else {
+                    $resp['qEquation'][$index01]['answer']['id'] = null;
+                    $resp['qEquation'][$index01]['answer']['answer'] = null;
                 }
             }
 
@@ -530,6 +546,9 @@ class ExamService
                 foreach ($res as $index02=>$val) {
                     $resp['qPairs'][$index01]['question']['answers'][$index02]['left'] = $val['answer_left'];
                     $resp['qPairs'][$index01]['question']['answers'][$index02]['right'] = $val['answer_right'];
+
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['left'] = null;
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = null;
                 }
 
                 $stmt = $this->conn->prepare("SELECT answers.id, answers_pairing.answer_left, answers_pairing.answer_right
@@ -546,7 +565,7 @@ class ExamService
                 }
             }
         } else {
-            $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
+            $resp = ['status' => 'FAIL', 'message' => 'No such test for this user.'];
         }
 
         echo json_encode($resp);
