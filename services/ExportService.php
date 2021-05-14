@@ -156,8 +156,8 @@
 
         public function delete_exam_csv($filename)//Ocakavam tmp/exam1.csv
         {   
-            $location = basename($filename);
-            $filename = '../tmp/' . $location;
+//            $location = basename($filename);
+//            $filename = '../tmp/' . $location;
             if(file_exists($filename)){
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];

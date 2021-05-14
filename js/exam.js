@@ -83,7 +83,8 @@ function generateTable() {
 
 // EXPORT BUTTONS
 function exportPdf() {
-    $.get(server + 'ExportController', function(resp){
+    $.get(server + 'ExportController.php?ep=exportPDF&id_test=' + id_exam, function(resp){
+        console.log(resp);
         if(resp['status'] == 'OK') {
             let path = resp['path']
             //TODO download
@@ -99,10 +100,9 @@ function exportCsv() {
         if(resp['status'] == 'OK') {
             downloadURI(server + resp['message']);
             $.get(server + 'ExportController.php?ep=deleteCsv&filename=' + resp['message'], function(respon){
-                // if(respon['status'] == 'OK') {
-                //     downloadURI(server + resp['message']);
-                // }
-                console.log(respon);
+                if(respon['status'] == 'OK') {
+                    //TODO
+                }
             });
         }
     });
