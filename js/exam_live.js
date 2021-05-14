@@ -72,7 +72,7 @@ function awake(){
 //    let start_time = new Date(question['exam']['start']);
     get_exam_times(function(){
         get_server_time(function(){
-            if(start_time.getTime() - server_time.getTime() < 0){
+            if(start_time.getTime() - server_time.getTime() < 0 && end_time.getTime() - server_time.getTime() > 0){
                 //getData from server
                 
                 document.getElementById('count-down').hidden = true;
@@ -89,34 +89,42 @@ function awake(){
                     }
                 }, false);
             }else{
-                document.getElementById('count-down').hidden = false;
-                document.getElementById('live-exam').hidden = true;
-                document.getElementById('live-exam-nav').hidden = true;
-        
-                get_server_time(function(){
-                    var myfunc = setInterval(function() {
-                        var now = new Date().getTime();
-                        let timeleft = start_time.getTime() - now;
-                            
-                        // Calculating the days, hours, minutes and seconds left
-                        var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
-                            
-                        // Result is output to the specific element            
-                        document.getElementById("cDays").innerHTML = days;           
-                        document.getElementById("cHours").innerHTML = hours; 
-                        document.getElementById("cMins").innerHTML = minutes; 
-                        document.getElementById("cSecs").innerHTML = seconds; 
-                            
-                        // Display the message when countdown is over
-                        if (timeleft < 0) {
-                            clearInterval(myfunc);
-                            awake();
-                        }
-                    }, 1000);
-                });
+                if(end_time.getTime() - server_time.getTime() <= 0){
+                    document.getElementById('count-down').hidden = true;
+                    document.getElementById('live-exam').hidden = true;
+                    document.getElementById('live-exam-nav').hidden = true;
+                    document.getElementById('end').hidden = false;
+                }else{
+                    document.getElementById('count-down').hidden = false;
+                    document.getElementById('live-exam').hidden = true;
+                    document.getElementById('live-exam-nav').hidden = true;
+                    document.getElementById('end').hidden = true;
+            
+                    get_server_time(function(){
+                        var myfunc = setInterval(function() {
+                            var now = new Date().getTime();
+                            let timeleft = start_time.getTime() - now;
+                                
+                            // Calculating the days, hours, minutes and seconds left
+                            var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+                            var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+                            var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+                                
+                            // Result is output to the specific element            
+                            document.getElementById("cDays").innerHTML = days;           
+                            document.getElementById("cHours").innerHTML = hours; 
+                            document.getElementById("cMins").innerHTML = minutes; 
+                            document.getElementById("cSecs").innerHTML = seconds; 
+                                
+                            // Display the message when countdown is over
+                            if (timeleft < 0) {
+                                clearInterval(myfunc);
+                                awake();
+                            }
+                        }, 1000);                    
+                    });
+                }
             }
         });
     });
@@ -515,11 +523,14 @@ function getEquationAnswers(){
     qMath.forEach(e => {
         let d = {};
         d['id'] = e;
-        d['answer'] = mathFields[e].getValue();
 
+        let url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
+
+        d['answer'] = url;
+        //d['answer'] = mathFields[e].getValue();
         data.push(d);
-    });
-
+    });       
+    
     return data;
 }
 
