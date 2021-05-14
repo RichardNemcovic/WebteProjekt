@@ -46,6 +46,13 @@ if(isset($_GET['ep'])) {
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('deleteCsv'):
+                if(isset($_GET['filename'])){
+                    $exportService->delete_exam_csv($_GET['filename']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
         }
     }
 }
