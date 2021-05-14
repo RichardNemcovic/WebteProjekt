@@ -5,18 +5,21 @@ if(!id_exam) {
     window.location.href = "404.html";
 }
 
-let server;
-// let id_user = sessionStorage.getItem('id_user');
-let id_user = 1;
+//let server;
+let id_user = sessionStorage.getItem('id_user');
+//let id_user = 1;
 
-const getStudents = async () => {
+/*const getStudents = async () => {
     const response = await fetch('js/config.json');
     const json = await response.json();
     server = json.url;
 
     checkOwner();
     generateTable();
-}
+}*/
+
+checkOwner();
+generateTable();
 
 function checkOwner() {
     let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
@@ -88,7 +91,7 @@ function generateTable() {
     });
 }
 
-getStudents();
+//getStudents();
 
 
 // EXPORT BUTTONS

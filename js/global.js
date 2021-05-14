@@ -1,0 +1,1 @@
+var server = 'http://147.175.98.107/zaver/';
