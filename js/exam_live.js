@@ -33,6 +33,8 @@ function get_server_time(callback){
             if(resp['status'] == 'OK'){
                 server_time = new Date(resp['time']);
                 callback();
+            }else{
+                error();
             }
         },
         async: false
@@ -58,6 +60,8 @@ function get_exam_times(callback){
                 if(callback){
                     callback();
                 }
+            }else{
+                error();
             }
         },
         async: false
@@ -80,6 +84,8 @@ function awake(){
                         timer(resp['start']);    
                         setData(resp);      
                         setFocusListener();  
+                    }else{
+                        error();
                     }
                 }, false);
             }else{
@@ -123,7 +129,11 @@ function setFocusListener(){
 }
 
 function error(){
-    
+    document.getElementById('count-down').hidden = true;
+    document.getElementById('live-exam').hidden = true;
+    document.getElementById('live-exam-nav').hidden = true;
+    document.getElementById('end').hidden = true;
+    document.getElementById('error').hidden = false;
 }
 
 function timer(){
@@ -414,8 +424,11 @@ function submitTest(){
                 document.getElementById('live-exam').hidden = true;
                 document.getElementById('live-exam-nav').hidden = true;
                 document.getElementById('end').hidden = false;
+                document.getElementById('error').hidden = true;
 
                 setTimeout(function() { logout(); }, 5000);
+            }else{
+                error();
             }
         },
         async: false
