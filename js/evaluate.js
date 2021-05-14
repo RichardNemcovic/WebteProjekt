@@ -122,9 +122,11 @@ function generateTable() {
                                 </div>
                                 <div class="col-md-6">
                                     <p class="light-coral-txt mb-1">Odpoveď:</p>
-                                    <button onclick="changeImage(${q.answer.answer})" class="btn btn-sm btn-dark btn-pill rounded-pill" data-toggle="modal" data-target="#modalBox">
+                                    <div onclick="changeImage('${q.answer.answer}')">
+                                    <button  class="btn btn-sm btn-dark btn-pill rounded-pill" data-toggle="modal" data-target="#modalBox">
                                         <div class="material-icons align-middle w-100" data-toggle="tooltip" data-placement="top" title="Show image">image</div> 
-                                    </button> 
+                                    </button>
+                                    </div> 
                                 </div> 
                                 <hr class="mt-3">
                                 <div class="col-md-3">
@@ -387,8 +389,11 @@ let button = document.getElementById('button-back');
 button.setAttribute('href','exam.html?id=' + id_exam);
 
 function changeImage(path) {
+    console.log('funkcia zbehla');
     let modal = document.getElementById('modal-image');
-    modal.setAttribute('src',server + path);
+    // modal.setAttribute('src',server + path);
+    modal.setAttribute('src', 'https://artprojectsforkids.org/wp-content/uploads/2021/04/Draw-a-Unicorn-revised.jpg');
+    
 }
 
 // SET TOOLTIPS
