@@ -126,7 +126,6 @@ class ExamService
                                 $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                 break;
                             }
-                            var_dump($item);
                             foreach ($item['possibilities'] as $key=>$value) {
                                         $answer = $value;
                                         $stmt_qSelect_answer = $this->conn->prepare('insert into questions_select(id_question, answer, correct) values (:id_question, :answer, :correct)');
