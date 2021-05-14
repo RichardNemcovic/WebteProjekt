@@ -33,7 +33,7 @@ function generateTable() {
                     <button id="btn-${cnt}" onclick="changeStatus(${cnt},${test.id})" class="btn btn-sm btn-dark rounded-pill d-inline-block mx-1" data-toggle="tooltip" data-placement="top" title="Deaktivovať">
                         <div id="btn-div-${cnt}" class="material-icons align-middle fs-5">toggle_on</div>
                     </button>
-                    <a href="exam.html?id=${test.id}" class="btn btn-sm btn-dark rounded-pill d-inline-block mx-1" data-toggle="tooltip" data-placement="top" title="Upozornenia">
+                    <a href="notifications.html?id=${test.id}" class="btn btn-sm btn-dark rounded-pill d-inline-block mx-1" data-toggle="tooltip" data-placement="top" title="Upozornenia">
                         <div class="material-icons align-middle fs-5">notifications</div>
                     </a>
                 `;
@@ -48,7 +48,7 @@ function generateTable() {
                     <button  onclick="changeStatus(${cnt},${test.id})" class="btn btn-sm btn-dark rounded-pill d-inline-block mx-1" data-toggle="tooltip" data-placement="top" title="Aktivovať">
                         <div id="btn-div-${cnt}" class="material-icons align-middle fs-5">toggle_off</div>
                     </button>
-                    <a href="exam.html?id=${test.id}" class="btn btn-sm btn-dark rounded-pill d-inline-block mx-1" data-toggle="tooltip" data-placement="top" title="Upozornenia">
+                    <a href="notifications.html?id=${test.id}" class="btn btn-sm btn-dark rounded-pill d-inline-block mx-1" data-toggle="tooltip" data-placement="top" title="Upozornenia">
                         <div class="material-icons align-middle fs-5">notifications</div>
                     </a>
                 `;
