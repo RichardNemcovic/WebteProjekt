@@ -5,18 +5,21 @@ if(!id_exam) {
     window.location.href = "404.html";
 }
 
-let server;
-// let id_user = sessionStorage.getItem('id_user');
-let id_user = 1;
+//let server;
+let id_user = sessionStorage.getItem('id_user');
+//let id_user = 1;
 
-const getStudents = async () => {
+/*const getStudents = async () => {
     const response = await fetch('js/config.json');
     const json = await response.json();
     server = json.url;
 
     checkOwner();
     generateTable();
-}
+}*/
+
+checkOwner();
+generateTable();
 
 function checkOwner() {
     let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
@@ -66,9 +69,9 @@ function generateTable() {
                 row.insertCell(0).innerHTML = student.id;
                 row.insertCell(1).innerHTML = student.name;
                 row.insertCell(2).innerHTML = student.surname;                
-                row.insertCell(3).innerHTML = `<div class="text-center">-</div>`;
 
                 if(student.status == "closed") {
+                    row.insertCell(3).innerHTML = student.score;
                     let cell = row.insertCell(4).innerHTML = `
                     <a href="evaluate.html?id_exam=${id_exam}&id_student=${student.id}" class="btn btn-sm btn-dark rounded-pill" data-toggle="tooltip" data-placement="top" title="Ohodnotiť">
                         <div class="material-icons align-middle fs-5">history_edu</div>
@@ -76,6 +79,7 @@ function generateTable() {
                     `;
                 }
                 else {
+                    row.insertCell(3).innerHTML = `<div class="text-center">-</div>`;
                     let cell = row.insertCell(4).innerHTML = `<div class="text-center">-</div>`;
                 }
                 
@@ -88,7 +92,7 @@ function generateTable() {
     });
 }
 
-getStudents();
+//getStudents();
 
 
 // EXPORT BUTTONS

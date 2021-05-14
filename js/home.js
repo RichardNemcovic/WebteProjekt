@@ -1,14 +1,16 @@
-let server;
-// let id_user = sessionStorage.getItem('id_user');
-let id_user = 1;
+//let server;
+let id_user = sessionStorage.getItem('id_user');
+//let id_user = 1;
 
-const getExams = async () => {
+/*const getExams = async () => {
     const response = await fetch('js/config.json');
     const json = await response.json();
     server = json.url;
     
     generateTable();
-}
+}*/
+
+generateTable();
 
 function generateTable() {    
     let req = server + "ExamController.php?ep=getAllExamsForCreator&id_creator=" + id_user;
@@ -61,7 +63,7 @@ function generateTable() {
 }
 
 
-getExams();
+//getExams();
 
 
 // DEACTIVATE EXAM                      TODO
