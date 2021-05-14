@@ -563,6 +563,13 @@ function getPairAnswers(){
     return data;
 }
 
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
 function getEquationAnswers(){
     let data = [];
 
@@ -571,20 +578,13 @@ function getEquationAnswers(){
         d['id'] = e;
 
         if(document.getElementById('eq-'+e+'-cb').checked){
-            //d['answer'] = document.getElementById('eq-'+id+'-f').value;
-            //encode to base64
-            var f = document.getElementById('eq-'+e+'-f').target.files[0]; // FileList object
-            var reader = new FileReader();
-            reader.onload = (function(theFile) {
-                return function(e) {
-                  var binaryData = e.target.result;
-                  //Converting Binary Data to base 64
-                  var base64String = window.btoa(binaryData);
-                  //showing file converted to base64
-                  d['answer'] = base64String;
-                }
-            })(f);  
+            var f = document.getElementById('eq-'+e+'-f').files[0]; // FileList object
+            toBase64(f).then(function(res){
+                d['answer'] = res;
+            });       
+            d['url'] = 0;       
         }else{
+            d['url'] = 1;
             d['answer'] = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
         }
 
@@ -606,17 +606,10 @@ function getImageAnswers(){
         d['id'] = e;
 
         if(document.getElementById('img-'+e+'-cb').checked){            
-            var f = document.getElementById('img-'+e+'-f').target.files[0]; // FileList object
-            var reader = new FileReader();
-            reader.onload = (function(theFile) {
-                return function(e) {
-                  var binaryData = e.target.result;
-                  //Converting Binary Data to base 64
-                  var base64String = window.btoa(binaryData);
-                  //showing file converted to base64
-                  d['image_data'] = base64String;
-                }
-            })(f);          
+            var f = document.getElementById('img-'+e+'-f').files[0]; // FileList object
+            toBase64(f).then(function(res){
+                d['image_data'] = res;
+            });          
         }else{
             d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });
         }
