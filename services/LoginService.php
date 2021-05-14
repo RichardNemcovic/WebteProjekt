@@ -74,14 +74,22 @@
                 $resp = ['status' => 'OK', 'id' => $output["id"], 'name' => $output["name"] ." ". $output["surname"]];
 
                 $status = 'active';
-                $stmt = $this->conn->prepare("SELECT id FROM exams WHERE code=:code AND status=:status");
+                $stmt = $this->conn->prepare("SELECT exams.id, exam_status.id_status 
+                                                    FROM exams 
+                                                    INNER JOIN exam_status ON exams.id=exam_status.id_exam
+                                                    WHERE code=:code 
+                                                      AND status=:status");
                 $stmt->bindParam(":code", $code);
                 $stmt->bindParam(":status", $status);
                 $stmt->execute();
-                $output = $stmt->fetchColumn();
+                $output = $stmt->fetch();
 
                 if ($output) {
-                    $resp['exam_id'] = $output[0];
+                    if ($output['id_status'] == 1){
+                        $resp['exam_id'] = $output['id'];
+                    } else {
+                        $resp = ['status' => 'FAIL', 'message' => "You've already submitted this test."];
+                    }
                 } else {
                     $resp = ['status' => 'FAIL', 'message' => 'No test matching this code.'];
                 }
