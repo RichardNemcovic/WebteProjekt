@@ -123,3 +123,13 @@ tbody{
 .light-bg{
     background: #f0f0ff;
 }
+
+.basic-link{
+    color: #0d0c52ff;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.basic-link:hover{
+    color: rgb(56, 55, 124);
+}
