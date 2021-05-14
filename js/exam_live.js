@@ -124,7 +124,23 @@ function awake(){
 
 function setFocusListener(){
     $(window).blur(function(){
-        console.log('von');
+        let data = {};
+        data['id_user'] = sessionStorage.getItem('id_user');
+        data['id_exam'] = id_exam;
+
+        $.ajax(
+            {
+            url: server+'ExamController.php?ep=cheating',
+            type: 'POST',
+            contentType: 'application/json',
+            success: function(resp){
+                if(resp['status'] == 'OK'){
+                    server_time = new Date(resp['time']);
+                    callback();
+                }
+            },
+            async: false
+        });
     });
 }
 
