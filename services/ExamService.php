@@ -552,8 +552,10 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_pairing.answer_left, answers_pairing.answer_right
                                                     FROM answers
                                                     INNER JOIN answers_pairing ON answers.id=answers_pairing.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                      AND answers.id_user=:id_user");
                 $stmt->bindParam(":id_question", $out['id']);
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->execute();
                 $res = $stmt->fetchAll();
 
