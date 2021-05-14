@@ -25,16 +25,23 @@ if(isset($_GET['ep'])) {
 
     if ($_SERVER["REQUEST_METHOD"] === 'GET') {
         switch($ep) {
-            case('getExamCSV'):
-                if(isset($data['id_creator'])){
-                    $exportService->get_exam_CSV($data['id_creator']);
+            case('exportCSV'):
+                if(isset($data['id_test'])){
+                    $exportService->get_exam_CSV($data['id_test']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
-            case('getExamPDF'):
-                if(isset($data['id_creator'])){
-                    $exportService->get_exam_PDF($data['id_creator']);
+            case('exportPDF'):
+                if(isset($data['id_test'])){
+                    $exportService->get_exam_PDF($data['id_test']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
+            case('deleteZip'):
+                if(isset($data['filename'])){
+                    $exportService->delete_exam_zip($data['filename']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
