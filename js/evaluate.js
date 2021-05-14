@@ -391,7 +391,6 @@ button.setAttribute('href','exam.html?id=' + id_exam);
 function changeImage(path) {
     console.log('funkcia zbehla');
     let modal = document.getElementById('modal-image');
-    // modal.setAttribute('src',server + path);
     modal.setAttribute('src', server+path);
 }
 
