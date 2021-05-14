@@ -1312,6 +1312,12 @@ class ExamService
             return json_encode($resp);
         }
     }
+
+    public function upload_file($ais_id, $url){
+        $t = time();
+        $img = 'uploads/'.$ais_id.$t.'.png';
+        file_put_contents($img, file_get_contents($url));
+    }
 }
 
 ?>

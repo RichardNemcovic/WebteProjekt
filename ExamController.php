@@ -109,6 +109,13 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('uploadFile'):
+                if(isset($data['ais_id']) && isset($data['url'])){
+                    $examService->upload_file($data['ais_id'], $data['url']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
         }
     }
 }else{
