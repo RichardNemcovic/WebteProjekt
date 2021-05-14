@@ -143,26 +143,26 @@
 
         public function delete_exam_zip($filename)//Ocakavam tmp/exam1.zip
         {   
-            $location = explode("/", $filename);
-            $filename = '../tmp/' . $location[1];
+            $location = basename($filename);
+            $filename = '../tmp/' . $location;
             if(file_exists($filename)){
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
             }else{
-                $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
+                $resp = ['status' => 'FAIL', 'message' => 'Deletion not completed, file didnt exist in that dir.'];
             }
             echo json_encode($resp);
         }
 
         public function delete_exam_csv($filename)//Ocakavam tmp/exam1.csv
         {   
-            $location = explode("/", $filename);
-            $filename = '../tmp/' . $location[1];
+            $location = basename($filename);
+            $filename = '../tmp/' . $location;
             if(file_exists($filename)){
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
             }else{
-                $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
+                $resp = ['status' => 'FAIL', 'message' => 'Deletion not completed, file didnt exist in that dir.'];
             }
             echo json_encode($resp);
         }

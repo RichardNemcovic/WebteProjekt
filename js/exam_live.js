@@ -372,6 +372,7 @@ function createImage(question){
         </div>                            
     </div>
     <hr>
+<<<<<<< HEAD
     <div>
         <div class="form-check form-switch" >
             <input class="form-check-input" type="checkbox" id="img-`+question['id']+`-cb" onclick="showHideImg(`+question['id']+`)">
@@ -388,7 +389,11 @@ function createImage(question){
         <button id="container-btn-`+question['id']+`" class="btn bt-submit shadow d-inline-block text-center my-3 align-self-center" type="button" onclick="resetCanvas('container-`+question['id']+`',`+question['id']+`)">                                
             <span class="material-icons align-middle">restart_alt</span> Obnoviť plátno
         </button>
-    </div>`;
+    </div>
+    <div id="option-b-${question['id']}" hidden>
+        tu je file upload
+    </div>
+    `;
 
     container.appendChild(div);
     questionIndex++;
@@ -621,4 +626,18 @@ function getImageAnswers(){
     })
 
     return data;
+}
+
+function toggleImage(id,option) {
+    console.log(document.getElementById('option-a-' + id));
+    let divA = document.getElementById('option-a-' + id);
+    let divB = document.getElementById('option-b-' + id);
+    if(option == 'a') {
+        divA.hidden = false;
+        divB.hidden = true;
+    }
+    else {
+        divA.hidden = true;
+        divB.hidden = false;
+    }
 }

@@ -1115,14 +1115,36 @@ class ExamService
                     if (isset($item['qEquation'])) {
                         if (!empty($item['qEquation'])) {
                             foreach ($item['qEquation'] as $value) {
-                                if (isset($value['id']) && isset($value['answer'])) {
-                                    if (!empty($value['id']) && !empty($value['answer'])) {
+                                if (isset($value['id']) && isset($value['answer']) && isset($value['url'])) {
+                                    if (!empty($value['id']) && !empty($value['answer']) && !empty($value['url'])) {
                                         $id_question = $value['id'];
                                         $answer = $value['answer'];
+                                        $url = $value['$url'];
                                     } else {
-                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                        $resp = ['status' => 'FAIL', 'message' => 'qEquation, wrong set'];
                                         echo json_encode($resp);
                                         return json_encode($resp);
+                                    }
+                                }
+                                if($url){
+                                    $stmt = $this->conn->prepare("select ais_id from users where id=:user_id");
+                                    $stmt->bindParam('user_id', $id_user);
+                                    $stmt->execute();
+                                    $ais_id = $stmt->fetchColumn();
+                                    if($ais_id){
+                                        $answer_path = $this->upload_file($ais_id, $answer);
+                                    }
+                                }else{
+                                    $stmt = $this->conn->prepare("select ais_id from users where id=:user_id");
+                                    $stmt->bindParam('user_id', $id_user);
+                                    $stmt->execute();
+                                    $ais_id = $stmt->fetchColumn();
+                                    if($ais_id) {
+                                        $t = time();
+                                        $path = "uploads/" . $ais_id . $t . ".png";
+                                        $img_data = substr($answer, 22);
+                                        $status = file_put_contents($path, base64_decode($img_data));
+                                        $answer_path = $path;
                                     }
                                 }
                                 $correct = 0;
@@ -1137,15 +1159,15 @@ class ExamService
                                     $id_answers = $this->conn->lastInsertId();
                                     $stmt = $this->conn->prepare('insert into answers_equations (id_answer, answer) values (:id_answer, :answer)');
                                     $stmt->bindParam('id_answer', $id_answers);
-                                    $stmt->bindParam('answer', $answer);
+                                    $stmt->bindParam('answer', $answer_path);
                                     $stmt->execute();
                                     if($stmt->rowCount()){}else {
-                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                        $resp = ['status' => 'FAIL', 'message' => 'submit_exam, answer_equation insert'];
                                         echo json_encode($resp);
                                         return json_encode($resp);
                                     }
                                 }else {
-                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam, answers insert'];
                                     echo json_encode($resp);
                                     return json_encode($resp);
                                 }
@@ -1317,6 +1339,8 @@ class ExamService
         $t = time();
         $img = 'uploads/'.$ais_id.$t.'.png';
         file_put_contents($img, file_get_contents($url));
+        echo $img;
+        return $img;
     }
 }
 
