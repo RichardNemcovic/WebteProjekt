@@ -28,7 +28,7 @@
             while($row =  $stmt->fetch(PDO::FETCH_ASSOC, 0)) {
                 fputcsv($fp, $row);
             }
-            $resp = ['status' => 'OK', 'path' => 'exam.csv'];
+            $resp = ['status' => 'OK', 'message' => 'Succes of csv export'];
         } else {
             $resp = ['status' => 'FAIL', 'message' => 'No tests with this id.'];
         }
