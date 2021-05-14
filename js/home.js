@@ -1,14 +1,4 @@
-//let server;
 let id_user = sessionStorage.getItem('id_user');
-//let id_user = 1;
-
-/*const getExams = async () => {
-    const response = await fetch('js/config.json');
-    const json = await response.json();
-    server = json.url;
-    
-    generateTable();
-}*/
 
 generateTable();
 
@@ -61,9 +51,6 @@ function generateTable() {
         setTooltips();
     });
 }
-
-
-//getExams();
 
 
 // DEACTIVATE EXAM                      TODO
