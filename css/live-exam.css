@@ -1,8 +1,13 @@
 /* GENERAL */
-html, body {
+html{
     min-height: 100%;
-    background: rgb(13,12,82);
-    background: linear-gradient(45deg, #0d0c52 0%, #ff8b8b 100%);
+    background: -webkit-linear-gradient(40deg, #0d0c52 , #ff8b8b);
+} 
+
+body {
+    min-height: 100%;
+    background: -webkit-linear-gradient(40deg, #0d0c52 , #ff8b8b);
+    background-repeat: no-repeat;
 }
 
 .border-box{
@@ -66,6 +71,7 @@ html, body {
 }
 
 #live-exam-nav{
+    width: 167px;
     left: 0;
     bottom: 0;
     position: fixed;
