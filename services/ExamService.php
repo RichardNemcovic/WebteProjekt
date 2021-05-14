@@ -472,7 +472,9 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_images.answer
                                                     FROM answers
                                                     INNER JOIN answers_images ON answers.id=answers_images.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                      AND answers.id_user=:id_user");
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
                 $res = $stmt->fetch();
@@ -493,7 +495,9 @@ class ExamService
             $stmt = $this->conn->prepare("SELECT id, name, score
                                                 FROM questions 
                                                 WHERE id_exam=:id_exam
-                                                  AND id_type=:id_type");
+                                                  AND id_type=:id_type
+                                                  AND answers.id_user=:id_user");
+            $stmt->bindParam(":id_user", $id_user);
             $stmt->bindParam(":id_exam", $id_exam);
             $stmt->bindParam(":id_type", $id_type);
             $stmt->execute();
@@ -1209,6 +1213,25 @@ class ExamService
         $resp = ['status' => 'FAIL', 'message' => 'get_server_time'];
         echo json_encode($resp);
         return json_encode($resp);
+    }
+
+    public function cheating_exam($id_user, $id_exam){
+        date_default_timezone_set('Europe/Bratislava');
+        $stamp = date("Y-m-d H:i:s");
+        $stmt = $this->conn->prepare('Insert into exam_cheating(id_user, id_exam, stamp) values(:id_user, :id_exam, :stamp)');
+        $stmt->bindParam('id_user', $id_user);
+        $stmt->bindParam('id_exam', $id_exam);
+        $stmt->bindParam('stamp', $stamp);
+        $stmt->execute();
+        if($stmt->rowCount()){
+            $resp = ['status' => 'OK', 'message' => 'cheater uploaded'];
+            echo json_encode($resp);
+            return json_encode($resp);
+        }else{
+            $resp = ['status' => 'FAIL', 'message' => 'cheater upload failed'];
+            echo json_encode($resp);
+            return json_encode($resp);
+        }
     }
 }
 

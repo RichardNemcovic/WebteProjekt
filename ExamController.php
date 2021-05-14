@@ -96,6 +96,13 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('cheating'):
+                if(isset($data['id_user']) && isset($data['id_test'])){
+                    $examService->cheating_exam($data['id_user'], $data['id_test']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
         }
     }
 }else{
