@@ -293,7 +293,7 @@ class ExamService
         return json_encode($resp);
     }
 
-    public function set_score($id_user, $id_answer, $id_question, $score) {
+    public function set_answers_score($id_answer, $score) {
         $stmt = $this->conn->prepare("SELECT * FROM answers 
                                             WHERE id=:id_answer 
                                               AND id_user=:id_user 
