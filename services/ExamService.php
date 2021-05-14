@@ -768,14 +768,21 @@ class ExamService
             }
         }
         if (isset($data['exam'])) {
-
             if (!empty($data['exam'])) {
                     $item = $data['exam'];
-
                     if (isset($item['id'])) {
-
                         if (!empty($item['id'])) {
                             $id_exam = $item['id'];
+                            $stmt = $this->conn->prepare('select * from exam_status where id_exam=:id_exam and id_user=:id_user and id_status=2');
+                            $stmt->bindParam('id_exam', $id_exam);
+                            $stmt->bindParam('id_user', $id_user);
+                            $stmt->execute();
+                            if($stmt->rowCount()){
+                                $resp = ['status' => 'FAIL', 'message' => 'trying to submit the same exam twice or thrice or more times'];
+                                echo json_encode($resp);
+                                return json_encode($resp);
+                            }
+
                             $stmt = $this->conn->prepare('select * from exams where id=:id and status="active"');
                             $stmt->bindParam('id', $id_exam);
                             $stmt->execute();
