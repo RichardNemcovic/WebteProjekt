@@ -808,7 +808,7 @@ class ExamService
                                     }
                                 }
 
-                                $id_type = "2";
+                                $id_type = "2";                               
 
                                 $stmt = $this->conn->prepare('Select * from questions where id_exam=:id_exam and id_type=:id_type and id=:id_question');
                                 $stmt->bindParam('id_exam', $id_exam);
