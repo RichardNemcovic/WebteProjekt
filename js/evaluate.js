@@ -365,23 +365,23 @@ function updateAnswer(n,id) {
         
         $.ajax(
             {
-            url: server+'?ep=setAnswersScore',
+            url: server+'ExamController.php?ep=setAnswersScore',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function(resp){
                 if(resp['status'] == 'OK'){
                     console.log('okOKOKOKOKO');
+                    let danger = document.getElementById('danger-' + n);
+                    danger.hidden = true;
+                    let success = document.getElementById('success-' + n);
+                    success.hidden = false;
                 }else{
-                    alert("Nastala chyba");
+                    console.log(resp);
+                    alert(resp);
                 }
             }
-        });
-
-        let danger = document.getElementById('danger-' + n);
-        danger.hidden = true;
-        let success = document.getElementById('success-' + n);
-        success.hidden = false;    
+        });            
     }
 }
 
