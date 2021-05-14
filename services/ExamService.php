@@ -1210,6 +1210,25 @@ class ExamService
         echo json_encode($resp);
         return json_encode($resp);
     }
+
+    public function cheating_exam($id_user, $id_exam){
+        date_default_timezone_set('Europe/Bratislava');
+        $stamp = date("Y-m-d H:i:s");
+        $stmt = $this->conn->prepare('Insert into exam_cheating(id_user, id_exam, stamp) values(:id_user, :id_exam, :stamp)');
+        $stmt->bindParam('id_user', $id_user);
+        $stmt->bindParam('id_exam', $id_exam);
+        $stmt->bindParam('stamp', $stamp);
+        $stmt->execute();
+        if($stmt->rowCount()){
+            $resp = ['status' => 'OK', 'message' => 'cheater uploaded'];
+            echo json_encode($resp);
+            return json_encode($resp);
+        }else{
+            $resp = ['status' => 'FAIL', 'message' => 'cheater upload failed'];
+            echo json_encode($resp);
+            return json_encode($resp);
+        }
+    }
 }
 
 ?>
