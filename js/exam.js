@@ -83,7 +83,7 @@ function generateTable() {
 
 // EXPORT BUTTONS
 function exportPdf() {
-    let req = "http://147.175.98.107/zaver/ExamController.php?ep=exportPDF&id=" + id_exam
+    let req = "http://147.175.98.107/zaver/ExamController.php?ep=exportPDF&id_test=" + id_exam
     $.get(req, function(resp){
         if(resp['status'] == 'OK') {
             let path = resp['path']
@@ -96,11 +96,9 @@ function exportPdf() {
 }
 
 function exportCsv() {
-    let req = "http://147.175.98.107/zaver/ExamController.php?ep=exportCSV&id=" + id_exam
-    $.get(req, function(resp){
+    $.get(server + 'ExportController.php?ep=exportCSV&id_test=' + id_exam, function(resp){
         if(resp['status'] == 'OK') {
             let path = resp['path']
-            //TODO download
         }
         else {
             

@@ -647,6 +647,49 @@ class ExamService
         return json_encode($resp);
     }
 
+    public function get_cheaters($id_exam){
+        $arr = array();
+        $arr['status'] = "OK";
+        $arr['cheater'] = array();
+        $stmt = $this->conn->prepare('select name from exams where id =:id');
+        $stmt->bindParam('id', $id_exam);
+        $stmt->execute();
+        $exam_name= $stmt->fetchColumn();
+        $arr['exam_name']= $exam_name;
+        if($exam_name){
+            $stmt = $this->conn->prepare('select * from exam_cheating where id_exam=:id_exam');
+            $stmt->bindParam('id_exam', $id_exam);
+            $stmt->execute();
+            $cheaters = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($cheaters){
+                foreach ($cheaters as $cheater){
+                    $id_user = $cheater['id_user'];
+                    $stmt = $this->conn->prepare('select * from users where id=:id');
+                    $stmt->bindParam('id', $id_user);
+                    $stmt->execute();
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    if($result){
+                        $name = $result[0]['name'] . " ". $result[0]['surname'];
+                        $temp = array(
+                          "name"=> $name,
+                            "ais_id"=>$result[0]['ais_id'],
+                            "time"=>$cheater['stamp']
+                        );
+                        array_push($arr['cheater'], $temp);
+                    }
+                }
+            }
+            $resp = $arr;
+            echo json_encode($arr);
+            return json_encode($arr);
+
+        }else{
+            $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
+            echo json_encode($resp);
+            return json_encode($resp);
+        }
+    }
+
     // -----------------------------------------------------------------------------------------------
     //                                   Student part
     // -----------------------------------------------------------------------------------------------

@@ -63,6 +63,12 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
+            case('cheating'):
+                if(isset($_GET['id_exam'])){
+                    $examService->get_cheaters($_GET['id_exam']);
+                }else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
         }
     }
 
