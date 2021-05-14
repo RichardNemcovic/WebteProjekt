@@ -84,11 +84,15 @@ html, body{
     background: rgb(255, 172, 172);
 }
 
+tbody{
+    font-weight: 500;
+}
+
 .action{
     width: 1rem;
 }
 .action2{
-    width: 8rem;
+    width: 114px;
 }
 
 .button-back{
@@ -104,4 +108,18 @@ html, body{
     margin: 10px 0;
     font-weight: 500;
     border-radius: 8px;
+}
+
+.alert-success{
+    color: #0d0c52ff;
+    background-color: rgb(186 185 255);
+    border: none;    
+}
+
+.alert-danger{    
+    border: none;    
+}
+
+.light-bg{
+    background: #f0f0ff;
 }

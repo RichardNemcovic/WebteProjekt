@@ -2,8 +2,8 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="06f4fad3-dd43-4e5b-825a-82d24ae100cd" name="webte" url="https://wt111.fei.stuba.sk/">
-        <fileTransfer rootFolder="/home/xnemcovic/public_html/Zaver" accessType="SFTP" host="147.175.98.111" port="22" sshConfigId="fc627613-879b-41f5-8784-26adbc77729f" sshConfig="xnemcovic@147.175.98.111:22 password">
+      <webServer id="e93612f6-f733-4db1-91e8-89d3722294fe" name="webte2" url="https://wt111.fei.stuba.sk/Zaver">
+        <fileTransfer rootFolder="/home/xnemcovic/public_html/Zaver" accessType="SFTP" host="147.175.98.111" port="22" sshConfigId="7af0bb7e-161a-427c-910c-0f2d4b4668d7" sshConfig="xnemcovic@147.175.98.111:22 password">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>

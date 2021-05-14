@@ -1,4 +1,3 @@
-var server = '';
 var id_exam;
 
 var qShort = [];
@@ -14,88 +13,6 @@ var mathFields = {};
 var questionIndex = 1; 
 var container = document.getElementById('exam-form');
 
-var question = {
-    status: 'OK',
-    exam: {
-        description: 'Test',
-        start: '2021-05-13 03:26:00',
-        end: '2021-05-13 15:38:00',
-        qShort: [
-            {
-                id: 5,
-                description: 'Kolko vazi tvoja mama?',
-                score: 10
-            }
-        ],
-        qSelect: [
-            {
-                id: 6,
-                description: 'Ako moc sme sprosty?',
-                score: 15,
-                possibilities: [
-                    {
-                        id: 1,
-                        answer: 'Stasne' 
-                    },
-                    {
-                        id: 2,
-                        answer: 'Hrozne' 
-                    },
-                    {
-                        id: 3,
-                        answer: 'Extremne' 
-                    }
-                ]
-            }
-        ],
-        qImage: [
-            {
-                id: 7,
-                description: 'Nakresli kona.',
-                score: 5,
-            },
-            {
-                id: 8,
-                description: 'Nakresli tvojho tatka.',
-                score: 5,
-            }
-        ],
-        qEquation: [
-            {
-                id: 9,
-                description: 'Vzorec na piko',
-                score: 25
-            },
-            {
-                id: 10,
-                description: 'Vzorec na herak',
-                score: 30
-            }
-        ],
-        qPairs: [
-            {
-                id: 11,
-                description: 'Sparuj svoje komplexy.',
-                score: 7,
-                pairs: [ //ALREADY MIXED!!
-                    {
-                        left: 'Mam',
-                        right: 'je koko*ina'
-                    },
-                    {
-                        left: 'WEBTE',
-                        right: 'šmerdzí'
-                    },
-                    {
-                        left: 'Matovic',
-                        right: 'maly penis'
-                    }
-                ]
-            }
-        ]
-    }
-}
-
 //IMPORTANT CHECK FOR TEST ID:
 let url = new URL(window.location.href);
 if(url.searchParams.has('id_exam')){
@@ -106,110 +23,170 @@ if(url.searchParams.has('id_exam')){
 //----------------------------
 var server_time;
 
-function get_server_time(){
-    //UPDATE
-    server_time = new Date()
+function get_server_time(callback){
+    $.ajax(
+        {
+        url: server+'ExamController.php?ep=getServerTime',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(resp){
+            if(resp['status'] == 'OK'){
+                server_time = new Date(resp['time']);
+                callback();
+            }
+        },
+        async: false
+    });
 }
 
 awake();
 
-function awake(){
-    //Get data
-    let start_time = new Date(question['exam']['start']);
+var start_time;
+var end_time;
 
-    get_server_time();
-    
-    if(start_time.getTime() - server_time.getTime() < 0){
-        //getData from server
-        
-        document.getElementById('count-down').hidden = true;
-        document.getElementById('live-exam').hidden = false;
-        document.getElementById('live-exam-nav').hidden = false;
-
-        setData(question);
-        timer(question['exam']['start']);
-    }else{
-        document.getElementById('count-down').hidden = false;
-        document.getElementById('live-exam').hidden = true;
-        document.getElementById('live-exam-nav').hidden = true;
-
-        get_server_time();
-
-        var myfunc = setInterval(function() {
-            var now = new Date().getTime();
-            let timeleft = start_time.getTime() - now;
+function get_exam_times(callback){
+    $.ajax(
+        {
+        url: server+'ExamController.php?ep=getExamTimes&id_exam='+id_exam,
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(resp){
+            if(resp['status']=='OK'){
+                start_time= new Date(resp['start']);
+                end_time=new Date(resp['end']);
                 
-            // Calculating the days, hours, minutes and seconds left
-            var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
-                
-            // Result is output to the specific element            
-            document.getElementById("cDays").innerHTML = days;           
-            document.getElementById("cHours").innerHTML = hours; 
-            document.getElementById("cMins").innerHTML = minutes; 
-            document.getElementById("cSecs").innerHTML = seconds; 
-                
-            // Display the message when countdown is over
-            if (timeleft < 0) {
-                clearInterval(myfunc);
-                awake();
+                if(callback){
+                    callback();
+                }
             }
-        }, 1000);
-    }
+        },
+        async: false
+    });
+}
+
+function awake(){
+//    let start_time = new Date(question['exam']['start']);
+    get_exam_times(function(){
+        get_server_time(function(){
+            if(start_time.getTime() - server_time.getTime() < 0){
+                //getData from server
+                
+                document.getElementById('count-down').hidden = true;
+                document.getElementById('live-exam').hidden = false;
+                document.getElementById('live-exam-nav').hidden = false;
+        
+                $.get(server+'ExamController.php?ep=openExam&id_exam='+id_exam+'&id_user='+sessionStorage.getItem('id_user'), function(resp){
+                    if(resp['status'] == 'OK'){
+                        timer(resp['start']);    
+                        setData(resp);      
+                        setFocusListener();  
+                    }
+                }, false);
+            }else{
+                document.getElementById('count-down').hidden = false;
+                document.getElementById('live-exam').hidden = true;
+                document.getElementById('live-exam-nav').hidden = true;
+        
+                get_server_time(function(){
+                    var myfunc = setInterval(function() {
+                        var now = new Date().getTime();
+                        let timeleft = start_time.getTime() - now;
+                            
+                        // Calculating the days, hours, minutes and seconds left
+                        var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+                        var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+                            
+                        // Result is output to the specific element            
+                        document.getElementById("cDays").innerHTML = days;           
+                        document.getElementById("cHours").innerHTML = hours; 
+                        document.getElementById("cMins").innerHTML = minutes; 
+                        document.getElementById("cSecs").innerHTML = seconds; 
+                            
+                        // Display the message when countdown is over
+                        if (timeleft < 0) {
+                            clearInterval(myfunc);
+                            awake();
+                        }
+                    }, 1000);
+                });
+            }
+        });
+    });
+}
+
+function setFocusListener(){
+    $(window).blur(function(){
+        console.log('von');
+    });
+}
+
+function error(){
+    
 }
 
 function timer(){
-    let end_time = new Date(question['exam']['end']);
-    let i = 0;
+    get_exam_times(function(){
+        let i = 0;
 
-    var myfunc1 = setInterval(function() {
-        i++;
-        if(i%5==0){
-            end_time = new Date(question['exam']['end']).getTime();
-        }
+        var myfunc1 = setInterval(function() {
+            i++;
+            if(i%5==0){
+                get_exam_times();
+            }
 
-        var now1 = new Date().getTime();
-        var timeleft1 = end_time - now1;
-            
-        // Calculating the days, hours, minutes and seconds left
-        var hours = Math.floor((timeleft1 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((timeleft1 % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((timeleft1 % (1000 * 60)) / 1000);
-            
-        // Result is output to the specific element
-        document.getElementById("cH").innerHTML = hours;
-        document.getElementById("cM").innerHTML = minutes; 
-        document.getElementById("cS").innerHTML = seconds; 
-            
-        console.log(timeleft1);
-        // Display the message when countdown is over
-        if (timeleft1 < 0) {
-            clearInterval(myfunc1);
-            submitTest();
-        }
-    }, 1000);
+            var now1 = new Date().getTime();
+            var timeleft1 = end_time - now1;
+                
+            // Calculating the days, hours, minutes and seconds left
+            var hours = Math.floor((timeleft1 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((timeleft1 % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((timeleft1 % (1000 * 60)) / 1000);
+                
+            // Result is output to the specific element
+            document.getElementById("cH").innerHTML = hours;
+            document.getElementById("cM").innerHTML = minutes; 
+            document.getElementById("cS").innerHTML = seconds; 
+                
+            // Display the message when countdown is over
+            if (timeleft1 < 0) {
+                clearInterval(myfunc1);
+                submitTest();
+            }
+        }, 1000);
+    });
+    //let end_time = new Date(question['exam']['end']);    
 }
 
 function setData(data){
-    document.getElementById('exam-name').innerHTML = question['exam']['description'];
+    document.getElementById('exam-name').innerHTML = data['name'];
 
-    data['exam']['qShort'].forEach(elem=>{
-        createShort(elem);
-    });
-    data['exam']['qSelect'].forEach(elem=>{
-        createSelect(elem);
-    });    
-    data['exam']['qEquation'].forEach(elem=>{
-        createEquation(elem);
-    });
-    data['exam']['qPairs'].forEach(elem=>{
-        createPair(elem);
-    });
-    data['exam']['qImage'].forEach(elem=>{
-        createImage(elem);
-    });
+    if(data['qShort']){
+        data['qShort'].forEach(elem=>{
+            createShort(elem);
+        });
+    }
+    if(data['qSelect']){
+        data['qSelect'].forEach(elem=>{
+            createSelect(elem);
+        });    
+    }
+    if(data['qEquation']){
+        data['qEquation'].forEach(elem=>{
+            createEquation(elem);
+        });
+    }
+    if(data['qPairs']){
+        data['qPairs'].forEach(elem=>{
+            createPair(elem);
+        });
+    }
+    if(data['qImage']){    
+        data['qImage'].forEach(elem=>{
+            createImage(elem);
+        });
+    }
 }
 
 //DYNAMIC HTML--------------------------------------
@@ -425,12 +402,24 @@ function submitTest(){
     
     data['exam'] = exam;
 
-    document.getElementById('count-down').hidden = true;
-    document.getElementById('live-exam').hidden = true;
-    document.getElementById('live-exam-nav').hidden = true;
-    document.getElementById('end').hidden = false;
+    $.ajax(
+        {
+        url: server+'ExamController.php?ep=submitExam',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(resp){
+            if(resp['status'] == 'OK'){                
+                document.getElementById('count-down').hidden = true;
+                document.getElementById('live-exam').hidden = true;
+                document.getElementById('live-exam-nav').hidden = true;
+                document.getElementById('end').hidden = false;
 
-    console.log(data);
+                setTimeout(function() { logout(); }, 5000);
+            }
+        },
+        async: false
+    });
 }
 
 function getShortAnswers(){

@@ -1,5 +1,3 @@
-var server = "http://147.175.98.107/zaver/controller.php";
-
 var cShort = 1;
 var cSelect = 1;
 var cImage = 1;
@@ -367,16 +365,26 @@ function createTest(event){
     data['qEquation'] = getEquationData();
     data['qPairs'] = gePairData();
 
+    data['start'] = data['start'].replace('T', ' ') + ':00';
+    data['end'] = data['end'].replace('T', ' ') + ':00';
+
     if(data['qShort'].length + data['qSelect'].length + data['qEquation'].length + data['qImage'].length + data['qPairs'].length > 0){
-        $.post(server+'?ep=createExam', data, function(resp){
-            if(resp['status'] == 'OK'){
-                reset();
-            }else{
-                error('Nastala chyba na strane servera.');
+        $.ajax(
+            {
+            url: server+'ExamController.php?ep=createExam',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(resp){
+                if(resp['status'] == 'OK'){
+                    reset();
+                }else{
+                    error('Nastala chyba na strane servera.');
+                }
             }
         });
     }else{
-        error('Test musí obsahovať aspoň jednu otázku.')
+        error('Test musí obsahovať aspoň jednu otázku.');
     }
 }
 

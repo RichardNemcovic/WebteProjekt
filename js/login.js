@@ -1,16 +1,18 @@
-var server = "http://147.175.98.107/zaver/controller.php";
-
 var path = window.location.href.split('/');
-path = path[path.length-1];
+path = path[path.length-1].split('?')[0];
 authenticate();
 
 function authenticate(){
     if(sessionStorage.getItem('id_user') && sessionStorage.getItem('role') && sessionStorage.getItem('name')){
-        if(path == 'index.html'){
-            if(sessionStorage.getItem('id_test')){
-                window.location.href = 'exam.html';
-            }else{
+        if(sessionStorage.getItem('role') == 'admin'){
+            if(path == 'index.html' || path == 'exam-live.html'){
                 window.location.href = 'home.html';
+            }
+        }
+
+        if(sessionStorage.getItem('role') == 'user'){
+            if(path != 'index.html' && path != 'live-exam.html'){
+                window.location.href = 'index.html';
             }
         }
     }else{
@@ -29,14 +31,21 @@ function login(event){
     data['email'] = document.getElementById('Temail').value;
     data['password'] = document.getElementById('Tpassword').value;
 
-    $.post(server+'?ep=teacherLogin', data, function(resp){
-        if(resp['status'] == 'OK'){
-            sessionStorage.setItem('id_user', resp['id']);
-            sessionStorage.setItem('name', resp['name']);
-            sessionStorage.setItem('role', 'admin');
-            window.location.href = 'home.html';
-        }else{
-            document.getElementById('teacher-alert').hidden = false;
+    $.ajax(
+        {
+        url: server+'LoginController.php?ep=teacherLogin',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(resp){
+            if(resp['status'] == 'OK'){
+                sessionStorage.setItem('id_user', resp['id']);
+                sessionStorage.setItem('name', resp['name']);
+                sessionStorage.setItem('role', 'admin');
+                window.location.href = 'home.html';
+            }else{
+                document.getElementById('teacher-alert').hidden = false;
+            }
         }
     });
 }
@@ -47,21 +56,28 @@ function register(event){
     }
 
     data = {};
-    data['aisID'] = document.getElementById('ais-id').value;
+    data['ais_id'] = document.getElementById('ais-id').value;
     data['email'] = document.getElementById('email').value;
     data['name'] = document.getElementById('name').value;
     data['surname'] = document.getElementById('surname').value;
     data['password'] = document.getElementById('password').value;
     data['passwordR'] = document.getElementById('password-again').value;
 
-    $.post(server+'?ep=registration', data, function(resp){
-        if(resp['status'] == 'OK'){
-            sessionStorage.setItem('id_user', resp['id']);
-            sessionStorage.setItem('role', 'admin');
-            sessionStorage.setItem('name', resp['name']);
-            window.location.href = 'home.html';
-        }else{
-            document.getElementById('register-alert').hidden = false;
+    $.ajax(
+        {
+        url: server+'LoginController.php?ep=teacherRegistration',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(resp){
+            if(resp['status'] == 'OK'){
+                sessionStorage.setItem('id_user', resp['id']);
+                sessionStorage.setItem('role', 'admin');
+                sessionStorage.setItem('name', resp['name']);
+                window.location.href = 'home.html';
+            }else{
+                document.getElementById('register-alert').hidden = false;
+            }
         }
     });
 }
@@ -72,31 +88,50 @@ function joinExam(event){
     }
 
     data = {};
-    data['kod'] = document.getElementById('Scode').value;
+    data['code'] = document.getElementById('Scode').value;
     data['name'] = document.getElementById('Sname').value;
     data['surname'] = document.getElementById('Ssurname').value;
-    data['aisID'] = document.getElementById('Sais-id').value;
+    data['ais_id'] = document.getElementById('Sais-id').value;
 
-    $.post(server+'?ep=studentLogin', data, function(resp){
-        if(resp['status'] == 'OK'){
-            sessionStorage.setItem('id_user', resp['id']);
-            sessionStorage.setItem('role', 'user');
-            sessionStorage.setItem('name', resp['name']);
-            //sessionStorage.setItem('id_exam', resp['id_exam']);
-            window.location.href = 'exam.html?id_exam='+resp['id_exam'];
-        }else{
-            document.getElementById('student-alert').hidden = false;
+    $.ajax(
+        {
+        url: server+'LoginController.php?ep=studentLogin',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(resp){
+            if(resp['status'] == 'OK'){
+                sessionStorage.setItem('id_user', resp['id']);
+                sessionStorage.setItem('role', 'user');
+                sessionStorage.setItem('name', resp['name']);
+                sessionStorage.setItem('id_exam', resp['exam_id']);
+                window.location.href = 'live-exam.html?id_exam='+resp['exam_id'];
+            }else{
+                document.getElementById('student-alert').hidden = false;
+            } 
         }
     });
 }
 
 function logout(){
-    $.post(server+'?ep=logout', function(data){
-        sessionStorage.removeItem('id_user');
-        sessionStorage.removeItem('role');
-        sessionStorage.removeItem('name');
-        //sessionStorage.removeItem('id_test');
-        
-        window.location.href = 'index.html';
-    });
+    sessionStorage.removeItem('id_user');
+            sessionStorage.removeItem('role');
+            sessionStorage.removeItem('name');
+            //sessionStorage.removeItem('id_test');
+            
+            window.location.href = 'index.html';
+    /*$.ajax(
+        {
+        url: server+'LoginController.php?ep=logout',
+        type: 'POST',
+        contentType: 'application/json',
+        success: function(resp){
+            sessionStorage.removeItem('id_user');
+            sessionStorage.removeItem('role');
+            sessionStorage.removeItem('name');
+            //sessionStorage.removeItem('id_test');
+            
+            window.location.href = 'index.html';
+        }
+    });*/
 }
