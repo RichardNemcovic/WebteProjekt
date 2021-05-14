@@ -313,7 +313,7 @@ class ExamService
         } else if ($rowCount != $output) {
             $resp = ['status' => 'FAIL', 'message' => 'No changes in the database.'];
         } else {
-            $resp = ['status' => 'SUCCESS'];
+            $resp = ['status' => 'OK'];
         }
 
         echo json_encode($resp);
