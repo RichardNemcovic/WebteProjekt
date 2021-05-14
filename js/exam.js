@@ -5,18 +5,7 @@ if(!id_exam) {
     window.location.href = "404.html";
 }
 
-//let server;
 let id_user = sessionStorage.getItem('id_user');
-//let id_user = 1;
-
-/*const getStudents = async () => {
-    const response = await fetch('js/config.json');
-    const json = await response.json();
-    server = json.url;
-
-    checkOwner();
-    generateTable();
-}*/
 
 checkOwner();
 generateTable();
@@ -91,9 +80,6 @@ function generateTable() {
     setTooltips();
     });
 }
-
-//getStudents();
-
 
 // EXPORT BUTTONS
 function exportPdf() {
