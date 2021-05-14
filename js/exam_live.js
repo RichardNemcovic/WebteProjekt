@@ -372,7 +372,6 @@ function createImage(question){
         </div>                            
     </div>
     <hr>
-<<<<<<< HEAD
     <div>
         <div class="form-check form-switch" >
             <input class="form-check-input" type="checkbox" id="img-`+question['id']+`-cb" onclick="showHideImg(`+question['id']+`)">
