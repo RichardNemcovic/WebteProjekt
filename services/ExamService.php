@@ -1069,7 +1069,7 @@ class ExamService
                                         $img_data = $value['image_data'];
                                     }
                                 } else {
-                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam, qImage isset (guess not)'];
                                     echo json_encode($resp);
                                     return json_encode($resp);
                                 }
@@ -1098,7 +1098,7 @@ class ExamService
                                         $stmt->execute();
                                         if ($stmt->rowCount()) {
                                         } else {
-                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam, insert into answers_images'];
                                             echo json_encode($resp);
                                             return json_encode($resp);
                                         }
