@@ -122,7 +122,9 @@ function generateTable() {
                                 </div>
                                 <div class="col-md-6">
                                     <p class="light-coral-txt mb-1">Odpoveď:</p>
-                                    <h6>${q.answer.answer}</h6>
+                                    <button onclick="changeImage(${q.answer.answer})" class="btn btn-sm btn-dark btn-pill rounded-pill" data-toggle="modal" data-target="#modalBox">
+                                        <div class="material-icons align-middle w-100" data-toggle="tooltip" data-placement="top" title="Show image">image</div> 
+                                    </button> 
                                 </div> 
                                 <hr class="mt-3">
                                 <div class="col-md-3">
@@ -379,9 +381,15 @@ function updateAnswer(n,id) {
     }
 }
 
+
 // SET BUTTON back to exam detail
 let button = document.getElementById('button-back');
 button.setAttribute('href','exam.html?id=' + id_exam);
+
+function changeImage(path) {
+    let modal = document.getElementById('modal-image');
+    modal.setAttribute('src',server + path);
+}
 
 // SET TOOLTIPS
 function setTooltips() {
