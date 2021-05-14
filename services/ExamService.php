@@ -1121,11 +1121,8 @@ class ExamService
                         }
                     }
                 }
-                date_default_timezone_set('Europe/Bratislava');
-                $time = date("Y-m-d H:i:s");
-                $stmt = $this->conn->prepare('update exam_status set id_status=2, submit_timestamp=:time_submit, points=:score where id_exam=:id_exam and id_user=:id_user');
+                $stmt = $this->conn->prepare('update exam_status set id_status=2, submit_timestamp=NOW(), points=:score where id_exam=:id_exam and id_user=:id_user');
                 $stmt->bindParam('score', $final_score);
-                $stmt->bindParam('time_submit', $time);
                 $stmt->bindParam('id_exam', $id_exam);
                 $stmt->bindParam('id_user', $id_user);
                 $stmt->execute();
