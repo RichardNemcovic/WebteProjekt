@@ -618,7 +618,7 @@ class ExamService
 
         if ($output) {
             $id_status = 1;
-            $stmt = $this->conn->prepare('INSERT INTO exam_status (id_exam, id_user, id_status) values (:id_exam, :id_user, :id_status)');
+            $stmt = $this->conn->prepare('INSERT IGNORE INTO exam_status (id_exam, id_user, id_status) values (:id_exam, :id_user, :id_status)');
             $stmt->bindParam(":id_exam", $id_exam);
             $stmt->bindParam(":id_user", $id_user);
             $stmt->bindParam(":id_status", $id_status);
