@@ -295,23 +295,15 @@ class ExamService
 
     public function set_answers_score($id_answer, $score) {
         $stmt = $this->conn->prepare("SELECT * FROM answers 
-                                            WHERE id=:id_answer 
-                                              AND id_user=:id_user 
-                                              AND id_question=:id_question");
-        $stmt->bindParam(":id_question", $id_question);
+                                            WHERE id=:id_answer");
         $stmt->bindParam(":id_answer", $id_answer);
-        $stmt->bindParam(":id_user", $id_user);
         $stmt->execute();
         $output = $stmt->rowCount();
 
         $stmt = $this->conn->prepare("UPDATE answers 
                                             SET score=:score 
-                                            WHERE id=:id_answer 
-                                              AND id_user=:id_user 
-                                              AND id_question=:id_question");
-        $stmt->bindParam(":id_question", $id_question);
+                                            WHERE id=:id_answer ");
         $stmt->bindParam(":id_answer", $id_answer);
-        $stmt->bindParam(":id_user", $id_user);
         $stmt->bindParam(":score", $score);
         $stmt->execute();
         $rowCount = $stmt->rowCount();
