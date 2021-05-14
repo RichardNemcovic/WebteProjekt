@@ -12,12 +12,12 @@
 
         public function get_exam_csv($id_exam)
         {
-        $stmt = $this->conn->prepare("SELECT users.id, name, surname, points FROM users, exam_status WHERE exam_status.id_exam=:id_exam AND exam_status.id_user=users.id");
+        $stmt = $this->conn->prepare("SELECT users.ais_id, name, surname, points FROM users, exam_status WHERE exam_status.id_exam=:id_exam AND id_status=2 AND exam_status.id_user=users.id");
         $stmt->bindParam(":id_exam", $id_exam);
         $stmt->execute();
-
+        $filename = 'exam' . $id_exam . '.csv';
         header( 'Content-Type: text/csv' );
-        header( 'Content-Disposition: attachment;filename=exam.csv');
+        header( 'Content-Disposition: attachment;filename=' . $filename);
         $fp = fopen('php://output', 'w');
         
         $row =  $stmt->fetch(PDO::FETCH_ASSOC);
@@ -41,7 +41,7 @@
             $filename = '../tmp/exam' . $id_exam . '.zip';
             $zip = new ZipArchive;
             if ($zip->open($filename, ZipArchive::CREATE) === TRUE){
-                $stmt = $this->conn->prepare("SELECT id_user, users.name as Username, surname, exams.name as Examname, ais_id  FROM exam_status, users, exams WHERE id_status=2 AND id_exam=:id_exam AND id_user=users.id AND id_exam=exams.id");
+                $stmt = $this->conn->prepare("SELECT id_user, users.name as Username, surname, exams.name as Examname, ais_id  FROM exam_status, users, exams WHERE id_status=2 AND id_exam=:id_exam AND id_user=users.id AND id_exam=exams.id AND users.id_role=1");
                 $stmt->bindParam(":id_exam", $id_exam);
                 $stmt->execute();
                 $status = false;
@@ -99,7 +99,7 @@
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
                                 while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
-                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
+                                    $myData .= '<strong>Answer: </strong><img src=../'. $dataA->answer .' alt="picture" width="350" height="200">';
                                 }
                                 break;
                             case 4:
@@ -107,7 +107,7 @@
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
                                 while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){//budem ocakavat img
-                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
+                                    $myData .= '<strong>Answer: </strong><img src=../'. $dataA->answer .' alt="picture" width="350" height="200">';
                                 }
                                 break;
                             case 5:
@@ -119,8 +119,8 @@
                                     $myData .= '<p>' .$dataA->answer_left. '---'. $dataA->answer_right . '</p>'  . '<br />';
                                 }
                                 break;
-                            $myData .= '<hr>';
                         }//TOTO MA BYT PRE KAZDEHO USERA
+                        $myData .= '<hr>';
                     }
                     $mpdf->WriteHTML($myData);
                     $mpdf->Output($pdfname, "F");
