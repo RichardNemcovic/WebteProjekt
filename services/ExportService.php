@@ -15,10 +15,8 @@
         $stmt = $this->conn->prepare("SELECT users.ais_id, name, surname, points FROM users, exam_status WHERE exam_status.id_exam=:id_exam AND id_status=2 AND exam_status.id_user=users.id");
         $stmt->bindParam(":id_exam", $id_exam);
         $stmt->execute();
-        $filename = 'exam' . $id_exam . '.csv';
-        header( 'Content-Type: text/csv' );
-        header( 'Content-Disposition: attachment;filename=' . $filename);
-        $fp = fopen('php://output', 'w');
+        $filename = 'tmp/exam' . $id_exam . '.csv';
+        $fp = fopen($filename, 'w');
         
         $row =  $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -28,7 +26,7 @@
             while($row =  $stmt->fetch(PDO::FETCH_ASSOC, 0)) {
                 fputcsv($fp, $row);
             }
-            $resp = ['status' => 'OK', 'message' => 'Succes of csv export'];
+            $resp = ['status' => 'OK', 'message' => $filename];
         } else {
             $resp = ['status' => 'FAIL', 'message' => 'No tests with this id.'];
         }

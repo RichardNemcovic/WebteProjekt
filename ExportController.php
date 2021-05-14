@@ -33,15 +33,15 @@ if(isset($_GET['ep'])) {
                 }
                 break;
             case('exportPDF'):
-                if(isset($data['id_test'])){
-                    $exportService->get_exam_PDF($data['id_test']);
+                if(isset($_GET['id_test'])){
+                    $exportService->get_exam_PDF($_GET['id_test']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('deleteZip'):
-                if(isset($data['filename'])){
-                    $exportService->delete_exam_zip($data['filename']);
+                if(isset($_GET['filename'])){
+                    $exportService->delete_exam_zip($_GET['filename']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
