@@ -82,9 +82,9 @@ if(isset($_GET['ep'])){
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
-            case('setScore'):
+            case('setAnswersScore'):
                 if(isset($data['id_user']) && isset($data['id_answer']) && isset($data['id_question']) && isset($data['score'])){
-                    $examService->set_score($data['id_user'], $data['id_answer'], $data['id_question'], $data['score']);
+                    $examService->set_answers_score($data['id_user'], $data['id_answer'], $data['id_question'], $data['score']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
