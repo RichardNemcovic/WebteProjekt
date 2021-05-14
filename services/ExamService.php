@@ -751,8 +751,8 @@ class ExamService
         if (isset($data['exam'])) {
 
             if (!empty($data['exam'])) {
+                    $item = $data['exam'];
 
-                foreach ($data['exam'] as $item) {
                     if (isset($item['id'])) {
 
                         if (!empty($item['id'])) {
@@ -1120,12 +1120,20 @@ class ExamService
                             }
                         }
                     }
-                }
                 $stmt = $this->conn->prepare('update exam_status set id_status=2, submit_timestamp=NOW(), points=:score where id_exam=:id_exam and id_user=:id_user');
                 $stmt->bindParam('score', $final_score);
                 $stmt->bindParam('id_exam', $id_exam);
                 $stmt->bindParam('id_user', $id_user);
                 $stmt->execute();
+                if($stmt->rowCount()){
+                    $resp = ['status' => 'OK', 'message' => 'submit_exam'];
+                    echo json_encode($resp);
+                    return json_encode($resp);}
+                else{
+                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                    echo json_encode($resp);
+                    return json_encode($resp);
+                }
                 $resp = ['status' => 'OK', 'message' => 'submit_exam'];
                 echo json_encode($resp);
                 return json_encode($resp);
