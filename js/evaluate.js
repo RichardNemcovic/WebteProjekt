@@ -338,7 +338,7 @@ function generateTable() {
             }            
         }
         else {
-            alert("Nastala chyba");
+            window.location.href = "404.html";
         }
     setTooltips();
     });
