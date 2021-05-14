@@ -40,45 +40,7 @@
         </div>
         <div id="live-exam" class="shadow-lg" hidden>
             <h2 id="exam-name" class="text-center my-5">Zapocet Webte </h2>
-            <form id="exam-form" action="#">
-                
-                <div class="card row m-4 py-3 px-5 shadow">
-                    <div class="row">
-                        <div class="col-10">
-                            <h5>`+questionIndex+`.</h5>
-                            <h6>`+question['description']+`</h6>
-                        </div>
-                        <div class="col-2 text-end">
-                            <h5>`+question['score']+`b</h5>
-                        </div>                            
-                    </div>
-                    <hr>
-                    <div class="text-center"> 
-                           
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                            <label class="form-check-label" for="inlineRadio1">Kreslenie</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                            <label class="form-check-label" for="inlineRadio2">Vložiť</label>
-                        </div>                               
-
-                        <div id="container-`+question['id']+`" class="drawing-container text-center">
-                            kreslenie
-                        </div>    
-
-                        <div id="container-`+question['id']+`" class="drawing-container text-center">
-                            vlozit
-                        </div>
-
-                        <button class="btn bt-submit shadow d-inline-block text-center my-3 align-self-center" type="button" onclick="resetCanvas('container-`+question['id']+`',`+question['id']+`)">                                
-                            <span class="material-icons align-middle">restart_alt</span> Obnoviť plátno
-                        </button>
-                    </div>
-                </div> 
-                
-
+            <form id="exam-form" action="#">                                                
             </form>
 
         </div>
