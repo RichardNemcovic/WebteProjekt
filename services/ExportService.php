@@ -149,7 +149,7 @@
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
             }else{
-                $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
+                $resp = ['status' => 'FAIL', 'message' => 'Deletion not completed, file didnt exist in that dir.'];
             }
             echo json_encode($resp);
         }
@@ -162,7 +162,7 @@
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
             }else{
-                $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
+                $resp = ['status' => 'FAIL', 'message' => 'Deletion not completed, file didnt exist in that dir.'];
             }
             echo json_encode($resp);
         }
