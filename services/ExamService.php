@@ -1119,7 +1119,7 @@ class ExamService
                                     if (!empty($value['id']) && !empty($value['answer'])) {
                                         $id_question = $value['id'];
                                         $answer = $value['answer'];
-                                        $url = $value['$url'];
+                                        $url = $value['url'];
                                     } else {
                                         $resp = ['status' => 'FAIL', 'message' => 'qEquation, wrong set'];
                                         echo json_encode($resp);
@@ -1339,7 +1339,6 @@ class ExamService
         $t = time();
         $img = 'uploads/'.$ais_id.$t.'.png';
         file_put_contents($img, file_get_contents($url));
-        echo $img;
         return $img;
     }
 }
