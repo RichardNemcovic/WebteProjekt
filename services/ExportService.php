@@ -58,7 +58,6 @@
                             border: 1px solid #ddd;
                             border-radius: 4px;
                             padding: 5px;
-                            width: 150px;
                         }
                         </style>
                         </head>
@@ -96,7 +95,7 @@
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
                                 while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
-                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
+                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="auto">';
                                 }
                                 break;
                             case 4:
@@ -104,7 +103,7 @@
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
                                 while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){//budem ocakavat img
-                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
+                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="300" height="auto">';
                                 }
                                 break;
                             case 5:
