@@ -382,6 +382,7 @@ class ExamService
             foreach ($output as $index01=>$out) {
                 $resp['qSelect'][$index01]['question']['description'] = $out['name'];
                 $resp['qSelect'][$index01]['question']['score'] = $out['score'];
+                $resp['qSelect'][$index01]['question']['id'] = $out['id'];
                 $stmt = $this->conn->prepare("SELECT id, answer, correct
                                                     FROM questions_select 
                                                     WHERE id_question=:id_question");
