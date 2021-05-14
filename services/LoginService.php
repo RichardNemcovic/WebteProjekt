@@ -73,36 +73,40 @@
             } else {
                 $resp = ['status' => 'OK', 'id' => $output["id"], 'name' => $output["name"] ." ". $output["surname"]];
                 $id_user = $output["id"];
-                $stmt = $this->conn->prepare("SELECT * 
-                                                    FROM exam_status
-                                                    WHERE id_exam=:id_exam 
-                                                      AND id_user=:id_user");
-                $stmt->bindParam(":id_exam", $id_exam);
-                $stmt->bindParam(":id_user", $id_user);
+
+                $status = 'active';
+                $stmt = $this->conn->prepare("SELECT id 
+                                                    FROM exams 
+                                                    WHERE code=:code 
+                                                      AND status=:status");
+                $stmt->bindParam(":code", $code);
+                $stmt->bindParam(":status", $status);
                 $stmt->execute();
                 $output = $stmt->fetch();
 
                 if ($output) {
-                    $resp = ['status' => 'FAIL', 'message' => "You've already submitted this test."];
-                } else {
-                    $status = 'active';
-                    $stmt = $this->conn->prepare("SELECT id 
-                                                        FROM exams 
-                                                        WHERE code=:code 
-                                                          AND status=:status");
-                    $stmt->bindParam(":code", $code);
-                    $stmt->bindParam(":status", $status);
+                    $resp['exam_id'] = $output['id'];
+                    $id_exam = $output['id'];
+
+                    $id_status = 2;
+                    $stmt = $this->conn->prepare("SELECT * 
+                                                        FROM exam_status
+                                                        WHERE id_exam=:id_exam 
+                                                          AND id_user=:id_user
+                                                          AND id_status=:id_status");
+                    $stmt->bindParam(":id_exam", $id_exam);
+                    $stmt->bindParam(":id_user", $id_user);
+                    $stmt->bindParam(":id_status", $id_status);
                     $stmt->execute();
                     $output = $stmt->fetch();
 
                     if ($output) {
-                        $resp['exam_id'] = $output['id'];
-                    } else {
-                        $resp = ['status' => 'FAIL', 'message' => 'No test matching this code.'];
-                    }
+                        $resp = ['status' => 'FAIL', 'message' => "You've already submitted this test."];
+                   }
+                } else {
+
+                    $resp = ['status' => 'FAIL', 'message' => 'No test matching this code.'];
                 }
-
-
             }
             echo json_encode($resp);
             return json_encode($resp);
