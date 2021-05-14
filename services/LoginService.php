@@ -72,7 +72,7 @@
                 $resp = ['status' => 'FAIL', 'message' => 'Name of surname not matching for given AIS ID.'];
             } else {
                 $resp = ['status' => 'OK', 'id' => $output["id"], 'name' => $output["name"] ." ". $output["surname"]];
-
+                $id_user = $output["id"];
                 $stmt = $this->conn->prepare("SELECT * 
                                                     FROM exam_status
                                                     WHERE id_exam=:id_exam 
