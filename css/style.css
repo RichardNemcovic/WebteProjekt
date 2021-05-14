@@ -74,7 +74,7 @@ html, body{
     font-weight: 500;
 }
 
-.btn-dark{
+.btn-dark, .btn-dark:focus{
     border-color: #ff8b8bff;
     background: #ff8b8bff;
 }
@@ -92,7 +92,7 @@ tbody{
     width: 1rem;
 }
 .action2{
-    width: 114px;
+    width: 164px;
 }
 
 .button-back{

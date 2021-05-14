@@ -393,7 +393,6 @@ function changeImage(path) {
     let modal = document.getElementById('modal-image');
     // modal.setAttribute('src',server + path);
     modal.setAttribute('src', server+path);
-    
 }
 
 // SET TOOLTIPS
