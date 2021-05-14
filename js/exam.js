@@ -98,6 +98,12 @@ function exportCsv() {
     $.get(server + 'ExportController.php?ep=exportCSV&id_test=' + id_exam, function(resp){
         if(resp['status'] == 'OK') {
             downloadURI(server + resp['message']);
+            $.get(server + 'ExportController.php?ep=deleteCsv&filename=' + resp['message'], function(respon){
+                // if(respon['status'] == 'OK') {
+                //     downloadURI(server + resp['message']);
+                // }
+                console.log(respon);
+            });
         }
     });
 }
