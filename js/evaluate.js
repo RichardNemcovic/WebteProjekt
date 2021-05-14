@@ -362,7 +362,6 @@ function updateAnswer(n,id) {
         data.id_answer = id;
         data.score = points;
         console.log(data);
-        
         $.ajax(
             {
             url: server+'ExamController.php?ep=setAnswersScore',
@@ -370,15 +369,14 @@ function updateAnswer(n,id) {
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function(resp){
+                console.log(resp);
                 if(resp['status'] == 'OK'){
-                    console.log('okOKOKOKOKO');
                     let danger = document.getElementById('danger-' + n);
                     danger.hidden = true;
                     let success = document.getElementById('success-' + n);
-                    success.hidden = false;
+                    success.hidden = false;                    
                 }else{
-                    console.log(resp);
-                    alert(resp);
+                    alert(resp.message);
                 }
             }
         });            
