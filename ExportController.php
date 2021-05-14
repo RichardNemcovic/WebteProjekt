@@ -34,7 +34,7 @@ if(isset($_GET['ep'])) {
                 break;
             case('exportPDF'):
                 if(isset($_GET['id_test'])){
-                    $exportService->get_exam_PDF($_GET['id_test']);
+                    $exportService->get_exam_pdf($_GET['id_test']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }

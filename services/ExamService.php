@@ -1069,7 +1069,7 @@ class ExamService
                                         $img_data = $value['image_data'];
                                     }
                                 } else {
-                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam, qImage isset (guess not)'];
                                     echo json_encode($resp);
                                     return json_encode($resp);
                                 }
@@ -1079,7 +1079,7 @@ class ExamService
                                 $ais_id = $stmt->fetchColumn();;
                                 if ($ais_id) {
                                     $t = time();
-                                    $path = "uploads/" . $ais_id . $t . ".png";
+                                    $path = "uploads/" . $ais_id . $t . "image.png";
                                     $img_data = substr($img_data, 22);
                                     $status = file_put_contents($path, base64_decode($img_data));
                                     $correct = 0;
@@ -1098,7 +1098,7 @@ class ExamService
                                         $stmt->execute();
                                         if ($stmt->rowCount()) {
                                         } else {
-                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                                            $resp = ['status' => 'FAIL', 'message' => 'submit_exam, insert into answers_images'];
                                             echo json_encode($resp);
                                             return json_encode($resp);
                                         }
@@ -1116,17 +1116,17 @@ class ExamService
                         if (!empty($item['qEquation'])) {
                             foreach ($item['qEquation'] as $value) {
                                 if (isset($value['id']) && isset($value['answer']) && isset($value['url'])) {
-                                    if (!empty($value['id']) && !empty($value['answer']) && !empty($value['url'])) {
+                                    if (!empty($value['id']) && !empty($value['answer'])) {
                                         $id_question = $value['id'];
                                         $answer = $value['answer'];
-                                        $url = $value['$url'];
+                                        $url = $value['url'];
                                     } else {
                                         $resp = ['status' => 'FAIL', 'message' => 'qEquation, wrong set'];
                                         echo json_encode($resp);
                                         return json_encode($resp);
                                     }
                                 }
-                                if($url){
+                                if($url == 1){
                                     $stmt = $this->conn->prepare("select ais_id from users where id=:user_id");
                                     $stmt->bindParam('user_id', $id_user);
                                     $stmt->execute();
@@ -1339,7 +1339,6 @@ class ExamService
         $t = time();
         $img = 'uploads/'.$ais_id.$t.'.png';
         file_put_contents($img, file_get_contents($url));
-        echo $img;
         return $img;
     }
 }
