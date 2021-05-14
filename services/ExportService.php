@@ -1,6 +1,6 @@
 <?php
     require 'connector.php';
-
+    require_once __DIR__ . '/../vendor/autoload.php';
     class ExportService
     {
         private $conn;
@@ -36,7 +36,7 @@
 
         public function get_exam_pdf($id_exam)//Composer Needed https://getcomposer.org/download/ and https://mpdf.github.io/installation-setup/installation-v7-x.html
         {//and U need to change priority to current file chmod 777 PLUS u need to create tmp file and do the same chmod mate
-            $filename = '../tmp/exam' . $id_exam . '.zip';
+            $filename = 'tmp/exam' . $id_exam . '.zip';
             $zip = new ZipArchive;
             if ($zip->open($filename, ZipArchive::CREATE) === TRUE){
                 $stmt = $this->conn->prepare("SELECT id_user, users.name as Username, surname, exams.name as Examname, ais_id  FROM exam_status, users, exams WHERE id_status=2 AND id_exam=:id_exam AND id_user=users.id AND id_exam=exams.id AND users.id_role=1");
@@ -96,7 +96,7 @@
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
                                 while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){
-                                    $myData .= '<strong>Answer: </strong><img src=../'. $dataA->answer .' alt="picture" width="350" height="200">';
+                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
                                 }
                                 break;
                             case 4:
@@ -104,7 +104,7 @@
                                 $stmtA->bindParam(":IDanswer", $dataQ->AnswerID);
                                 $stmtA->execute();
                                 while($dataA = $stmtA->fetch(PDO::FETCH_OBJ)){//budem ocakavat img
-                                    $myData .= '<strong>Answer: </strong><img src=../'. $dataA->answer .' alt="picture" width="350" height="200">';
+                                    $myData .= '<strong>Answer: </strong><img src='. $dataA->answer .' alt="picture" width="350" height="200">';
                                 }
                                 break;
                             case 5:
@@ -143,8 +143,8 @@
 
         public function delete_exam_zip($filename)//Ocakavam tmp/exam1.zip
         {   
-            $location = basename($filename);
-            $filename = '../tmp/' . $location;
+            // $location = basename($filename);
+            // $filename = '../tmp/' . $location;
             if(file_exists($filename)){
                 array_map('unlink', glob($filename));
                 $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
