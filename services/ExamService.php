@@ -469,7 +469,7 @@ class ExamService
                 $resp['qImage'][$index01]['question']['description'] = $out['name'];
                 $resp['qImage'][$index01]['question']['score'] = $out['score'];
 
-                $stmt = $this->conn->prepare("SELECT answers.id, answers_images.answer
+                $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_images.answer
                                                     FROM answers
                                                     INNER JOIN answers_images ON answers.id=answers_images.id_answer
                                                     WHERE answers.id_question=:id_question");
@@ -479,9 +479,11 @@ class ExamService
 
                 if ($res) {
                     $resp['qImage'][$index01]['answer']['id'] = $res['id'];
+                    $resp['qImage'][$index01]['answer']['score'] = $res['score'];
                     $resp['qImage'][$index01]['answer']['answer'] = $res['answer'];
                 } else {
                     $resp['qImage'][$index01]['answer']['id'] = null;
+                    $resp['qImage'][$index01]['answer']['score'] = null;
                     $resp['qImage'][$index01]['answer']['answer'] = null;
                 }
             }
@@ -501,7 +503,7 @@ class ExamService
                 $resp['qEquation'][$index01]['question']['description'] = $out['name'];
                 $resp['qEquation'][$index01]['question']['score'] = $out['score'];
 
-                $stmt = $this->conn->prepare("SELECT answers.id, answers_equations.answer
+                $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_equations.answer
                                                     FROM answers
                                                     INNER JOIN answers_equations ON answers.id=answers_equations.id_answer
                                                     WHERE answers.id_question=:id_question");
@@ -511,9 +513,11 @@ class ExamService
 
                 if ($res) {
                     $resp['qEquation'][$index01]['answer']['id'] = $res['id'];
+                    $resp['qEquation'][$index01]['answer']['score'] = $res['score'];
                     $resp['qEquation'][$index01]['answer']['answer'] = $res['answer'];
                 } else {
                     $resp['qEquation'][$index01]['answer']['id'] = null;
+                    $resp['qEquation'][$index01]['answer']['score'] = null;
                     $resp['qEquation'][$index01]['answer']['answer'] = null;
                 }
             }
@@ -552,8 +556,10 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_pairing.answer_left, answers_pairing.answer_right
                                                     FROM answers
                                                     INNER JOIN answers_pairing ON answers.id=answers_pairing.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                      AND answers.id_user=:id_user");
                 $stmt->bindParam(":id_question", $out['id']);
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->execute();
                 $res = $stmt->fetchAll();
 
