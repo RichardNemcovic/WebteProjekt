@@ -1317,6 +1317,7 @@ class ExamService
         $t = time();
         $img = 'uploads/'.$ais_id.$t.'.png';
         file_put_contents($img, file_get_contents($url));
+        echo $img;
     }
 }
 
