@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher's panel</title>
+    <title>Učiteľský panel</title>
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
@@ -20,7 +20,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="home.html">Teacher's panel</a>
+          <a class="navbar-brand" href="home.html">Učiteľský panel</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="material-icons align-middle">menu</span>
           </button>
@@ -52,22 +52,168 @@
     </nav>
 
     <!-- CONTENT -->
-    <div class="container shadow-lg p-5">
+    <div class="container shadow-lg p-5 mb-5">
         <h2 class="text-center mb-3 mt-2">O projekte</h2>
-        <h6 class="text-center mb-5">Rozdelenie úloh členmi tímu</h6>
+        <h6 class="text-center my-5">Rozdelenie úloh členmi tímu</h6>        
+        <div class="row my-4">
+            <small class="mx-2 my-3">Súbory s koncovkou .drawio možno zobraziť v editore <a class="basic-link" href="https://www.diagrams.net/">diagrams.net</a></small>
+            <a href="https://github.com/RichardNemcovic/WebteProjekt" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill mx-3" data-toggle="tooltip" data-placement="top" title="Repozitár">
+                <img src="resources/github.svg" width="30px" alt="github">
+            </a> 
+            <a href="https://github.com/RichardNemcovic/WebteProjekt/blob/main/Dokumentacia/API.drawio" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="API Diagram ">
+                <div class="material-icons align-middle">api</div> 
+            </a>
+            <a href="https://github.com/RichardNemcovic/WebteProjekt/blob/main/Dokumentacia/html_endpoints.drawio" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill mx-3" data-toggle="tooltip" data-placement="top" title="Diagram grafického layoutu">
+                <div class="material-icons align-middle">account_tree</div> 
+            </a>
+            <a href="https://github.com/RichardNemcovic/WebteProjekt/blob/main/Dokumentacia/sql_scheme_0605.PNG" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Diagram databázy">
+                <div class="material-icons align-middle">analytics</div> 
+            </a>            
+        </div>
         <div class="row table-responsive">
+            <h3>Rozdelenie rolí</h3>
             <table class="table table-bordered">
                 <thead class="table-head blue-bg white-txt">
-                <tr>
-                    <th>Student</th>
-                    <th>Exam key</th>
-                    <th>Exam name</th>
-                    <th>Time</th>
-                </tr>
+                    <tr>
+                        <th>Autor</th>
+                        <th>Rola</th>                    
+                    </tr>
                 </thead>
-                <tbody>                            
+                <tbody>
+                    <tr>
+                        <td>Adam Klimko</td>
+                        <td>Html + css + javascript</td>                    
+                    </tr>
+                    <tr>
+                        <td>Andrej Mikuš</td>
+                        <td>Html + css + javascript</td>                    
+                    </tr> 
+                    <tr>
+                        <td>Ján Dolinay</td>
+                        <td>Php + databáza</td>                    
+                    </tr> 
+                    <tr>
+                        <td>Marek Gežďo</td>
+                        <td>Php + databáza</td>                    
+                    </tr> 
+                    <tr>
+                        <td>Richard Nemčovič</td>
+                        <td>Php + databáza</td>                    
+                    </tr>                             
                 </tbody>
-            </table>                                     
+            </table>
+            <hr class="my-5">
+            <h3>Rozdelenie úloh</h3>
+            <table class="table table-bordered">
+                <thead class="table-head blue-bg white-txt">
+                    <tr>
+                        <th>Úloha</th>
+                        <th>Adam Klimko</th>    
+                        <th>Andrej Mikuš</th>
+                        <th>Ján Dolinay</th> 
+                        <th>Marek Gežďo</th>
+                        <th>Richard Nemčovič</th>               
+                    </tr>
+                </thead>
+                <tbody>                    
+                    <tr>
+                        <th>Návrh</th>
+                        <td>Grafický návrh</td>                    
+                        <td>Návrh databázy, API</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Prihlasovanie sa do aplikácie</th>
+                        <td>HTML, CSS</td>                    
+                        <td>JS</td>
+                        <td></td>
+                        <td></td>
+                        <td>php</td>
+                    </tr>
+                    <tr>
+                        <th>Realizácia otázok s viacerými odpoveďami</th>
+                        <td>HTML, CSS</td>                    
+                        <td>JS</td>
+                        <td>php</td>
+                        <td></td>
+                        <td>php</td>
+                    </tr>
+                    <tr>
+                        <th>Realizácia otázok skrátkymi odpoveďami</th>
+                        <td>HTML, CSS</td>                    
+                        <td>JS</td>
+                        <td>php</td>
+                        <td></td>
+                        <td>php</td>
+                    </tr>
+                    <tr>
+                        <th>Realizácia párovacích otázok</th>
+                        <td>HTML, CSS</td>                    
+                        <td>JS</td>
+                        <td>php</td>
+                        <td></td>
+                        <td>php</td>
+                    </tr>
+                    <tr>
+                        <th>Realizácia otázok skreslením</th>
+                        <td>HTML, CSS</td>                    
+                        <td>JS</td>
+                        <td>php</td>
+                        <td></td>
+                        <td>php</td>
+                    </tr> 
+                    <tr>
+                        <th>Realizácia otázok s matematickým výrazom</th>
+                        <td>HTML, CSS</td>                    
+                        <td>JS</td>
+                        <td>php</td>
+                        <td></td>
+                        <td>php</td>
+                    </tr> 
+                    <tr>
+                        <th>Ukončenie testu</th>
+                        <td>HTML, CSS</td>                    
+                        <td>JS</td>
+                        <td>php</td>
+                        <td></td>
+                        <td></td>
+                    </tr> 
+                    <tr>
+                        <th>Viaceré testy, ich aktivácia a deaktivácia</th>
+                        <td>HTML, CSS, JS</td>                    
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>php</td>
+                    </tr>
+                    <tr>
+                        <th>Info pre učiteľa o zbiehaní testov</th>
+                        <td>HTML, CSS, JS</td>                    
+                        <td></td>
+                        <td>php</td>
+                        <td></td>
+                        <td></td>
+                    </tr>                                               
+                    <tr>
+                        <th>Export do pdf</th>
+                        <td></td>                    
+                        <td>JS</td>
+                        <td></td>
+                        <td>php</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th>Export do csv</th>
+                        <td></td>                    
+                        <td>JS</td>
+                        <td></td>
+                        <td>php</td>
+                        <td></td>
+                    </tr>                    
+                </tbody>
+            </table>                                            
         </div>      
     </div>
     <div class="gradient-line w-100 gl-bottom"></div>
