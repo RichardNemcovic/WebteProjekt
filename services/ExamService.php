@@ -128,9 +128,7 @@ class ExamService
                             }
                             var_dump($item);
                             foreach ($item['possibilities'] as $key=>$value) {
-                                if(isset($value['answer'])){
-                                    if(!empty($value['answer'])){
-                                        $answer = $value['answer'];
+                                        $answer = $value;
                                         $stmt_qSelect_answer = $this->conn->prepare('insert into questions_select(id_question, answer, correct) values (:id_question, :answer, :correct)');
                                         $stmt_qSelect_answer->bindParam('id_question', $id_question);
                                         $stmt_qSelect_answer->bindParam('answer', $answer);
@@ -148,8 +146,6 @@ class ExamService
                                             $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                             break;
                                         }
-                                    }
-                                }
                             }
                         }
                     }
