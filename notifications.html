@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher's panel</title>
+    <title>Učiteľský panel</title>
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
@@ -13,6 +13,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>    
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <!--MY SCRIPT-->    
+    <script src="js/global.js"></script>
+    <script src="js/login.js" defer></script>
+    <script defer src="js/notifications.js"></script>
     <script defer src="js/tooltips.js"></script>
 </head>
 <body>
@@ -20,7 +24,7 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="home.html">Teacher's panel</a>
+          <a class="navbar-brand" href="home.html">Učitelský panel</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
             <span class="material-icons align-middle">menu</span>
           </button>
@@ -28,12 +32,12 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="create.html">
-                        <span class="material-icons align-middle">add</span> New exam 
+                        <span class="material-icons align-middle">add</span> Nový test
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="home.html">
-                        <span class="material-icons align-middle">list</span> Exam list 
+                    <a class="nav-link active" href="home.html">
+                        <span class="material-icons align-middle">list</span> Zoznam testov 
                     </a>
                 </li>
                 <li class="nav-item">
@@ -42,8 +46,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span class="material-icons align-middle">logout</span> Sign out 
+                    <a class="nav-link" href="#" onclick="logout()">
+                        <span class="material-icons align-middle">logout</span> Odhlásiť sa 
                     </a>
                 </li>                           
             </ul>                                
@@ -52,29 +56,42 @@
     </nav>
 
     <!-- CONTENT -->
-    <div class="container shadow-lg p-5">
-        <h2 class="text-center mb-3 mt-2">Notifications</h2>
-        <h6 class="text-center mb-5">See who is cheating</h6>
+    <div class="container shadow-lg p-5 mb-5">
+        <div class="button-back"> 
+            <a href="home.html" class="light-coral-txt lct-hover" data-toggle="tooltip" data-placement="top" title="Moje testy"> <span class="material-icons">arrow_back</span>  </a>
+        </div>
+        <h2 class="text-center mb-3 mt-2">Upozornenia</h2>
+        <div class="row my-5">
+            <div class="col-md-4 text-center">
+                <h6 class="light-coral-txt">Názov testu: </h6>
+                <h5 id="exam-name"></h5>
+            </div>
+            <div class="col-md-4 text-center">
+                <h6 class="light-coral-txt">Začiatok: </h6>
+                <h5 id="exam-start"></h5>
+            </div>
+            <div class="col-md-4 text-center">
+                <h6 class="light-coral-txt">Koniec: </h6>
+                <h5 id="exam-end"></h5>
+            </div>            
+        </div>        
         <div class="row table-responsive">
+
             <table class="table table-bordered">
+
                 <thead class="table-head blue-bg white-txt">
                 <tr>
-                    <th>Student</th>
-                    <th>Exam key</th>
-                    <th>Exam name</th>
-                    <th>Time</th>
+                    <th>ID</th>
+                    <th>Meno Priezvisko</th>                                     
+                    <th>Čas podvázdania</th>
                 </tr>
                 </thead>
-                <tbody>
-                    <!-- ROW EXAMPLE -->
-                <tr class="table-row">                
-                    <td>Podvadzac prasivy</td>
-                    <td>679135</td>
-                    <td>Zapocet OS</td>
-                    <td>20.5.2021, 13:30</td>                    
-                </tr>              
+                
+                <tbody id="table-body">                                                  
                 </tbody>
-            </table>                                     
+
+            </table>   
+
         </div>      
     </div>
     <div class="gradient-line w-100 gl-bottom"></div>
