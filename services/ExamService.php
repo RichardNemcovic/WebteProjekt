@@ -127,9 +127,7 @@ class ExamService
                                 break;
                             }
                             foreach ($item['possibilities'] as $key=>$value) {
-                                if(isset($value['answer'])){
-                                    if(!empty($value['answer'])){
-                                        $answer = $value['answer'];
+                                        $answer = $value;
                                         $stmt_qSelect_answer = $this->conn->prepare('insert into questions_select(id_question, answer, correct) values (:id_question, :answer, :correct)');
                                         $stmt_qSelect_answer->bindParam('id_question', $id_question);
                                         $stmt_qSelect_answer->bindParam('answer', $answer);
@@ -147,8 +145,6 @@ class ExamService
                                             $resp = ['status' => 'FAIL', 'message' => 'create_exam'];
                                             break;
                                         }
-                                    }
-                                }
                             }
                         }
                     }
@@ -354,7 +350,9 @@ class ExamService
         $stmt->bindParam(":id_user", $id_user);
         $stmt->execute();
         $output = $stmt->fetch();
-        $studentName = $output['name']." ".$output['surname'];
+        if ($output) {
+            $studentName = $output['name']." ".$output['surname'];
+        }
 
         $stmt = $this->conn->prepare("SELECT exams.name, exam_status.submit_timestamp
                                             FROM exams 
@@ -383,6 +381,7 @@ class ExamService
             foreach ($output as $index01=>$out) {
                 $resp['qSelect'][$index01]['question']['description'] = $out['name'];
                 $resp['qSelect'][$index01]['question']['score'] = $out['score'];
+                $resp['qSelect'][$index01]['question']['id'] = $out['id'];
                 $stmt = $this->conn->prepare("SELECT id, answer, correct
                                                     FROM questions_select 
                                                     WHERE id_question=:id_question");
@@ -412,6 +411,10 @@ class ExamService
                     $resp['qSelect'][$index01]['answer']['id'] = $res['id'];
                     $resp['qSelect'][$index01]['answer']['answer'] = $res['id_question_select'];
                     $resp['qSelect'][$index01]['answer']['score'] = $res['score'];
+                } else {
+                    $resp['qSelect'][$index01]['answer']['id'] = null;
+                    $resp['qSelect'][$index01]['answer']['answer'] = null;
+                    $resp['qSelect'][$index01]['answer']['score'] = null;
                 }
             }
 
@@ -444,6 +447,10 @@ class ExamService
                     $resp['qShort'][$index01]['answer']['id'] = $res['id'];
                     $resp['qShort'][$index01]['answer']['answer'] = $res['answer'];
                     $resp['qShort'][$index01]['answer']['score'] = $res['score'];
+                } else {
+                    $resp['qShort'][$index01]['answer']['id'] = null;
+                    $resp['qShort'][$index01]['answer']['answer'] = null;
+                    $resp['qShort'][$index01]['answer']['score'] = null;
                 }
             }
 
@@ -473,6 +480,9 @@ class ExamService
                 if ($res) {
                     $resp['qImage'][$index01]['answer']['id'] = $res['id'];
                     $resp['qImage'][$index01]['answer']['answer'] = $res['answer'];
+                } else {
+                    $resp['qImage'][$index01]['answer']['id'] = null;
+                    $resp['qImage'][$index01]['answer']['answer'] = null;
                 }
             }
 
@@ -502,6 +512,9 @@ class ExamService
                 if ($res) {
                     $resp['qEquation'][$index01]['answer']['id'] = $res['id'];
                     $resp['qEquation'][$index01]['answer']['answer'] = $res['answer'];
+                } else {
+                    $resp['qEquation'][$index01]['answer']['id'] = null;
+                    $resp['qEquation'][$index01]['answer']['answer'] = null;
                 }
             }
 
@@ -527,12 +540,16 @@ class ExamService
                 $stmt->execute();
                 $res = $stmt->fetchAll();
 
+                $resp['qPairs'][$index01]['answer']['score'] = null;
                 foreach ($res as $index02=>$val) {
                     $resp['qPairs'][$index01]['question']['answers'][$index02]['left'] = $val['answer_left'];
                     $resp['qPairs'][$index01]['question']['answers'][$index02]['right'] = $val['answer_right'];
+
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['left'] = null;
+                    $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = null;
                 }
 
-                $stmt = $this->conn->prepare("SELECT answers.id, answers_pairing.answer_left, answers_pairing.answer_right
+                $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_pairing.answer_left, answers_pairing.answer_right
                                                     FROM answers
                                                     INNER JOIN answers_pairing ON answers.id=answers_pairing.id_answer
                                                     WHERE answers.id_question=:id_question");
@@ -541,12 +558,13 @@ class ExamService
                 $res = $stmt->fetchAll();
 
                 foreach ($res as $index02=>$val) {
+                    $resp['qPairs'][$index01]['answer']['score'] = $val['score'];
                     $resp['qPairs'][$index01]['answer']['answers'][$index02]['left'] = $val['answer_left'];
                     $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = $val['answer_right'];
                 }
             }
         } else {
-            $resp = ['status' => 'FAIL', 'message' => 'get_exam_by_id'];
+            $resp = ['status' => 'FAIL', 'message' => 'No such test for this user.'];
         }
 
         echo json_encode($resp);
@@ -751,8 +769,8 @@ class ExamService
         if (isset($data['exam'])) {
 
             if (!empty($data['exam'])) {
+                    $item = $data['exam'];
 
-                foreach ($data['exam'] as $item) {
                     if (isset($item['id'])) {
 
                         if (!empty($item['id'])) {
@@ -1120,15 +1138,20 @@ class ExamService
                             }
                         }
                     }
-                }
-                date_default_timezone_set('Europe/Bratislava');
-                $time = date("Y-m-d H:i:s");
-                $stmt = $this->conn->prepare('update exam_status set id_status=2, submit_timestamp=:time_submit, points=:score where id_exam=:id_exam and id_user=:id_user');
+                $stmt = $this->conn->prepare('update exam_status set id_status=2, submit_timestamp=NOW(), points=:score where id_exam=:id_exam and id_user=:id_user');
                 $stmt->bindParam('score', $final_score);
-                $stmt->bindParam('time_submit', $time);
                 $stmt->bindParam('id_exam', $id_exam);
                 $stmt->bindParam('id_user', $id_user);
                 $stmt->execute();
+                if($stmt->rowCount()){
+                    $resp = ['status' => 'OK', 'message' => 'submit_exam'];
+                    echo json_encode($resp);
+                    return json_encode($resp);}
+                else{
+                    $resp = ['status' => 'FAIL', 'message' => 'submit_exam'];
+                    echo json_encode($resp);
+                    return json_encode($resp);
+                }
                 $resp = ['status' => 'OK', 'message' => 'submit_exam'];
                 echo json_encode($resp);
                 return json_encode($resp);
