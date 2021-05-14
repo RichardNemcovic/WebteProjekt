@@ -495,9 +495,7 @@ class ExamService
             $stmt = $this->conn->prepare("SELECT id, name, score
                                                 FROM questions 
                                                 WHERE id_exam=:id_exam
-                                                  AND id_type=:id_type
-                                                  AND answers.id_user=:id_user");
-            $stmt->bindParam(":id_user", $id_user);
+                                                  AND id_type=:id_type");
             $stmt->bindParam(":id_exam", $id_exam);
             $stmt->bindParam(":id_type", $id_type);
             $stmt->execute();
@@ -510,7 +508,9 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_equations.answer
                                                     FROM answers
                                                     INNER JOIN answers_equations ON answers.id=answers_equations.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                      AND answers.id_user=:id_user");
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
                 $res = $stmt->fetch();
