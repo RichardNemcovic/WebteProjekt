@@ -1079,7 +1079,7 @@ class ExamService
                                 $ais_id = $stmt->fetchColumn();;
                                 if ($ais_id) {
                                     $t = time();
-                                    $path = "uploads/" . $ais_id . $t . ".png";
+                                    $path = "uploads/" . $ais_id . $t . "image.png";
                                     $img_data = substr($img_data, 22);
                                     $status = file_put_contents($path, base64_decode($img_data));
                                     $correct = 0;
