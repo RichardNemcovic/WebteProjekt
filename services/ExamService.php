@@ -543,6 +543,7 @@ class ExamService
                 $stmt->execute();
                 $res = $stmt->fetchAll();
 
+                $resp['qPairs'][$index01]['answer']['score'] = null;
                 foreach ($res as $index02=>$val) {
                     $resp['qPairs'][$index01]['question']['answers'][$index02]['left'] = $val['answer_left'];
                     $resp['qPairs'][$index01]['question']['answers'][$index02]['right'] = $val['answer_right'];
@@ -551,7 +552,7 @@ class ExamService
                     $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = null;
                 }
 
-                $stmt = $this->conn->prepare("SELECT answers.id, answers_pairing.answer_left, answers_pairing.answer_right
+                $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_pairing.answer_left, answers_pairing.answer_right
                                                     FROM answers
                                                     INNER JOIN answers_pairing ON answers.id=answers_pairing.id_answer
                                                     WHERE answers.id_question=:id_question");
@@ -560,6 +561,7 @@ class ExamService
                 $res = $stmt->fetchAll();
 
                 foreach ($res as $index02=>$val) {
+                    $resp['qPairs'][$index01]['answer']['score'] = $val['score'];
                     $resp['qPairs'][$index01]['answer']['answers'][$index02]['left'] = $val['answer_left'];
                     $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = $val['answer_right'];
                 }
