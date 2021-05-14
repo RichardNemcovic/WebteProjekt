@@ -70,7 +70,7 @@ function generateTable() {
                                 </div>
                                 <div class="col-md-6">
                                     <p class="light-coral-txt mb-1">Odpoveď:</p>
-                                    <math-field>${q.answer.answer}</math-field>
+                                    <img src="${server + q.answer.answer}" width="280px">   
                                 </div> 
                                 <hr class="mt-3">
                                 <div class="col-md-3">
