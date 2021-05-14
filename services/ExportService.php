@@ -51,7 +51,6 @@
                     <html lang="sk">
                     <head>
                         <meta charset="UTF-8">
-                        <script src="https://unpkg.com/mathlive/dist/mathlive.min.js"></script>
                         <style>
                         h1 {text-align: center;}
                         h2 {text-align: center;}
@@ -139,7 +138,7 @@
             }
             $zip->close();
             array_map('unlink', glob("*.pdf"));
-            return json_encode($resp);
+            echo json_encode($resp);
         }
 
         public function delete_exam_zip($filename)//Ocakavam tmp/exam1.zip
@@ -152,7 +151,20 @@
             }else{
                 $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
             }
-            return json_encode($resp);
+            echo json_encode($resp);
+        }
+
+        public function delete_exam_csv($filename)//Ocakavam tmp/exam1.csv
+        {   
+            $location = explode("/", $filename);
+            $filename = '../tmp/' . $location[1];
+            if(file_exists($filename)){
+                array_map('unlink', glob($filename));
+                $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
+            }else{
+                $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
+            }
+            echo json_encode($resp);
         }
     }
 ?>
