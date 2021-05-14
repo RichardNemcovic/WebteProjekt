@@ -372,11 +372,20 @@ function createImage(question){
         </div>                            
     </div>
     <hr>
+    <div>
+        <div class="form-check form-switch" >
+            <input class="form-check-input" type="checkbox" id="img-`+question['id']+`-cb" onclick="showHideImg(`+question['id']+`)">
+            <label class="form-check-label" for="img-`+question['id']+`-c">Nahrať súbor</label>
+        </div>
+    </div>
     <div class="text-center">                                    
         <div id="container-`+question['id']+`" class="drawing-container text-center">
 
-        </div>    
-        <button class="btn bt-submit shadow d-inline-block text-center my-3 align-self-center" type="button" onclick="resetCanvas('container-`+question['id']+`',`+question['id']+`)">                                
+        </div>
+        <div class="mb-3" id="img-`+question['id']+`-f-c" hidden>
+            <input class="form-control" type="file" id="img-`+question['id']+`-f">
+        </div>  
+        <button id="container-btn-`+question['id']+`" class="btn bt-submit shadow d-inline-block text-center my-3 align-self-center" type="button" onclick="resetCanvas('container-`+question['id']+`',`+question['id']+`)">                                
             <span class="material-icons align-middle">restart_alt</span> Obnoviť plátno
         </button>
     </div>`;
@@ -387,6 +396,18 @@ function createImage(question){
     stages[question['id']] = createCanvas('container-'+question['id']);
 
     //console.log(stages[question['id']].toDataURL({ pixelRatio: 3 }));
+}
+
+function showHideImg(id){
+    if(document.getElementById('img-'+id+'-cb').checked){
+        document.getElementById('container-'+id).hidden = true;
+        document.getElementById('container-btn-'+id).style.visibility = 'hidden';
+        document.getElementById('img-'+id+'-f-c').hidden = false;
+    }else{
+        document.getElementById('container-'+id).hidden = false;
+        document.getElementById('container-btn-'+id).style.visibility = 'visible';
+        document.getElementById('img-'+id+'-f-c').hidden = true;
+    }
 }
 
 function createEquation(question){
@@ -406,9 +427,19 @@ function createEquation(question){
             </div>                           
         </div>
         <hr>
-        <div class="row">                    
+        <div>
+            <div class="form-check form-switch pt-2">
+                <input class="form-check-input" type="checkbox" id="eq-`+question['id']+`-cb" onclick="showHideEq(`+question['id']+`);">
+                <label class="form-check-label" for="eq-`+question['id']+`-c">Nahrať súbor</label>
+            </div>
+        </div>
+        
+        <div class="row" id="eq-`+question['id']+`-c">                    
             <div id="mathfield-`+question['id']+`" class="border-box">
             </div>                                        
+        </div>
+        <div class="row" id="eq-`+question['id']+`-f-c" hidden>
+            <input class="form-control" type="file" id="eq-`+question['id']+`-f">
         </div>                                
     </div>`;    
 
@@ -419,6 +450,16 @@ function createEquation(question){
         virtualKeyboardMode: "manual",
         virtualKeyboards: 'numeric symbols'
     });
+}
+
+function showHideEq(id){
+    if(document.getElementById('eq-'+id+'-cb').checked){
+        document.getElementById('eq-'+id+'-c').hidden = true;
+        document.getElementById('eq-'+id+'-f-c').hidden = false;
+    }else{
+        document.getElementById('eq-'+id+'-c').hidden = false;
+        document.getElementById('eq-'+id+'-f-c').hidden = true;
+    }
 }
 
 //OBTAINING DATA
@@ -524,9 +565,27 @@ function getEquationAnswers(){
         let d = {};
         d['id'] = e;
 
-        let url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
+        if(document.getElementById('eq-'+e+'-cb').checked){
+            //d['answer'] = document.getElementById('eq-'+id+'-f').value;
+            //encode to base64
+            var f = document.getElementById('eq-'+e+'-f').target.files[0]; // FileList object
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                  var binaryData = e.target.result;
+                  //Converting Binary Data to base 64
+                  var base64String = window.btoa(binaryData);
+                  //showing file converted to base64
+                  d['answer'] = base64String;
+                }
+            })(f);  
+        }else{
+            d['answer'] = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
+        }
 
-        d['answer'] = url;
+        //let url = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
+
+        //d['answer'] = url;
         //d['answer'] = mathFields[e].getValue();
         data.push(d);
     });       
@@ -540,7 +599,23 @@ function getImageAnswers(){
     qImage.forEach(e => {
         let d = {};
         d['id'] = e;
-        d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });
+
+        if(document.getElementById('img-'+e+'-cb').checked){            
+            var f = document.getElementById('img-'+e+'-f').target.files[0]; // FileList object
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                  var binaryData = e.target.result;
+                  //Converting Binary Data to base 64
+                  var base64String = window.btoa(binaryData);
+                  //showing file converted to base64
+                  d['image_data'] = base64String;
+                }
+            })(f);          
+        }else{
+            d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });
+        }
+        //d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });
         
         data.push(d);
     })
