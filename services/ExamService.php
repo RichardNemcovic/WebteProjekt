@@ -290,10 +290,12 @@ class ExamService
     }
 
     public function set_answers_score($id_answer, $score) {
-        $stmt = $this->conn->prepare("SELECT * FROM answers 
+        $stmt = $this->conn->prepare("SELECT score FROM answers 
                                             WHERE id=:id_answer");
         $stmt->bindParam(":id_answer", $id_answer);
         $stmt->execute();
+        $points = $stmt->fetchColumn();
+
         $output = $stmt->rowCount();
 
         $stmt = $this->conn->prepare("UPDATE answers 
@@ -309,6 +311,40 @@ class ExamService
         } else if ($rowCount != $output) {
             $resp = ['status' => 'FAIL', 'message' => 'No changes in the database.'];
         } else {
+            $new_points = $score - $points;
+
+            $stmt = $this->conn->prepare("SELECT id_question, id_user FROM answers 
+                                                WHERE id=:id_answer");
+            $stmt->bindParam(":id_answer", $id_answer);
+            $stmt->execute();
+            $output = $stmt->fetch();
+            $id_question = $output['id_question'];
+            $id_user = $output['id_user'];
+
+            $stmt = $this->conn->prepare("SELECT id_exam FROM questions 
+                                                WHERE id=:id_question");
+            $stmt->bindParam(":id_question", $id_question);
+            $stmt->execute();
+            $id_exam = $stmt->fetchColumn();
+
+            $stmt = $this->conn->prepare("SELECT points FROM exam_status 
+                                                WHERE id_exam=:id_exam
+                                                  AND id_user=:id_user");
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_user", $id_user);
+            $stmt->execute();
+            $points = $stmt->fetchColumn();
+            $new_points = $new_points + $points;
+
+            $stmt = $this->conn->prepare("UPDATE exam_status 
+                                                SET points=:score 
+                                                WHERE id_exam=:id_exam 
+                                                  AND id_user=:id_user");
+            $stmt->bindParam(":score", $new_points);
+            $stmt->bindParam(":id_exam", $id_exam);
+            $stmt->bindParam(":id_user", $id_user);
+            $stmt->execute();
+
             $resp = ['status' => 'OK'];
         }
 

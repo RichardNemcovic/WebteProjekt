@@ -15,10 +15,8 @@
         $stmt = $this->conn->prepare("SELECT users.ais_id, name, surname, points FROM users, exam_status WHERE exam_status.id_exam=:id_exam AND id_status=2 AND exam_status.id_user=users.id");
         $stmt->bindParam(":id_exam", $id_exam);
         $stmt->execute();
-        $filename = 'exam' . $id_exam . '.csv';
-        header( 'Content-Type: text/csv' );
-        header( 'Content-Disposition: attachment;filename=' . $filename);
-        $fp = fopen('php://output', 'w');
+        $filename = 'tmp/exam' . $id_exam . '.csv';
+        $fp = fopen($filename, 'w');
         
         $row =  $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -28,12 +26,12 @@
             while($row =  $stmt->fetch(PDO::FETCH_ASSOC, 0)) {
                 fputcsv($fp, $row);
             }
-            $resp = ['status' => 'OK', 'message' => 'Succes of csv export'];
+            $resp = ['status' => 'OK', 'message' => $filename];
         } else {
             $resp = ['status' => 'FAIL', 'message' => 'No tests with this id.'];
         }
         fclose($fp);
-        return json_encode($resp);
+        echo json_encode($resp);
         }
 
         public function get_exam_pdf($id_exam)//Composer Needed https://getcomposer.org/download/ and https://mpdf.github.io/installation-setup/installation-v7-x.html
@@ -53,7 +51,6 @@
                     <html lang="sk">
                     <head>
                         <meta charset="UTF-8">
-                        <script src="https://unpkg.com/mathlive/dist/mathlive.min.js"></script>
                         <style>
                         h1 {text-align: center;}
                         h2 {text-align: center;}
@@ -141,7 +138,7 @@
             }
             $zip->close();
             array_map('unlink', glob("*.pdf"));
-            return json_encode($resp);
+            echo json_encode($resp);
         }
 
         public function delete_exam_zip($filename)//Ocakavam tmp/exam1.zip
@@ -154,7 +151,20 @@
             }else{
                 $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
             }
-            return json_encode($resp);
+            echo json_encode($resp);
+        }
+
+        public function delete_exam_csv($filename)//Ocakavam tmp/exam1.csv
+        {   
+            $location = explode("/", $filename);
+            $filename = '../tmp/' . $location[1];
+            if(file_exists($filename)){
+                array_map('unlink', glob($filename));
+                $resp = ['status' => 'OK', 'path' => 'Deletion completed'];
+            }else{
+                $resp = ['status' => 'FAIL', 'message' => 'Deletion not copleted, file didnt exist in that dir.'];
+            }
+            echo json_encode($resp);
         }
     }
 ?>

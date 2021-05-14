@@ -6,7 +6,7 @@ error_reporting(E_ERROR | E_PARSE);
 error_reporting(E_ALL);
 
 //Imports
-require 'services/ExamService.php';
+require 'services/ExportService.php';
 
 //Headers
 header("Access-Control-Allow-Origin: *");
@@ -26,22 +26,29 @@ if(isset($_GET['ep'])) {
     if ($_SERVER["REQUEST_METHOD"] === 'GET') {
         switch($ep) {
             case('exportCSV'):
-                if(isset($data['id_test'])){
-                    $exportService->get_exam_CSV($data['id_test']);
+                if(isset($_GET['id_test'])){
+                    $exportService->get_exam_csv($_GET['id_test']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('exportPDF'):
-                if(isset($data['id_test'])){
-                    $exportService->get_exam_PDF($data['id_test']);
+                if(isset($_GET['id_test'])){
+                    $exportService->get_exam_PDF($_GET['id_test']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }
                 break;
             case('deleteZip'):
-                if(isset($data['filename'])){
-                    $exportService->delete_exam_zip($data['filename']);
+                if(isset($_GET['filename'])){
+                    $exportService->delete_exam_zip($_GET['filename']);
+                } else{
+                    echo json_encode(['status'=>'FAIL']);
+                }
+                break;
+            case('deleteCsv'):
+                if(isset($_GET['filename'])){
+                    $exportService->delete_exam_csv($_GET['filename']);
                 } else{
                     echo json_encode(['status'=>'FAIL']);
                 }

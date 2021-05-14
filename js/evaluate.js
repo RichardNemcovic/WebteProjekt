@@ -70,7 +70,7 @@ function generateTable() {
                                 </div>
                                 <div class="col-md-6">
                                     <p class="light-coral-txt mb-1">Odpoveď:</p>
-                                    <h6>${q.answer.answer}</h6>
+                                    <math-field>${q.answer.answer}</math-field>
                                 </div> 
                                 <hr class="mt-3">
                                 <div class="col-md-3">
@@ -391,7 +391,7 @@ button.setAttribute('href','exam.html?id=' + id_exam);
 function changeImage(path) {
     console.log('funkcia zbehla');
     let modal = document.getElementById('modal-image');
-    modal.setAttribute('src','http://147.175.98.107/zaver/' + path);
+    modal.setAttribute('src', server+path);
 }
 
 // SET TOOLTIPS
