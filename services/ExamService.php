@@ -1116,7 +1116,7 @@ class ExamService
                         if (!empty($item['qEquation'])) {
                             foreach ($item['qEquation'] as $value) {
                                 if (isset($value['id']) && isset($value['answer']) && isset($value['url'])) {
-                                    if (!empty($value['id']) && !empty($value['answer']) && !empty($value['url'])) {
+                                    if (!empty($value['id']) && !empty($value['answer'])) {
                                         $id_question = $value['id'];
                                         $answer = $value['answer'];
                                         $url = $value['$url'];
@@ -1126,7 +1126,7 @@ class ExamService
                                         return json_encode($resp);
                                     }
                                 }
-                                if($url){
+                                if($url == 1){
                                     $stmt = $this->conn->prepare("select ais_id from users where id=:user_id");
                                     $stmt->bindParam('user_id', $id_user);
                                     $stmt->execute();
