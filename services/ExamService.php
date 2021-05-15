@@ -262,7 +262,7 @@ class ExamService
     }
 
     public function get_exams_students($id_exam) {
-        $stmt = $this->conn->prepare("SELECT exam_status.id_user, exam_status.points, status_type.name AS status, users.name, users.surname 
+        $stmt = $this->conn->prepare("SELECT exam_status.id_user, exam_status.points, status_type.name, users.ais_id AS status, users.name, users.surname, users.ais_id
                                             FROM status_type 
                                             INNER JOIN exam_status ON exam_status.id_status=status_type.id 
                                             INNER JOIN users ON exam_status.id_user=users.id 
@@ -275,6 +275,7 @@ class ExamService
 
         if ($output) {
             foreach ($output as $index=>$out) {
+                $students[$index]['ais_id'] = $out['ais_id'];
                 $students[$index]['id']     = $out['id_user'];
                 $students[$index]['status']   = $out['status'];
                 $students[$index]['score']  = $out['points'];
