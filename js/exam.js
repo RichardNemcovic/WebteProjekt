@@ -55,7 +55,7 @@ function generateTable() {
                     var row = finished.insertRow();
                 }
 
-                row.insertCell(0).innerHTML = student.id;
+                row.insertCell(0).innerHTML = student.ais_id;
                 row.insertCell(1).innerHTML = student.name;
                 row.insertCell(2).innerHTML = student.surname;                
 
@@ -83,7 +83,15 @@ function generateTable() {
 
 // EXPORT BUTTONS
 function exportPdf() {
+    document.getElementById('pdf-icon').hidden = true;
+    document.getElementById('pdf-spinner').hidden = false;
+    document.getElementById('pdf-btn').disabled = true;
+
     $.get(server + 'ExportController.php?ep=exportPDF&id_test=' + id_exam, function(resp){
+        document.getElementById('pdf-icon').hidden = false;
+        document.getElementById('pdf-spinner').hidden = true;
+        document.getElementById('pdf-btn').disabled = false;
+
         if(resp['status'] == 'OK') {
             downloadZip(server + resp['path']);
             $.get(server + 'ExportController.php?ep=deleteZip&filename=' + resp['path'], function(respon){
@@ -96,7 +104,15 @@ function exportPdf() {
 }
 
 function exportCsv() {
+    document.getElementById('csv-icon').hidden = true;
+    document.getElementById('csv-spinner').hidden = false;
+    document.getElementById('csv-btn').disabled = true;
+
     $.get(server + 'ExportController.php?ep=exportCSV&id_test=' + id_exam, function(resp){
+        document.getElementById('csv-icon').hidden = false;
+        document.getElementById('csv-spinner').hidden = true;
+        document.getElementById('csv-btn').disabled = false;
+
         if(resp['status'] == 'OK') {
             downloadURI(server + resp['message']);
             $.get(server + 'ExportController.php?ep=deleteCsv&filename=' + resp['message'], function(respon){

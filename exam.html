@@ -76,11 +76,17 @@
             </div>            
         </div>    
         <div class="row mb-4">
-            <button onclick="exportPdf()" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill mx-3" data-toggle="tooltip" data-placement="top" title="Export do pdf">
-                <div class="material-icons align-middle">picture_as_pdf</div> 
+            <button id="pdf-btn" onclick="exportPdf()" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill mx-3" data-toggle="tooltip" data-placement="top" title="Export do pdf">
+                <div id="pdf-icon" class="material-icons align-middle">picture_as_pdf</div> 
+                <div id="pdf-spinner" class="spinner-border text-danger" role="status" hidden>
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
             </button> 
-            <button onclick="exportCsv()" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Export do csv">
-                <div class="material-icons align-middle">assessment</div> 
+            <button id="csv-btn" onclick="exportCsv()" class="btn btn-sm btn-dark blue-bg btn-pill rounded-pill" data-toggle="tooltip" data-placement="top" title="Export do csv">
+                <div id="csv-icon" class="material-icons align-middle">assessment</div> 
+                <div id="csv-spinner" class="spinner-border text-danger" role="status" hidden>
+                    <span class="visually-hidden">Loading...</span>
+                </div>
             </button> 
         </div>
         <div class="row table-responsive">
