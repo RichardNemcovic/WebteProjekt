@@ -70,7 +70,7 @@ function generateTable() {
                                 </div>
                                 <div class="col-md-6">
                                     <p class="light-coral-txt mb-1">Odpoveď:</p>
-                                    <img src="${server + q.answer.answer}" width="280px">   
+                                    <img src="${server + q.answer.answer}" class="equation-image">   
                                 </div> 
                                 <hr class="mt-3">
                                 <div class="col-md-3">
@@ -122,7 +122,7 @@ function generateTable() {
                                 </div>
                                 <div class="col-md-6">
                                     <p class="light-coral-txt mb-1">Odpoveď:</p>
-                                    <div onclick="changeImage('${q.answer.answer}')">
+                                     <div onclick="changeImage('${q.answer.answer}')">
                                     <button  class="btn btn-sm btn-dark btn-pill rounded-pill" data-toggle="modal" data-target="#modalBox">
                                         <div class="material-icons align-middle w-100" data-toggle="tooltip" data-placement="top" title="Show image">image</div> 
                                     </button>
