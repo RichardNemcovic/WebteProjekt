@@ -1225,6 +1225,10 @@ class ExamService
                                                 }
                                             }
                                         }
+                                        if(!isset($pairs['right'])){
+                                            $score = 0;
+                                            $correct = 0;
+                                        }
                                     }
                                     $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
                                     $stmt->bindParam('id_user', $id_user);
