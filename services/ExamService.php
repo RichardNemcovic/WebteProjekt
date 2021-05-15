@@ -605,6 +605,7 @@ class ExamService
 
                 foreach ($res as $index02=>$val) {
                     $resp['qPairs'][$index01]['answer']['score'] = $val['score'];
+                    $resp['qPairs'][$index01]['answer']['id'] = $val['id'];
                     $resp['qPairs'][$index01]['answer']['answers'][$index02]['left'] = $val['answer_left'];
                     $resp['qPairs'][$index01]['answer']['answers'][$index02]['right'] = $val['answer_right'];
                 }
