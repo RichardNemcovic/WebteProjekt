@@ -72,12 +72,20 @@ function addSelectOption(qID, cID){
 
     document.getElementById('q-con-'+cID).appendChild(l);
     document.getElementById('q-con-'+cID).appendChild(i);
+
+    let inputBox = document.getElementById('select-answer-'+cID);
+    let max = inputBox.getAttribute('max');
+    inputBox.setAttribute('max',parseInt(max) + 1);
 }
 
 function deleteSelectOption(qID, cID){
     if(document.getElementById('select-'+cID+'-'+oSelect[qID]) && document.getElementById('selectl-'+cID+'-'+oSelect[qID]) && oSelect[qID] > 2){
         document.getElementById('select-'+cID+'-'+oSelect[qID]).remove();
         document.getElementById('selectl-'+cID+'-'+oSelect[qID]).remove();
+
+        let inputBox = document.getElementById('select-answer-'+cID);
+        let max = inputBox.getAttribute('max');
+        inputBox.setAttribute('max',parseInt(max) - 1);
 
         oSelect[qID] --;
     }
@@ -124,7 +132,7 @@ function createSelect(){
             </div>
             <div>
                 <label for="select-answer-`+id+`" class="form-label">Číslo správnej odpovede</label>
-                <input id="select-answer-`+id+`" type="number" class="form-control"> 
+                <input id="select-answer-`+id+`" type="number" min="1" max="2" class="form-control">
             </div>
             <hr class="mt-4">
             <div class="col-md-4 text-md-start">
