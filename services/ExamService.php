@@ -300,7 +300,7 @@ class ExamService
 
         $stmt = $this->conn->prepare("UPDATE answers 
                                             SET score=:score 
-                                            WHERE id=:id_answer ");
+                                            WHERE id=:id_answer");
         $stmt->bindParam(":id_answer", $id_answer);
         $stmt->bindParam(":score", $score);
         $stmt->execute();
@@ -444,7 +444,6 @@ class ExamService
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
                 $res = $stmt->fetch();
-
                 if ($res) {
                     $resp['qSelect'][$index01]['answer']['id'] = $res['id'];
                     $resp['qSelect'][$index01]['answer']['answer'] = $res['id_question_select'];
@@ -467,7 +466,6 @@ class ExamService
             $stmt->bindParam(":id_type", $id_type);
             $stmt->execute();
             $output = $stmt->fetchAll();
-
             foreach ($output as $index01=>$out) {
                 $resp['qShort'][$index01]['question']['description'] = $out['name'];
                 $resp['qShort'][$index01]['question']['score'] = $out['score'];
@@ -1067,7 +1065,9 @@ class ExamService
                     }
                     if (isset($item['qImage'])) {
                         if (!empty($item['qImage'])) {
+                            $i = 1;
                             foreach ($item['qImage'] as $value) {
+                                $i++;
                                 if (isset($value['id']) && isset($value['image_data'])) {
                                     if (!empty($value['id']) && !empty($value['image_data'])) {
                                         $id_question = $value['id'];
@@ -1084,7 +1084,7 @@ class ExamService
                                 $ais_id = $stmt->fetchColumn();;
                                 if ($ais_id) {
                                     $t = time();
-                                    $path = "uploads/" . $ais_id . $t . "image.png";
+                                    $path = "uploads/" . $ais_id . $t . $i . "image.png";
                                     $img_data = substr($img_data, 22);
                                     $status = file_put_contents($path, base64_decode($img_data));
                                     $correct = 0;
@@ -1119,7 +1119,9 @@ class ExamService
                     }
                     if (isset($item['qEquation'])) {
                         if (!empty($item['qEquation'])) {
+                            $i = 1;
                             foreach ($item['qEquation'] as $value) {
+                                $i++;
                                 if (isset($value['id']) && isset($value['answer']) && isset($value['url'])) {
                                     if (!empty($value['id']) && !empty($value['answer'])) {
                                         $id_question = $value['id'];
@@ -1137,7 +1139,7 @@ class ExamService
                                     $stmt->execute();
                                     $ais_id = $stmt->fetchColumn();
                                     if($ais_id){
-                                        $answer_path = $this->upload_file($ais_id, $answer);
+                                        $answer_path = $this->upload_file($ais_id, $answer, $i);
                                     }
                                 }else{
                                     $stmt = $this->conn->prepare("select ais_id from users where id=:user_id");
@@ -1146,7 +1148,7 @@ class ExamService
                                     $ais_id = $stmt->fetchColumn();
                                     if($ais_id) {
                                         $t = time();
-                                        $path = "uploads/" . $ais_id . $t . ".png";
+                                        $path = "uploads/" . $ais_id . $t  .$i . ".png";
                                         $img_data = substr($answer, 22);
                                         $status = file_put_contents($path, base64_decode($img_data));
                                         $answer_path = $path;
@@ -1228,6 +1230,10 @@ class ExamService
                                                     return json_encode($resp);
                                                 }
                                             }
+                                        }
+                                        if(!isset($pairs['right'])){
+                                            $score = 0;
+                                            $correct = 0;
                                         }
                                     }
                                     $stmt = $this->conn->prepare('insert into answers (id_user, id_question, correct, score) values (:id_user, :id_question, :correct, :score)');
@@ -1340,9 +1346,9 @@ class ExamService
         }
     }
 
-    public function upload_file($ais_id, $url){
+    public function upload_file($ais_id, $url, $i){
         $t = time();
-        $img = 'uploads/'.$ais_id.$t.'.png';
+        $img = 'uploads/'.$ais_id.$t.$i .'.png';
         file_put_contents($img, file_get_contents($url));
         return $img;
     }
