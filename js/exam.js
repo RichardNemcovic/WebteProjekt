@@ -83,13 +83,14 @@ function generateTable() {
 
 // EXPORT BUTTONS
 function exportPdf() {
-    $.get(server + 'ExportController', function(resp){
+    $.get(server + 'ExportController.php?ep=exportPDF&id_test=' + id_exam, function(resp){
         if(resp['status'] == 'OK') {
-            let path = resp['path']
-            //TODO download
+            downloadZip(server + resp['path']);
+            $.get(server + 'ExportController.php?ep=deleteZip&filename=' + resp['path'], function(respon){
+            });
         }
         else {
-            
+            alert(resp['message']);
         }
     });
 }
@@ -99,11 +100,9 @@ function exportCsv() {
         if(resp['status'] == 'OK') {
             downloadURI(server + resp['message']);
             $.get(server + 'ExportController.php?ep=deleteCsv&filename=' + resp['message'], function(respon){
-                // if(respon['status'] == 'OK') {
-                //     downloadURI(server + resp['message']);
-                // }
-                console.log(respon);
             });
+        }else {
+            alert(resp['message']);
         }
     });
 }
@@ -117,7 +116,15 @@ function downloadURI(uri) {
     document.body.removeChild(link);
     delete link;
  }
-
+ function downloadZip(uri) {
+    var link = document.createElement('a');
+    link.download = 'exams.zip';
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    delete link;
+ }
 // SET TOOLTIPS
 function setTooltips() {
     $(document).ready(function(){

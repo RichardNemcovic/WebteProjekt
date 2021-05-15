@@ -93,24 +93,28 @@ function joinExam(event){
     data['surname'] = document.getElementById('Ssurname').value;
     data['ais_id'] = document.getElementById('Sais-id').value;
 
-    $.ajax(
-        {
-        url: server+'LoginController.php?ep=studentLogin',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(resp){
-            if(resp['status'] == 'OK'){
-                sessionStorage.setItem('id_user', resp['id']);
-                sessionStorage.setItem('role', 'user');
-                sessionStorage.setItem('name', resp['name']);
-                sessionStorage.setItem('id_exam', resp['exam_id']);
-                window.location.href = 'live-exam.html?id_exam='+resp['exam_id'];
-            }else{
-                document.getElementById('student-alert').hidden = false;
-            } 
-        }
-    });
+    if(data['ais_id'].length == 5 ){
+        $.ajax(
+            {
+            url: server+'LoginController.php?ep=studentLogin',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(resp){
+                if(resp['status'] == 'OK'){
+                    sessionStorage.setItem('id_user', resp['id']);
+                    sessionStorage.setItem('role', 'user');
+                    sessionStorage.setItem('name', resp['name']);
+                    sessionStorage.setItem('id_exam', resp['exam_id']);
+                    window.location.href = 'live-exam.html?id_exam='+resp['exam_id'];
+                }else{
+                    document.getElementById('student-alert').hidden = false;
+                } 
+            }
+        });
+    }else{
+        document.getElementById('student-alert').hidden = false;
+    }
 }
 
 function logout(){

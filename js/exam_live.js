@@ -72,7 +72,7 @@ function awake(){
 //    let start_time = new Date(question['exam']['start']);
     get_exam_times(function(){
         get_server_time(function(){
-            if(start_time.getTime() - server_time.getTime() < 0){
+            if(start_time.getTime() - server_time.getTime() < 0 && end_time.getTime() - server_time.getTime() > 0){
                 //getData from server
                 
                 document.getElementById('count-down').hidden = true;
@@ -83,40 +83,47 @@ function awake(){
                     if(resp['status'] == 'OK'){
                         timer(resp['start']);    
                         setData(resp);      
-                        setFocusListener();  
                     }else{
                         error();
                     }
                 }, false);
             }else{
-                document.getElementById('count-down').hidden = false;
-                document.getElementById('live-exam').hidden = true;
-                document.getElementById('live-exam-nav').hidden = true;
-        
-                get_server_time(function(){
-                    var myfunc = setInterval(function() {
-                        var now = new Date().getTime();
-                        let timeleft = start_time.getTime() - now;
-                            
-                        // Calculating the days, hours, minutes and seconds left
-                        var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
-                        var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
-                            
-                        // Result is output to the specific element            
-                        document.getElementById("cDays").innerHTML = days;           
-                        document.getElementById("cHours").innerHTML = hours; 
-                        document.getElementById("cMins").innerHTML = minutes; 
-                        document.getElementById("cSecs").innerHTML = seconds; 
-                            
-                        // Display the message when countdown is over
-                        if (timeleft < 0) {
-                            clearInterval(myfunc);
-                            awake();
-                        }
-                    }, 1000);
-                });
+                if(end_time.getTime() - server_time.getTime() <= 0){
+                    document.getElementById('count-down').hidden = true;
+                    document.getElementById('live-exam').hidden = true;
+                    document.getElementById('live-exam-nav').hidden = true;
+                    document.getElementById('end').hidden = false;
+                }else{
+                    document.getElementById('count-down').hidden = false;
+                    document.getElementById('live-exam').hidden = true;
+                    document.getElementById('live-exam-nav').hidden = true;
+                    document.getElementById('end').hidden = true;
+            
+                    get_server_time(function(){
+                        var myfunc = setInterval(function() {
+                            var now = new Date().getTime();
+                            let timeleft = start_time.getTime() - now;
+                                
+                            // Calculating the days, hours, minutes and seconds left
+                            var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+                            var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+                            var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+                                
+                            // Result is output to the specific element            
+                            document.getElementById("cDays").innerHTML = days;           
+                            document.getElementById("cHours").innerHTML = hours; 
+                            document.getElementById("cMins").innerHTML = minutes; 
+                            document.getElementById("cSecs").innerHTML = seconds; 
+                                
+                            // Display the message when countdown is over
+                            if (timeleft < 0) {
+                                clearInterval(myfunc);
+                                awake();
+                            }
+                        }, 1000);                    
+                    });
+                }
             }
         });
     });
@@ -364,20 +371,20 @@ function createImage(question){
         </div>                            
     </div>
     <hr>
-    <div class="text-center"> 
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="radio-${questionIndex}" id="radio-${questionIndex}-a" onclick="toggleImage(${question.id},'a')" value="a" checked>
-            <label class="form-check-label" for="radio-${questionIndex}-a">Kreslenie</label>
-            </div>
-            <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="radio-${questionIndex}" id="radio-${questionIndex}-b" onclick="toggleImage(${question.id},'b')" value="b">
-            <label class="form-check-label" for="radio-${questionIndex}-b">Vložiť</label>
+    <div>
+        <div class="form-check form-switch" >
+            <input class="form-check-input" type="checkbox" id="img-`+question['id']+`-cb" onclick="showHideImg(`+question['id']+`)">
+            <label class="form-check-label" for="img-`+question['id']+`-c">Nahrať súbor</label>
         </div>
     </div>
-    <div id="option-a-${question['id']}" class="text-center">                                              
-        <div id="container-${question['id']}" class="drawing-container text-center">            
-        </div>              
-        <button class="btn bt-submit shadow d-inline-block text-center my-3 align-self-center" type="button" onclick="resetCanvas('container-`+question['id']+`',`+question['id']+`)">                                
+    <div class="text-center">                                    
+        <div id="container-`+question['id']+`" class="drawing-container text-center">
+
+        </div>
+        <div class="mb-3" id="img-`+question['id']+`-f-c" hidden>
+            <input class="form-control" type="file" id="img-`+question['id']+`-f">
+        </div>  
+        <button id="container-btn-`+question['id']+`" class="btn bt-submit shadow d-inline-block text-center my-3 align-self-center" type="button" onclick="resetCanvas('container-`+question['id']+`',`+question['id']+`)">                                
             <span class="material-icons align-middle">restart_alt</span> Obnoviť plátno
         </button>
     </div>
@@ -392,6 +399,18 @@ function createImage(question){
     stages[question['id']] = createCanvas('container-'+question['id']);
 
     //console.log(stages[question['id']].toDataURL({ pixelRatio: 3 }));
+}
+
+function showHideImg(id){
+    if(document.getElementById('img-'+id+'-cb').checked){
+        document.getElementById('container-'+id).hidden = true;
+        document.getElementById('container-btn-'+id).style.visibility = 'hidden';
+        document.getElementById('img-'+id+'-f-c').hidden = false;
+    }else{
+        document.getElementById('container-'+id).hidden = false;
+        document.getElementById('container-btn-'+id).style.visibility = 'visible';
+        document.getElementById('img-'+id+'-f-c').hidden = true;
+    }
 }
 
 function createEquation(question){
@@ -411,9 +430,19 @@ function createEquation(question){
             </div>                           
         </div>
         <hr>
-        <div class="row">                    
+        <div>
+            <div class="form-check form-switch pt-2">
+                <input class="form-check-input" type="checkbox" id="eq-`+question['id']+`-cb" onclick="showHideEq(`+question['id']+`);">
+                <label class="form-check-label" for="eq-`+question['id']+`-c">Nahrať súbor</label>
+            </div>
+        </div>
+        
+        <div class="row" id="eq-`+question['id']+`-c">                    
             <div id="mathfield-`+question['id']+`" class="border-box">
             </div>                                        
+        </div>
+        <div class="row" id="eq-`+question['id']+`-f-c" hidden>
+            <input class="form-control" type="file" id="eq-`+question['id']+`-f">
         </div>                                
     </div>`;    
 
@@ -426,43 +455,55 @@ function createEquation(question){
     });
 }
 
+function showHideEq(id){
+    if(document.getElementById('eq-'+id+'-cb').checked){
+        document.getElementById('eq-'+id+'-c').hidden = true;
+        document.getElementById('eq-'+id+'-f-c').hidden = false;
+    }else{
+        document.getElementById('eq-'+id+'-c').hidden = false;
+        document.getElementById('eq-'+id+'-f-c').hidden = true;
+    }
+}
+
 //OBTAINING DATA
 
 function submitTest(){
-    let data = {};
-    data['id_user'] = sessionStorage.getItem('id_user');
+    readFiles(function(){
+        let data = {};
+        data['id_user'] = sessionStorage.getItem('id_user');
+        
+        let exam = {}
+        exam['id'] = id_exam;
+        exam['qShort'] = getShortAnswers();
+        exam['qSelect'] = getSelectAnswers();
+        exam['qImage'] = getImageAnswers();
+        exam['qEquation'] = getEquationAnswers();
+        exam['qPairs'] = getPairAnswers();
+        
+        data['exam'] = exam;
     
-    let exam = {}
-    exam['id'] = id_exam;
-    exam['qShort'] = getShortAnswers();
-    exam['qSelect'] = getSelectAnswers();
-    exam['qImage'] = getImageAnswers();
-    exam['qEquation'] = getEquationAnswers();
-    exam['qPairs'] = getPairAnswers();
+        $.ajax(
+            {
+            url: server+'ExamController.php?ep=submitExam',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(resp){
+                if(resp['status'] == 'OK'){                
+                    document.getElementById('count-down').hidden = true;
+                    document.getElementById('live-exam').hidden = true;
+                    document.getElementById('live-exam-nav').hidden = true;
+                    document.getElementById('end').hidden = false;
+                    document.getElementById('error').hidden = true;
     
-    data['exam'] = exam;
-
-    $.ajax(
-        {
-        url: server+'ExamController.php?ep=submitExam',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(resp){
-            if(resp['status'] == 'OK'){                
-                document.getElementById('count-down').hidden = true;
-                document.getElementById('live-exam').hidden = true;
-                document.getElementById('live-exam-nav').hidden = true;
-                document.getElementById('end').hidden = false;
-                document.getElementById('error').hidden = true;
-
-                setTimeout(function() { logout(); }, 5000);
-            }else{
-                error();
-            }
-        },
-        async: false
-    });
+                    setTimeout(function() { logout(); }, 5000);
+                }else{
+                    error();
+                }
+            },
+            async: false
+        });
+    });    
 }
 
 function getShortAnswers(){
@@ -522,17 +563,98 @@ function getPairAnswers(){
     return data;
 }
 
+function getBase64(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  function readFileAsText(file){
+    return new Promise(function(resolve,reject){
+        let fr = new FileReader();
+
+        fr.onload = function(){
+            resolve(fr.result);
+        };
+
+        fr.onerror = function(){
+            reject(fr);
+        };
+
+        fr.readAsDataURL(file);
+    });
+}
+
+
+var fileData = {};
+
+function readFiles(callback){
+    readers = [];
+    indexes = [];
+    
+    qMath.forEach(e => {
+        if(document.getElementById('eq-'+e+'-cb').checked){
+            let f = document.getElementById('eq-'+e+'-f').files[0]; // FileList object
+            readers.push(readFileAsText(f));
+            indexes.push('e'+e);
+            //console.log(readFile(f));  
+        }
+    });
+
+    qImage.forEach(e => {
+        if(document.getElementById('img-'+e+'-cb').checked){            
+            var f = document.getElementById('img-'+e+'-f').files[0]; // FileList object
+            
+            readers.push(readFileAsText(f));
+            indexes.push('i'+e);
+            //console.log(readFile(f));
+            /*getBase64(f).then(
+                a => (fileData['img'][e] = a)
+            );*/
+        }
+    });
+
+    Promise.all(readers).then((values) => {
+        // Values will be an array that contains an item
+        // with the text of every selected file
+        // ["File1 Content", "File2 Content" ... "FileN Content"]
+        for(let i = 0; i < values.length; i++){
+            let i1 = indexes[i].substring(0,1);
+            let i2 = indexes[i].substring(1);
+            fileData[i1] = {}
+            fileData[i1][i2] = values[i];
+        }
+        console.log(fileData);
+        callback();
+    });
+}
+
 function getEquationAnswers(){
     let data = [];
 
     qMath.forEach(e => {
         let d = {};
         d['id'] = e;
-        d['answer'] = mathFields[e].getValue();
+
+        if(document.getElementById('eq-'+e+'-cb').checked){
+            //let f = document.getElementById('eq-'+e+'-f').files[0]; // FileList object
+
+            d['answer'] = fileData['e'][e];
+            /*getBase64(f).then(
+                a => d['answer'] = a
+            );*/   
+            d['url'] = 0;       
+        }else{
+            d['url'] = 1;
+            d['answer'] = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathFields[e].getValue());
+        }
 
         data.push(d);
-    });
-
+    });       
+    
     return data;
 }
 
@@ -542,8 +664,17 @@ function getImageAnswers(){
     qImage.forEach(e => {
         let d = {};
         d['id'] = e;
-        d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });
-        
+
+        if(document.getElementById('img-'+e+'-cb').checked){            
+            //var f = document.getElementById('img-'+e+'-f').files[0]; // FileList object
+            d['image_data'] = fileData['i'][e];
+            /*getBase64(f).then(
+                a => console.log(a)
+            );         */
+        }else{
+            d['image_data'] = stages[e].toDataURL({ pixelRatio: 3 });            
+        }
+
         data.push(d);
     })
 
