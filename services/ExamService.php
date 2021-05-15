@@ -262,7 +262,7 @@ class ExamService
     }
 
     public function get_exams_students($id_exam) {
-        $stmt = $this->conn->prepare("SELECT exam_status.id_user, exam_status.points, status_type.name, users.ais_id AS status, users.name, users.surname, users.ais_id
+        $stmt = $this->conn->prepare("SELECT exam_status.id_user, exam_status.points, status_type.name AS status, users.ais_id, users.name, users.surname
                                             FROM status_type 
                                             INNER JOIN exam_status ON exam_status.id_status=status_type.id 
                                             INNER JOIN users ON exam_status.id_user=users.id 
@@ -439,7 +439,9 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_select.id_question_select
                                                     FROM answers
                                                     INNER JOIN answers_select ON answers.id=answers_select.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                    AND answers.id_user=:id_user");
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
                 $res = $stmt->fetch();
@@ -473,7 +475,9 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_short.answer
                                                     FROM answers
                                                     INNER JOIN answers_short ON answers.id=answers_short.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                    AND answers.id_user=:id_user");
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
                 $res = $stmt->fetch();

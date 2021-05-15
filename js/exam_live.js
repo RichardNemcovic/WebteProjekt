@@ -81,6 +81,7 @@ function awake(){
         
                 $.get(server+'ExamController.php?ep=openExam&id_exam='+id_exam+'&id_user='+sessionStorage.getItem('id_user'), function(resp){
                     if(resp['status'] == 'OK'){
+                        setFocusListener();
                         timer(resp['start']);    
                         setData(resp);      
                     }else{
@@ -144,7 +145,6 @@ function setFocusListener(){
             success: function(resp){
                 if(resp['status'] == 'OK'){
                     server_time = new Date(resp['time']);
-                    callback();
                 }
             },
             async: false
@@ -469,6 +469,7 @@ function showHideEq(id){
 
 function submitTest(){
     readFiles(function(){
+        document.getElementById('loader').hidden = false;
         let data = {};
         data['id_user'] = sessionStorage.getItem('id_user');
         
@@ -489,7 +490,8 @@ function submitTest(){
             contentType: 'application/json',
             data: JSON.stringify(data),
             success: function(resp){
-                if(resp['status'] == 'OK'){                
+                document.getElementById('loader').hidden = true;  
+                if(resp['status'] == 'OK'){                                  
                     document.getElementById('count-down').hidden = true;
                     document.getElementById('live-exam').hidden = true;
                     document.getElementById('live-exam-nav').hidden = true;

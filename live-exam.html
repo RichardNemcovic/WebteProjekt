@@ -23,7 +23,13 @@
     <script src="js/exam_live.js" defer></script>
 </head>
 <body>
-    
+    <div id="loader" class="loader-cont" hidden>
+        <div class="loader">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>        
+    </div>
     <!-- CONTENT -->
     <div class="container">
         <div id='count-down' class="shadow-lg">
@@ -43,7 +49,7 @@
             <form id="exam-form" action="#">                                                
             </form>
 
-        </div>
+        </div>        
     </div>
 
     <nav id="live-exam-nav" class="shadow">
