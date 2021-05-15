@@ -137,3 +137,19 @@ tbody{
 .equation-image{
     max-width: 270px;
 }
+
+.html{
+    color: #e54d26;
+}
+
+.css{
+    color: #0b74b8;
+}
+
+.js{
+    color: #dab92c;
+}
+
+.php{
+    color: #777bb3;
+}
