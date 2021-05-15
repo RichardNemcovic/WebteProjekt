@@ -133,3 +133,7 @@ tbody{
 .basic-link:hover{
     color: rgb(56, 55, 124);
 }
+
+.equation-image{
+    max-width: 270px;
+}
