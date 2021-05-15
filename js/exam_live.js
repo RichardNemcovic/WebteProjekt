@@ -352,7 +352,7 @@ function createPair(question){
 function resetCanvas(canvasID, qID){
     document.getElementById(canvasID).innerHTML = '';
 
-    stages['qID'] = createCanvas(canvasID);
+    stages[qID] = createCanvas(canvasID);
 }
 
 function createImage(question){
