@@ -438,7 +438,9 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_select.id_question_select
                                                     FROM answers
                                                     INNER JOIN answers_select ON answers.id=answers_select.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                    AND answers.id_user=:id_user");
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
                 $res = $stmt->fetch();
@@ -474,7 +476,9 @@ class ExamService
                 $stmt = $this->conn->prepare("SELECT answers.id, answers.score, answers_short.answer
                                                     FROM answers
                                                     INNER JOIN answers_short ON answers.id=answers_short.id_answer
-                                                    WHERE answers.id_question=:id_question");
+                                                    WHERE answers.id_question=:id_question
+                                                    AND answers.id_user=:id_user");
+                $stmt->bindParam(":id_user", $id_user);
                 $stmt->bindParam(":id_question", $out['id']);
                 $stmt->execute();
                 $res = $stmt->fetch();
